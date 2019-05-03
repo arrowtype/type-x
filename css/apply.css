@@ -1,0 +1,11 @@
+@font-face {
+    font-family: hankypankyschnitzelhosen;
+    /* src: url('chrome-extension://__MSG_@@extension_id__/fonts/recursive-sans-var.woff2'); */
+    src: url('chrome-extension://__MSG_@@extension_id__/fonts/Bungee-Regular.woff2');
+}
+
+* {
+    /* font-family: hankypankyschnitzelhosen, fantasy !important; */
+    font-family: var(--hanky) !important;
+    color: lime;
+}
