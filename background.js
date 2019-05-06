@@ -29,7 +29,7 @@ chrome.tabs.onActivated.addListener(() => {
 });
 
 function toggle(fontActivated) {
-    const className = "hankypankyschnitzelhosen-disabled";
+    const className = "recursivetypetester-disabled";
 
     // Injecting the stylesheet is fast, adding a class to
     // the body isn't. We don't want a delay, so the CSS will

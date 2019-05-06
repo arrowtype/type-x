@@ -1,12 +1,12 @@
 @font-face {
-    font-family: hankypankyschnitzelhosen;
+    font-family: recursivetypetester;
     /* src: url('chrome-extension://__MSG_@@extension_id__/fonts/recursive-sans-var.woff2'); */
     src: url('chrome-extension://__MSG_@@extension_id__/fonts/Bungee-Regular.woff2');
 }
 
-body:not(.hankypankyschnitzelhosen-disabled) *,
-body:not(.hankypankyschnitzelhosen-disabled) *::before,
-body:not(.hankypankyschnitzelhosen-disabled) *::after {
-    font-family: hankypankyschnitzelhosen !important;
-    color: hotpink;
+body:not(.recursivetypetester-disabled) *,
+body:not(.recursivetypetester-disabled) *::before,
+body:not(.recursivetypetester-disabled) *::after {
+    font-family: recursivetypetester !important;
+    color: lime;
 }
