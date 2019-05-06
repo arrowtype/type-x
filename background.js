@@ -1,9 +1,5 @@
 // Recursive
 
-// TODO: upon turning the font back on again, it's requested
-// and returns a 200 after ~ 60ms. Why can't it be cached or
-// served quicker?
-
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({
         "fontActivated": false
@@ -34,13 +30,13 @@ function toggle(fontActivated) {
     // Injecting the stylesheet is fast, adding a class to
     // the body isn't. We don't want a delay, so the CSS will
     // enable the fonts immediately, and we only add a class
-    // when we want the custom fonts gone.
+    // when we want to *remove* the custom fonts.
     if (fontActivated) {
-        // Inject CSS to activate font
         chrome.tabs.query({
             active: true,
             currentWindow: true
         }, tabs => {
+            // Inject CSS to activate font
             // TODO: Inject only once per page
             // It's only injected again when toggling the extension
             // on and off, and doesn't really fudge anyting up, so
@@ -49,21 +45,20 @@ function toggle(fontActivated) {
                 file: "css/apply.css",
                 runAt: "document_start"
             });
-            chrome.tabs.executeScript(
-                tabs[0].id, {
-                    code: `document.body.classList.remove("${className}");`
-                });
+            // Remove force-disable class
+            chrome.tabs.executeScript(tabs[0].id, {
+                code: `document.body.classList.remove("${className}");`
+            });
         });
     } else {
-        // If font has been previously enabled, force disable it
+        // If font has been previously enabled, force-disable it
         chrome.tabs.query({
             active: true,
             currentWindow: true
         }, tabs => {
-            chrome.tabs.executeScript(
-                tabs[0].id, {
-                    code: `document.body.classList.add("${className}");`
-                });
+            chrome.tabs.executeScript(tabs[0].id, {
+                code: `document.body.classList.add("${className}");`
+            });
         });
     }
 }
