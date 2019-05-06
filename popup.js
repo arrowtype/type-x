@@ -1,6 +1,7 @@
 // Recursive
 
 let activateFonts = document.getElementById('activateFonts');
+let activateFontsStatus = document.getElementById('activateFontsStatus');
 
 activateFonts.onclick = () => {
     chrome.storage.sync.get(
@@ -8,14 +9,21 @@ activateFonts.onclick = () => {
             chrome.storage.sync.set({
                 "fontActivated": !fontActivated
             }, () => {
-                // TODO: properly show state of fontActivated
-                // instead of sticking it in the button text
-                activateFonts.innerText = !fontActivated;
-
                 chrome.runtime.getBackgroundPage(backgroundPage => {
                     backgroundPage.toggle(!fontActivated);
                 });
+                updateStatus();
             });
         }
     );
 };
+
+const updateStatus = () => {
+    chrome.storage.sync.get(
+        "fontActivated", ({ fontActivated }) => {
+            activateFontsStatus.innerText = `Active: ${fontActivated ? "Yep" : "Nope"}`;
+        }
+    );
+}
+
+updateStatus();
