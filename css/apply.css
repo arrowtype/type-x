@@ -4,9 +4,9 @@
     src: url('chrome-extension://__MSG_@@extension_id__/fonts/Bungee-Regular.woff2');
 }
 
-body:not(.recursivetypetester-disabled) *,
-body:not(.recursivetypetester-disabled) *::before,
-body:not(.recursivetypetester-disabled) *::after {
+body:not(.recursivetypetester-disabled) *:not(.icon):not(.Icon):not(.fa):not(.fas):not(.far):not(.fal):not(.fab):not(.font-fontello):not(.glyphicon),
+body:not(.recursivetypetester-disabled) *:not(.icon):not(.Icon):not(.fa):not(.fas):not(.far):not(.fal):not(.fab):not(.font-fontello):not(.glyphicon)::before,
+body:not(.recursivetypetester-disabled) *:not(.icon):not(.Icon):not(.fa):not(.fas):not(.far):not(.fal):not(.fab):not(.font-fontello):not(.glyphicon)::after {
     font-family: recursivetypetester !important;
-    color: lime;
+    color: hotpink;
 }

@@ -2,7 +2,7 @@
 
 let activateFonts = document.getElementById('activateFonts');
 
-activateFonts.onclick = element => {
+activateFonts.onclick = () => {
     chrome.storage.sync.get(
         "fontActivated", ({ fontActivated }) => {
             chrome.storage.sync.set({
