@@ -4,8 +4,9 @@
     src: url('chrome-extension://__MSG_@@extension_id__/fonts/Bungee-Regular.woff2');
 }
 
-* {
-    /* font-family: hankypankyschnitzelhosen, fantasy !important; */
-    font-family: var(--hanky) !important;
-    color: lime;
+body:not(.hankypankyschnitzelhosen-disabled) *,
+body:not(.hankypankyschnitzelhosen-disabled) *::before,
+body:not(.hankypankyschnitzelhosen-disabled) *::after {
+    font-family: hankypankyschnitzelhosen !important;
+    color: hotpink;
 }

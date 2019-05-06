@@ -1,8 +1,12 @@
 // Recursive
 
+// TODO: upon turning the font back on again, it's requested
+// and returns a 200 after ~ 60ms. Why can't it be cached or
+// served quicker?
+
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({
-        "fontActivated": true
+        "fontActivated": false
     });
 });
 
@@ -16,45 +20,50 @@ chrome.tabs.onUpdated.addListener((tabId, { status }, { active }) => {
     }
 });
 
+chrome.tabs.onActivated.addListener(() => {
+    chrome.storage.sync.get(
+        "fontActivated", ({ fontActivated }) => {
+            toggle(fontActivated);
+        }
+    );
+});
+
 function toggle(fontActivated) {
-    // The value "#" results in an invalid `font-family` rule,
-    // restoring the site's original `font-family` rule.
-    // Toggling CSS variables is faster than addding/removing classes!
-    const swapAction = fontActivated ? "hankypankyschnitzelhosen" : "*";
-    // const swapAction = fontActivated ? "add" : "remove";
-    console.log(swapAction);
+    const className = "hankypankyschnitzelhosen-disabled";
 
-    chrome.tabs.query({
-        active: true,
-        currentWindow: true
-    }, tabs => {
-        // TODO: Inject only once per page
-        // It's only injected again when toggling the extension
-        // on and off, and doesn't really fudge anyting up, so
-        // I guess this is low prio.
-        chrome.tabs.insertCSS(tabs[0].id, {
-            file: "css/apply.css",
-            runAt: "document_start"
+    // Injecting the stylesheet is fast, adding a class to
+    // the body isn't. We don't want a delay, so the CSS will
+    // enable the fonts immediately, and we only add a class
+    // when we want the custom fonts gone.
+    if (fontActivated) {
+        // Inject CSS to activate font
+        chrome.tabs.query({
+            active: true,
+            currentWindow: true
+        }, tabs => {
+            // TODO: Inject only once per page
+            // It's only injected again when toggling the extension
+            // on and off, and doesn't really fudge anyting up, so
+            // I guess this is low prio.
+            chrome.tabs.insertCSS(tabs[0].id, {
+                file: "css/apply.css",
+                runAt: "document_start"
+            });
+            chrome.tabs.executeScript(
+                tabs[0].id, {
+                    code: `document.body.classList.remove("${className}");`
+                });
         });
-
-
-        // Swapping classes is really slow. So let's use
-        // a CSS variable
-        // TODO: how to unset CSS variable so it doesn't
-        // overwrite the site's font-family?
-        // chrome.tabs.executeScript(
-        //     tabs[0].id, {
-        //         // code: `document.body.classList.${swapAction}("hankypankyschnitzelhosen-disabled");`,
-        //         code: `document.documentElement.style.setProperty("--hanky", '${swapAction}');`,
-        //         runAt: "document_start"
-        //     });
-
-
-
-
-
-        // TODO: upon turning the font back on again, it's requested
-        // and returns a 200 after ~ 60ms. Why can't it be cached or
-        // served quicker?
-    });
+    } else {
+        // If font has been previously enabled, force disable it
+        chrome.tabs.query({
+            active: true,
+            currentWindow: true
+        }, tabs => {
+            chrome.tabs.executeScript(
+                tabs[0].id, {
+                    code: `document.body.classList.add("${className}");`
+                });
+        });
+    }
 }
