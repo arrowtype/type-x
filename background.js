@@ -37,13 +37,23 @@ function toggle(fontActivated) {
             currentWindow: true
         }, tabs => {
             // Inject CSS to activate font
-            // TODO: Inject only once per page
-            // It's only injected again when toggling the extension
-            // on and off, and doesn't really fudge anyting up, so
-            // I guess this is low prio.
-            chrome.tabs.insertCSS(tabs[0].id, {
-                file: "css/apply.css",
-                runAt: "document_start"
+            chrome.tabs.executeScript(tabs[0].id, {
+                code: `
+                (() => {
+                    if (window.hasRecursivetypetesterCSS === true) return true;
+                    window.hasRecursivetypetesterCSS = true;
+                })();
+                `,
+            }, function(results) {
+                if (chrome.runtime.lastError || !results || !results.length) {
+                    return;
+                }
+                if (results[0] !== true) {
+                    chrome.tabs.insertCSS(tabs[0].id, {
+                        file: "css/apply.css",
+                        runAt: "document_start"
+                    });
+                }
             });
             // Remove force-disable class
             chrome.tabs.executeScript(tabs[0].id, {
