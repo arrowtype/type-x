@@ -9,7 +9,7 @@ chrome.runtime.onInstalled.addListener(() => {
     });
 });
 
-chrome.tabs.onUpdated.addListener((tabId, { status }, { active }) => {
+chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
     if (active && status === "loading") {
         chrome.storage.sync.get(
             "fontActivated", ({ fontActivated }) => {
@@ -27,7 +27,7 @@ chrome.tabs.onActivated.addListener(() => {
     );
 });
 
-chrome.tabs.onRemoved.addListener((tabId) => {
+chrome.tabs.onRemoved.addListener(tabId => {
     insertedTabs.delete(tabId);
 });
 
