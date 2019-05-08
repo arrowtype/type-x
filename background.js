@@ -1,6 +1,7 @@
 // Recursive
 
 const insertedTabs = new Set();
+const className = "recursivetypetester-disabled";
 
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({
@@ -30,20 +31,18 @@ chrome.tabs.onRemoved.addListener((tabId) => {
     insertedTabs.delete(tabId);
 });
 
+// Injecting the stylesheet is fast, adding a class to
+// the body isn't. We don't want a delay, so the CSS will
+// enable the fonts immediately, and we only add a class
+// when we want to *remove* the custom fonts.
 function toggle(fontActivated, forceInsert) {
-    const className = "recursivetypetester-disabled";
+    chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    }, tabs => {
+        const tabId = tabs[0].id;
 
-    // Injecting the stylesheet is fast, adding a class to
-    // the body isn't. We don't want a delay, so the CSS will
-    // enable the fonts immediately, and we only add a class
-    // when we want to *remove* the custom fonts.
-    if (fontActivated) {
-        chrome.tabs.query({
-            active: true,
-            currentWindow: true
-        }, tabs => {
-            const tabId = tabs[0].id;
-
+        if (fontActivated) {
             // Inject CSS to activate font
             if (!insertedTabs.has(tabId) || forceInsert) {
                 chrome.tabs.insertCSS(tabId, {
@@ -52,23 +51,15 @@ function toggle(fontActivated, forceInsert) {
                 });
                 insertedTabs.add(tabId);
             }
-
             // Remove force-disable class
             chrome.tabs.executeScript(tabId, {
                 code: `document.body.classList.remove("${className}");`
             });
-        });
-    } else {
-        // If font has been previously enabled, force-disable it
-        chrome.tabs.query({
-            active: true,
-            currentWindow: true
-        }, tabs => {
-            const tabId = tabs[0].id;
-
+        } else {
+            // Add force-disable class
             chrome.tabs.executeScript(tabId, {
                 code: `document.body.classList.add("${className}");`
             });
-        });
-    }
+        }
+    });
 }
