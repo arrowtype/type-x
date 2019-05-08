@@ -26,6 +26,10 @@ chrome.tabs.onActivated.addListener(() => {
     );
 });
 
+chrome.tabs.onRemoved.addListener((tabId) => {
+    insertedTabs.delete(tabId);
+});
+
 function toggle(fontActivated, forceInsert) {
     const className = "recursivetypetester-disabled";
 
@@ -38,20 +42,19 @@ function toggle(fontActivated, forceInsert) {
             active: true,
             currentWindow: true
         }, tabs => {
-            const id = tabs[0].id;
+            const tabId = tabs[0].id;
 
-            if(!insertedTabs.has(id) || forceInsert) {
-                // Inject CSS to activate font
-                chrome.tabs.insertCSS(id, {
+            // Inject CSS to activate font
+            if (!insertedTabs.has(tabId) || forceInsert) {
+                chrome.tabs.insertCSS(tabId, {
                     file: "css/apply.css",
                     runAt: "document_start"
                 });
+                insertedTabs.add(tabId);
             }
 
-            insertedTabs.add(id);
-
             // Remove force-disable class
-            chrome.tabs.executeScript(id, {
+            chrome.tabs.executeScript(tabId, {
                 code: `document.body.classList.remove("${className}");`
             });
         });
@@ -61,9 +64,9 @@ function toggle(fontActivated, forceInsert) {
             active: true,
             currentWindow: true
         }, tabs => {
-            const id = tabs[0].id;
+            const tabId = tabs[0].id;
 
-            chrome.tabs.executeScript(id, {
+            chrome.tabs.executeScript(tabId, {
                 code: `document.body.classList.add("${className}");`
             });
         });

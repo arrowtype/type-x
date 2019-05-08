@@ -36,12 +36,3 @@
         "128": "images/get_started128.png"
     }
 }
-// Injected on _every_ page, so perhaps not what we want
-// ,
-// "content_scripts": [
-//   {
-//     "matches": ["*://*/*"],
-//     "css": ["bloop.css"]
-//     // "js": ["contentScript.js"]
-//   }
-// ]
