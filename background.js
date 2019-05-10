@@ -113,6 +113,8 @@ function generateStyleSheet() {
         "fonts", ({ fonts }) => {
             for (const font of fonts) {
 
+                // TODO: if font has `*` as selector, it must go first in
+                // the stylesheet, otherwise it overwrites previous rules
                 let selectors = [];
                 for (const selector of font.selectors) {
                     selectors.push(`body:not(.recursivetypetester-disabled) ${selector}${blacklist}`);
