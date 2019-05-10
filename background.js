@@ -2,10 +2,23 @@
 
 const insertedTabs = new Set();
 const className = "recursivetypetester-disabled";
+let stylesheet = "";
 
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({
-        "fontActivated": false
+        "fontActivated": false,
+        "fonts": [
+            {
+                "name": "Recursive Mono",
+                "file": "recursive-mono-var.woff2"
+            },
+            {
+                "name": "Recursive Sans",
+                "file": "recursive-sans-var.woff2"
+            }
+        ]
+    }, () => {
+        generateStyleSheet();
     });
 });
 
@@ -46,7 +59,7 @@ function toggle(fontActivated, forceInsert) {
             // Inject CSS to activate font
             if (!insertedTabs.has(tabId) || forceInsert) {
                 chrome.tabs.insertCSS(tabId, {
-                    file: "css/apply.css",
+                    code: stylesheet,
                     runAt: "document_start"
                 });
                 insertedTabs.add(tabId);
@@ -62,4 +75,25 @@ function toggle(fontActivated, forceInsert) {
             });
         }
     });
+}
+
+function generateStyleSheet() {
+    chrome.storage.sync.get(
+        "fonts", ({ fonts }) => {
+            for (const font of fonts) {
+                const fontURL = chrome.runtime.getURL(`fonts/${font.file}`);
+                stylesheet += `
+                    @font-face {
+                        font-family: '${font.name}';
+                        src: url('${fontURL}');
+                    }
+
+                    body:not(.recursivetypetester-disabled) *,
+                    body:not(.recursivetypetester-disabled) *::before,
+                    body:not(.recursivetypetester-disabled) *::after {
+                        font-family: '${font.name}' !important;
+                    }`;
+            }
+        }
+    );
 }
