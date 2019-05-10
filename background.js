@@ -1,8 +1,26 @@
 // Recursive
 
+let stylesheet = "";
 const insertedTabs = new Set();
 const className = "recursivetypetester-disabled";
-let stylesheet = "";
+const blacklistedClasses = [
+    "icon",
+    "Icon",
+    "fa",
+    "fas",
+    "far",
+    "fal",
+    "fab",
+    "font-fontello",
+    "glyphicon"
+];
+const blacklist = (() => {
+    let b = "";
+    for(const blacklistedClass of blacklistedClasses) {
+        b += `:not(.${blacklistedClass})`;
+    }
+    return b;
+})();
 
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({
@@ -88,9 +106,9 @@ function generateStyleSheet() {
                         src: url('${fontURL}');
                     }
 
-                    body:not(.recursivetypetester-disabled) *,
-                    body:not(.recursivetypetester-disabled) *::before,
-                    body:not(.recursivetypetester-disabled) *::after {
+                    body:not(.recursivetypetester-disabled) *${blacklist},
+                    body:not(.recursivetypetester-disabled) *${blacklist}::before,
+                    body:not(.recursivetypetester-disabled) *${blacklist}::after {
                         font-family: '${font.name}' !important;
                     }`;
             }
