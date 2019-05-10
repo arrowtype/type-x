@@ -106,9 +106,7 @@ function generateStyleSheet() {
                         src: url('${fontURL}');
                     }
 
-                    body:not(.recursivetypetester-disabled) *${blacklist},
-                    body:not(.recursivetypetester-disabled) *${blacklist}::before,
-                    body:not(.recursivetypetester-disabled) *${blacklist}::after {
+                    body:not(.recursivetypetester-disabled) *${blacklist} {
                         font-family: '${font.name}' !important;
                     }`;
             }
