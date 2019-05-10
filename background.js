@@ -16,7 +16,7 @@ const blacklistedClasses = [
 ];
 const blacklist = (() => {
     let b = "";
-    for(const blacklistedClass of blacklistedClasses) {
+    for (const blacklistedClass of blacklistedClasses) {
         b += `:not(.${blacklistedClass})`;
     }
     return b;
@@ -25,15 +25,28 @@ const blacklist = (() => {
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({
         "fontActivated": false,
-        "fonts": [
-            {
-                "name": "Recursive Mono",
-                "file": "recursive-mono-var.woff2"
+        "fonts": [{
+                "name": "Recursive Sans",
+                "file": "recursive-sans-var.woff2",
+                "selectors": [
+                    "*"
+                ]
             },
             {
-                "name": "Recursive Sans",
-                "file": "recursive-sans-var.woff2"
+                "name": "Recursive Mono",
+                "file": "recursive-mono-var.woff2",
+                "selectors": [
+                    "code",
+                    "code *", // Code blocks with syntax highlighting
+                    "pre",
+                    "pre *", // Code blocks with syntax highlighting
+                    "samp",
+                    "kbd",
+                    ".blob-code", // Github
+                    ".blob-code *" // Github
+                ]
             }
+
         ]
     }, () => {
         generateStyleSheet();
@@ -99,14 +112,21 @@ function generateStyleSheet() {
     chrome.storage.sync.get(
         "fonts", ({ fonts }) => {
             for (const font of fonts) {
+
+                let selectors = [];
+                for (const selector of font.selectors) {
+                    selectors.push(`body:not(.recursivetypetester-disabled) ${selector}${blacklist}`);
+                }
+
                 const fontURL = chrome.runtime.getURL(`fonts/${font.file}`);
+
                 stylesheet += `
                     @font-face {
                         font-family: '${font.name}';
                         src: url('${fontURL}');
                     }
 
-                    body:not(.recursivetypetester-disabled) *${blacklist} {
+                    ${selectors.join(', ')} {
                         font-family: '${font.name}' !important;
                     }`;
             }
