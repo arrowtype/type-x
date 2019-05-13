@@ -1,6 +1,6 @@
 // Recursive
 
-let stylesheet = "";
+let stylesheets = [];
 const insertedTabs = new Set();
 const className = "recursivetypetester-disabled";
 const blacklistedClasses = [
@@ -26,13 +26,6 @@ chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({
         "fontActivated": false,
         "fonts": [{
-                "name": "Recursive Sans",
-                "file": "recursive-sans-var.woff2",
-                "selectors": [
-                    "*"
-                ]
-            },
-            {
                 "name": "Recursive Mono",
                 "file": "recursive-mono-var.woff2",
                 "selectors": [
@@ -45,8 +38,14 @@ chrome.runtime.onInstalled.addListener(() => {
                     ".blob-code", // Github
                     ".blob-code *" // Github
                 ]
+            },
+            {
+                "name": "Recursive Sans",
+                "file": "recursive-sans-var.woff2",
+                "selectors": [
+                    "*"
+                ]
             }
-
         ]
     }, () => {
         generateStyleSheet();
@@ -90,7 +89,7 @@ function toggle(fontActivated, forceInsert) {
             // Inject CSS to activate font
             if (!insertedTabs.has(tabId) || forceInsert) {
                 chrome.tabs.insertCSS(tabId, {
-                    code: stylesheet,
+                    code: stylesheets.join('\n'),
                     runAt: "document_start"
                 });
                 insertedTabs.add(tabId);
@@ -112,17 +111,17 @@ function generateStyleSheet() {
     chrome.storage.sync.get(
         "fonts", ({ fonts }) => {
             for (const font of fonts) {
+                let universal = false;
+                const fontURL = chrome.runtime.getURL(`fonts/${font.file}`);
 
-                // TODO: if font has `*` as selector, it must go first in
-                // the stylesheet, otherwise it overwrites previous rules
                 let selectors = [];
                 for (const selector of font.selectors) {
+                    // Is this font using the `*` CSS selector? Put it last.
+                    if (selector === '*') universal = true;
                     selectors.push(`body:not(.recursivetypetester-disabled) ${selector}${blacklist}`);
                 }
 
-                const fontURL = chrome.runtime.getURL(`fonts/${font.file}`);
-
-                stylesheet += `
+                const stylesheet = `
                     @font-face {
                         font-family: '${font.name}';
                         src: url('${fontURL}');
@@ -130,7 +129,13 @@ function generateStyleSheet() {
 
                     ${selectors.join(', ')} {
                         font-family: '${font.name}' !important;
-                    }`;
+                    }`
+
+                if (universal) {
+                    stylesheets.push(stylesheet);
+                } else {
+                    stylesheets.unshift(stylesheet)
+                }
             }
         }
     );
