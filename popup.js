@@ -1,7 +1,6 @@
 // Recursive
 
 let activateFonts = document.getElementById('activateFonts');
-let activateFontsStatus = document.getElementById('activateFontsStatus');
 
 activateFonts.onclick = () => {
     chrome.storage.sync.get(
@@ -21,7 +20,7 @@ activateFonts.onclick = () => {
 const updateStatus = () => {
     chrome.storage.sync.get(
         "fontActivated", ({ fontActivated }) => {
-            activateFontsStatus.innerText = `Active: ${fontActivated ? "Yep" : "Nope"}`;
+            activateFonts.innerText = fontActivated ? "Turn off" : "Turn on";
         }
     );
 }
