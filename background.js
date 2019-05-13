@@ -1,5 +1,30 @@
 // Recursive
 
+// User variables (should come from settings)
+const userFonts = [{
+        "name": "Recursive Mono",
+        "file": "recursive-mono-var.woff2",
+        "selectors": [
+            "code",
+            "code *", // Code blocks with syntax highlighting
+            "pre",
+            "pre *", // Code blocks with syntax highlighting
+            "samp",
+            "kbd",
+            ".blob-code", // Github
+            ".blob-code *" // Github
+        ]
+    },
+    {
+        "name": "Recursive Sans",
+        "file": "recursive-sans-var.woff2",
+        "selectors": [
+            "*"
+        ]
+    }
+];
+
+// Extension variables
 let stylesheets = [];
 const insertedTabs = new Set();
 const className = "recursivetypetester-disabled";
@@ -25,28 +50,7 @@ const blacklist = (() => {
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({
         "fontActivated": false,
-        "fonts": [{
-                "name": "Recursive Mono",
-                "file": "recursive-mono-var.woff2",
-                "selectors": [
-                    "code",
-                    "code *", // Code blocks with syntax highlighting
-                    "pre",
-                    "pre *", // Code blocks with syntax highlighting
-                    "samp",
-                    "kbd",
-                    ".blob-code", // Github
-                    ".blob-code *" // Github
-                ]
-            },
-            {
-                "name": "Recursive Sans",
-                "file": "recursive-sans-var.woff2",
-                "selectors": [
-                    "*"
-                ]
-            }
-        ]
+        "fonts": userFonts
     }, () => {
         generateStyleSheet();
     });
@@ -126,7 +130,6 @@ function generateStyleSheet() {
                         font-family: '${font.name}';
                         src: url('${fontURL}');
                     }
-
                     ${selectors.join(', ')} {
                         font-family: '${font.name}' !important;
                     }`
