@@ -114,6 +114,8 @@ function toggle(fontActivated, forceInsert) {
 function generateStyleSheet() {
     chrome.storage.sync.get(
         "fonts", ({ fonts }) => {
+            stylesheets = [];
+
             for (const font of fonts) {
                 let universal = false;
                 const fontURL = chrome.runtime.getURL(`fonts/${font.file}`);
@@ -121,18 +123,18 @@ function generateStyleSheet() {
                 let selectors = [];
                 for (const selector of font.selectors) {
                     // Is this font using the `*` CSS selector? Put it last.
-                    if (selector === '*') universal = true;
+                    if (selector === "*") universal = true;
                     selectors.push(`body:not(.recursivetypetester-disabled) ${selector}${blacklist}`);
                 }
 
                 const stylesheet = `
-                    @font-face {
-                        font-family: '${font.name}';
-                        src: url('${fontURL}');
-                    }
-                    ${selectors.join(', ')} {
-                        font-family: '${font.name}' !important;
-                    }`
+                @font-face {
+                    font-family: '${font.name}';
+                    src: url('${fontURL}');
+                }
+                ${selectors.join(",")} {
+                    font-family: '${font.name}' !important;
+                }`
 
                 if (universal) {
                     stylesheets.push(stylesheet);
