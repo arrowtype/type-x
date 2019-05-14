@@ -64,6 +64,13 @@ function buildForm(fonts) {
         el.setAttribute("value", font.selectors.join(", "));
         usedFont.appendChild(el);
 
+        // CSS
+        el = document.createElement("input");
+        el.setAttribute("type", "text");
+        el.setAttribute("name", "css");
+        el.setAttribute("value", font.css);
+        usedFont.appendChild(el);
+
         usedFonts.appendChild(usedFont);
     }
 }
@@ -87,12 +94,12 @@ function storeForm() {
         const inputs = fieldset.querySelectorAll("input");
 
         for (const input of inputs) {
-            if (input.name === "name" || input.name === "file") {
-                newFont[input.name] = input.value;
-            }
-
             if (input.name === "selectors") {
+                // Selectors should become an array
                 newFont["selectors"] = input.value.split(",").map(item => item.trim());
+            } else {
+                // The rest is plain text
+                newFont[input.name] = input.value;
             }
         }
         newFonts.push(newFont);

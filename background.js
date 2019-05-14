@@ -13,14 +13,16 @@ const userFonts = [{
             "kbd",
             ".blob-code", // Github
             ".blob-code *" // Github
-        ]
+        ],
+        "css": ""
     },
     {
         "name": "Recursive Sans",
         "file": "recursive-sans-var.woff2",
         "selectors": [
             "*"
-        ]
+        ],
+        "css": ""
     }
 ];
 
@@ -134,6 +136,7 @@ function generateStyleSheet(callback) {
                 }
                 ${selectors.join(",")} {
                     font-family: '${font.name}' !important;
+                    ${font.css}
                 }`
 
                 if (universal) {
