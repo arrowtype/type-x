@@ -111,7 +111,7 @@ function toggle(fontActivated, forceInsert) {
     });
 }
 
-function generateStyleSheet() {
+function generateStyleSheet(callback) {
     chrome.storage.sync.get(
         "fonts", ({ fonts }) => {
             stylesheets = [];
@@ -142,6 +142,8 @@ function generateStyleSheet() {
                     stylesheets.unshift(stylesheet)
                 }
             }
+
+            callback && callback();
         }
     );
 }

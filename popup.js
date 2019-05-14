@@ -34,18 +34,35 @@ chrome.storage.sync.get(
     }
 );
 
+// Generate form based on current settings
 function buildForm(fonts) {
     const usedFonts = document.querySelector("#usedFonts");
 
     for (const font of fonts) {
         const usedFont = document.createElement("fieldset");
 
+        let el = null;
+
         // Name
-        const nameElement = document.createElement("input");
-        nameElement.setAttribute("type", "text");
-        nameElement.setAttribute("name", "name");
-        nameElement.setAttribute("value", font.name);
-        usedFont.appendChild(nameElement);
+        el = document.createElement("input");
+        el.setAttribute("type", "text");
+        el.setAttribute("name", "name");
+        el.setAttribute("value", font.name);
+        usedFont.appendChild(el);
+
+        // File
+        el = document.createElement("input");
+        el.setAttribute("type", "text");
+        el.setAttribute("name", "file");
+        el.setAttribute("value", font.file);
+        usedFont.appendChild(el);
+
+        // Selectors
+        el = document.createElement("input");
+        el.setAttribute("type", "text");
+        el.setAttribute("name", "selectors");
+        el.setAttribute("value", font.selectors.join(", "));
+        usedFont.appendChild(el);
 
         usedFonts.appendChild(usedFont);
     }
@@ -60,6 +77,7 @@ function initForm() {
     }, false);
 }
 
+// Store changes made to fonts
 function storeForm() {
     const newFonts = [];
     const fieldsets = document.querySelectorAll("#usedFonts > fieldset");
@@ -69,24 +87,30 @@ function storeForm() {
         const inputs = fieldset.querySelectorAll("input");
 
         for (const input of inputs) {
-            // console.log(input);
-            newFont[input.name] = input.value;
+            if (input.name === "name" || input.name === "file") {
+                newFont[input.name] = input.value;
+            }
+
+            if (input.name === "selectors") {
+                newFont["selectors"] = input.value.split(",").map(item => item.trim());
+            }
         }
-
-        // Temp
-        newFont["file"] = "testfont.ttf";
-        newFont["selectors"] = "*";
-
         newFonts.push(newFont);
     }
 
+    // Apply new fonts and activate extension
     chrome.storage.sync.set({ "fonts": newFonts }, () => {
         chrome.runtime.getBackgroundPage(backgroundPage => {
-            // TODO!! The new stylesheet will be overwritten
-            // by the previous one. E.g. all current tabs
-            // will stay on the old font, new tabs will get
-            // the new font
-            backgroundPage.generateStyleSheet();
+            backgroundPage.generateStyleSheet(() => {
+                chrome.storage.sync.set({
+                    "fontActivated": true
+                }, () => {
+                    chrome.runtime.getBackgroundPage(backgroundPage => {
+                        backgroundPage.toggle(true, true);
+                    });
+                    updateStatus();
+                });
+            });
         });
     });
 }
