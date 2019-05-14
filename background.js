@@ -1,7 +1,7 @@
 // Recursive
 
 // User variables (should come from settings)
-const userFonts = [{
+const defaultFonts = [{
         "name": "Recursive Mono",
         "file": "recursive-mono-var.woff2",
         "selectors": [
@@ -52,7 +52,7 @@ const blacklist = (() => {
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({
         "fontActivated": false,
-        "fonts": userFonts
+        "fonts": defaultFonts
     }, () => {
         generateStyleSheet();
     });

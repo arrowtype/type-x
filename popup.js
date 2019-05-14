@@ -1,12 +1,28 @@
 // Recursive
 
 const activateFonts = document.querySelector("#activateFonts");
+const addFont = document.querySelector("#addFont");
 
 // Toggle extension on/off using the button
 activateFonts.onclick = () => {
     chrome.storage.sync.get(
         "fontActivated", ({ fontActivated }) => {
             updateStatus(!fontActivated);
+        }
+    );
+};
+
+// Toggle extension on/off using the button
+addFont.onclick = () => {
+    chrome.storage.sync.get(
+        "fonts", ({ fonts }) => {
+            fonts.push({
+                "name": "",
+                "file": "",
+                "selectors": [],
+                "css": ""
+            });
+            buildForm(fonts);
         }
     );
 };
@@ -45,6 +61,10 @@ function initForm() {
 // Generate form based on current settings
 function buildForm(fonts) {
     const usedFonts = document.querySelector("#usedFonts");
+
+    while (usedFonts.firstChild) {
+        usedFonts.removeChild(usedFonts.firstChild);
+    }
 
     for (const font of fonts) {
         const usedFont = document.createElement("fieldset");
@@ -117,7 +137,7 @@ function storeForm() {
 // Get current fonts from storage and show them in the popup
 chrome.storage.sync.get(
     "fonts", ({ fonts }) => {
-        buildForm(fonts)
+        buildForm(fonts);
     }
 );
 
