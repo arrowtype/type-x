@@ -14,7 +14,7 @@ const defaultFonts = [{
             ".blob-code", // Github
             ".blob-code *" // Github
         ],
-        "css": ""
+        "css": "line-height: normal; font-feature-settings: normal;"
     },
     {
         "name": "Recursive Sans",
