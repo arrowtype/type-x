@@ -2,24 +2,29 @@
 
 const activateFonts = document.querySelector("#activateFonts");
 
-// Toggle extension on/off
+// Toggle extension on/off using the button
 activateFonts.onclick = () => {
     chrome.storage.sync.get(
         "fontActivated", ({ fontActivated }) => {
-            chrome.storage.sync.set({
-                "fontActivated": !fontActivated
-            }, () => {
-                chrome.runtime.getBackgroundPage(backgroundPage => {
-                    backgroundPage.toggle(!fontActivated, true);
-                });
-                updateStatus();
-            });
+            updateStatus(!fontActivated);
         }
     );
 };
 
+// Toggle extension on/off
+function updateStatus(status) {
+    chrome.storage.sync.set({
+        "fontActivated": status
+    }, () => {
+        chrome.runtime.getBackgroundPage(backgroundPage => {
+            backgroundPage.updateFonts(status, true);
+        });
+        showStatus();
+    });
+}
+
 // Show status of extension in the popup
-const updateStatus = () => {
+const showStatus = () => {
     chrome.storage.sync.get(
         "fontActivated", ({ fontActivated }) => {
             activateFonts.innerText = fontActivated ? "Turn off" : "Turn on";
@@ -27,12 +32,15 @@ const updateStatus = () => {
     );
 }
 
-// Get current fonts from storage and show them in the popup
-chrome.storage.sync.get(
-    "fonts", ({ fonts }) => {
-        buildForm(fonts)
-    }
-);
+// Initialise form
+function initForm() {
+    const form = document.querySelector("#fontsForm");
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        storeForm();
+    }, false);
+}
 
 // Generate form based on current settings
 function buildForm(fonts) {
@@ -75,15 +83,6 @@ function buildForm(fonts) {
     }
 }
 
-function initForm() {
-    const form = document.querySelector("#fontsForm");
-
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        storeForm();
-    }, false);
-}
-
 // Store changes made to fonts
 function storeForm() {
     const newFonts = [];
@@ -96,7 +95,7 @@ function storeForm() {
         for (const input of inputs) {
             if (input.name === "selectors") {
                 // Selectors should become an array
-                newFont["selectors"] = input.value.split(",").map(item => item.trim());
+                newFont["selectors"] = input.value.split(",").map(i => i.trim());
             } else {
                 // The rest is plain text
                 newFont[input.name] = input.value;
@@ -109,19 +108,19 @@ function storeForm() {
     chrome.storage.sync.set({ "fonts": newFonts }, () => {
         chrome.runtime.getBackgroundPage(backgroundPage => {
             backgroundPage.generateStyleSheet(() => {
-                chrome.storage.sync.set({
-                    "fontActivated": true
-                }, () => {
-                    chrome.runtime.getBackgroundPage(backgroundPage => {
-                        backgroundPage.toggle(true, true);
-                    });
-                    updateStatus();
-                });
+                updateStatus(true);
             });
         });
     });
 }
 
+// Get current fonts from storage and show them in the popup
+chrome.storage.sync.get(
+    "fonts", ({ fonts }) => {
+        buildForm(fonts)
+    }
+);
+
 // Initialise popup
-updateStatus();
+showStatus();
 initForm();

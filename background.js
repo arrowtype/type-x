@@ -62,7 +62,7 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
     if (active && status === "loading") {
         chrome.storage.sync.get(
             "fontActivated", ({ fontActivated }) => {
-                toggle(fontActivated, true);
+                updateFonts(fontActivated, true);
             }
         );
     }
@@ -71,7 +71,7 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
 chrome.tabs.onActivated.addListener(() => {
     chrome.storage.sync.get(
         "fontActivated", ({ fontActivated }) => {
-            toggle(fontActivated);
+            updateFonts(fontActivated);
         }
     );
 });
@@ -84,7 +84,7 @@ chrome.tabs.onRemoved.addListener(tabId => {
 // the body isn't. We don't want a delay, so the CSS will
 // enable the fonts immediately, and we only add a class
 // when we want to *remove* the custom fonts.
-function toggle(fontActivated, forceInsert) {
+function updateFonts(fontActivated, forceInsert) {
     chrome.tabs.query({
         active: true,
         currentWindow: true
