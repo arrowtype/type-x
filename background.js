@@ -1,7 +1,7 @@
 // Recursive
 
 // User variables (should come from settings)
-const userFonts = [{
+const defaultFonts = [{
         "name": "Recursive Mono",
         "file": "recursive-mono-var.woff2",
         "selectors": [
@@ -13,14 +13,16 @@ const userFonts = [{
             "kbd",
             ".blob-code", // Github
             ".blob-code *" // Github
-        ]
+        ],
+        "css": "line-height: normal; font-feature-settings: normal;"
     },
     {
         "name": "Recursive Sans",
         "file": "recursive-sans-var.woff2",
         "selectors": [
             "*"
-        ]
+        ],
+        "css": ""
     }
 ];
 
@@ -50,7 +52,7 @@ const blacklist = (() => {
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({
         "fontActivated": false,
-        "fonts": userFonts
+        "fonts": defaultFonts
     }, () => {
         generateStyleSheet();
     });
@@ -60,7 +62,7 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
     if (active && status === "loading") {
         chrome.storage.sync.get(
             "fontActivated", ({ fontActivated }) => {
-                toggle(fontActivated, true);
+                updateFonts(fontActivated, true);
             }
         );
     }
@@ -69,7 +71,7 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
 chrome.tabs.onActivated.addListener(() => {
     chrome.storage.sync.get(
         "fontActivated", ({ fontActivated }) => {
-            toggle(fontActivated);
+            updateFonts(fontActivated);
         }
     );
 });
@@ -82,7 +84,7 @@ chrome.tabs.onRemoved.addListener(tabId => {
 // the body isn't. We don't want a delay, so the CSS will
 // enable the fonts immediately, and we only add a class
 // when we want to *remove* the custom fonts.
-function toggle(fontActivated, forceInsert) {
+function updateFonts(fontActivated, forceInsert) {
     chrome.tabs.query({
         active: true,
         currentWindow: true
@@ -111,9 +113,11 @@ function toggle(fontActivated, forceInsert) {
     });
 }
 
-function generateStyleSheet() {
+function generateStyleSheet(callback) {
     chrome.storage.sync.get(
         "fonts", ({ fonts }) => {
+            stylesheets = [];
+
             for (const font of fonts) {
                 let universal = false;
                 const fontURL = chrome.runtime.getURL(`fonts/${font.file}`);
@@ -121,18 +125,19 @@ function generateStyleSheet() {
                 let selectors = [];
                 for (const selector of font.selectors) {
                     // Is this font using the `*` CSS selector? Put it last.
-                    if (selector === '*') universal = true;
+                    if (selector === "*") universal = true;
                     selectors.push(`body:not(.recursivetypetester-disabled) ${selector}${blacklist}`);
                 }
 
                 const stylesheet = `
-                    @font-face {
-                        font-family: '${font.name}';
-                        src: url('${fontURL}');
-                    }
-                    ${selectors.join(', ')} {
-                        font-family: '${font.name}' !important;
-                    }`
+                @font-face {
+                    font-family: '${font.name}';
+                    src: url('${fontURL}');
+                }
+                ${selectors.join(",")} {
+                    font-family: '${font.name}' !important;
+                    ${font.css}
+                }`
 
                 if (universal) {
                     stylesheets.push(stylesheet);
@@ -140,6 +145,8 @@ function generateStyleSheet() {
                     stylesheets.unshift(stylesheet)
                 }
             }
+
+            callback && callback();
         }
     );
 }
