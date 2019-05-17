@@ -1,32 +1,5 @@
 // Recursive
 
-// User variables (should come from settings)
-const defaultFonts = [
-    // {
-    //     "name": "Recursive Mono",
-    //     "file": "recursive-mono-var.woff2",
-    //     "selectors": [
-    //         "code",
-    //         "code *", // Code blocks with syntax highlighting
-    //         "pre",
-    //         "pre *", // Code blocks with syntax highlighting
-    //         "samp",
-    //         "kbd",
-    //         ".blob-code", // Github
-    //         ".blob-code *" // Github
-    //     ],
-    //     "css": "line-height: normal; font-feature-settings: normal;"
-    // },
-    {
-        "name": "Recursive Sans",
-        "file": "recursive-sans-var.woff2",
-        "selectors": [
-            "*"
-        ],
-        "css": ""
-    }
-];
-
 // Extension variables
 let stylesheets = [];
 const insertedTabs = new Set();
