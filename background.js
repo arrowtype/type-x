@@ -1,21 +1,22 @@
 // Recursive
 
 // User variables (should come from settings)
-const defaultFonts = [{
-        "name": "Recursive Mono",
-        "file": "recursive-mono-var.woff2",
-        "selectors": [
-            "code",
-            "code *", // Code blocks with syntax highlighting
-            "pre",
-            "pre *", // Code blocks with syntax highlighting
-            "samp",
-            "kbd",
-            ".blob-code", // Github
-            ".blob-code *" // Github
-        ],
-        "css": "line-height: normal; font-feature-settings: normal;"
-    },
+const defaultFonts = [
+    // {
+    //     "name": "Recursive Mono",
+    //     "file": "recursive-mono-var.woff2",
+    //     "selectors": [
+    //         "code",
+    //         "code *", // Code blocks with syntax highlighting
+    //         "pre",
+    //         "pre *", // Code blocks with syntax highlighting
+    //         "samp",
+    //         "kbd",
+    //         ".blob-code", // Github
+    //         ".blob-code *" // Github
+    //     ],
+    //     "css": "line-height: normal; font-feature-settings: normal;"
+    // },
     {
         "name": "Recursive Sans",
         "file": "recursive-sans-var.woff2",
@@ -50,7 +51,7 @@ const blacklist = (() => {
 })();
 
 chrome.runtime.onInstalled.addListener(() => {
-    chrome.storage.sync.set({
+    chrome.storage.local.set({
         "fontActivated": false,
         "fonts": defaultFonts
     }, () => {
@@ -60,7 +61,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
     if (active && status === "loading") {
-        chrome.storage.sync.get(
+        chrome.storage.local.get(
             "fontActivated", ({ fontActivated }) => {
                 updateFonts(fontActivated, true);
             }
@@ -69,7 +70,7 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
 });
 
 chrome.tabs.onActivated.addListener(() => {
-    chrome.storage.sync.get(
+    chrome.storage.local.get(
         "fontActivated", ({ fontActivated }) => {
             updateFonts(fontActivated);
         }
@@ -114,13 +115,14 @@ function updateFonts(fontActivated, forceInsert) {
 }
 
 function generateStyleSheet(callback) {
-    chrome.storage.sync.get(
+    chrome.storage.local.get(
         "fonts", ({ fonts }) => {
             stylesheets = [];
 
             for (const font of fonts) {
                 let universal = false;
-                const fontURL = chrome.runtime.getURL(`fonts/${font.file}`);
+                // const fontURL = chrome.runtime.getURL(`fonts/${font.file}`);
+                const fontURL = font.file;
 
                 let selectors = [];
                 for (const selector of font.selectors) {

@@ -2,10 +2,12 @@
 
 const activateFonts = document.querySelector("#activateFonts");
 const addFont = document.querySelector("#addFont");
+const fontFiles = {};
+// const fontfile = document.querySelector("#fontfile");
 
 // Toggle extension on/off using the button
 activateFonts.onclick = () => {
-    chrome.storage.sync.get(
+    chrome.storage.local.get(
         "fontActivated", ({ fontActivated }) => {
             updateStatus(!fontActivated);
         }
@@ -14,7 +16,7 @@ activateFonts.onclick = () => {
 
 // Toggle extension on/off using the button
 addFont.onclick = () => {
-    chrome.storage.sync.get(
+    chrome.storage.local.get(
         "fonts", ({ fonts }) => {
             fonts.push({
                 "name": "",
@@ -29,7 +31,7 @@ addFont.onclick = () => {
 
 // Toggle extension on/off
 function updateStatus(status) {
-    chrome.storage.sync.set({
+    chrome.storage.local.set({
         "fontActivated": status
     }, () => {
         chrome.runtime.getBackgroundPage(backgroundPage => {
@@ -41,7 +43,7 @@ function updateStatus(status) {
 
 // Show status of extension in the popup
 const showStatus = () => {
-    chrome.storage.sync.get(
+    chrome.storage.local.get(
         "fontActivated", ({ fontActivated }) => {
             activateFonts.innerText = fontActivated ? "Turn off" : "Turn on";
         }
@@ -80,9 +82,10 @@ function buildForm(fonts) {
 
         // File
         el = document.createElement("input");
-        el.setAttribute("type", "text");
-        el.setAttribute("name", "file");
-        el.setAttribute("value", font.file);
+        el.setAttribute("type", "file");
+        el.setAttribute("accept", ".ttf,.otf,.woff,.woff2");
+        el.setAttribute("name", (Math.random() + 1).toString(36).substring(7));
+        el.onchange = grabFont;
         usedFont.appendChild(el);
 
         // Selectors
@@ -106,7 +109,7 @@ function buildForm(fonts) {
 // Store changes made to fonts
 function storeForm() {
     const newFonts = [];
-    const fieldsets = document.querySelectorAll("#usedFonts > fieldset");
+    const fieldsets = document.querySelectorAll("#fontsForm fieldset");
 
     for (const fieldset of fieldsets) {
         const newFont = {}
@@ -116,16 +119,17 @@ function storeForm() {
             if (input.name === "selectors") {
                 // Selectors should become an array
                 newFont["selectors"] = input.value.split(",").map(i => i.trim());
-            } else {
-                // The rest is plain text
+            } else if (input.name === "name" || input.name === "css") {
                 newFont[input.name] = input.value;
+            } else {
+                newFont["file"] = fontFiles[input.name];
             }
         }
         newFonts.push(newFont);
     }
 
     // Apply new fonts and activate extension
-    chrome.storage.sync.set({ "fonts": newFonts }, () => {
+    chrome.storage.local.set({ "fonts": newFonts }, () => {
         chrome.runtime.getBackgroundPage(backgroundPage => {
             backgroundPage.generateStyleSheet(() => {
                 updateStatus(true);
@@ -135,7 +139,7 @@ function storeForm() {
 }
 
 // Get current fonts from storage and show them in the popup
-chrome.storage.sync.get(
+chrome.storage.local.get(
     "fonts", ({ fonts }) => {
         buildForm(fonts);
     }
@@ -144,3 +148,16 @@ chrome.storage.sync.get(
 // Initialise popup
 showStatus();
 initForm();
+
+// Keep track of file data, and hook up to rest
+// of form data on submit
+function grabFont(e) {
+    const file = e.target.files[0];
+    const id = e.target.name;
+
+    const reader = new FileReader();
+    reader.onload = ({target}) => {
+        fontFiles[id] = target.result;
+    };
+    reader.readAsDataURL(file);
+}
