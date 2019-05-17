@@ -56,7 +56,7 @@ function initForm() {
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();
-        storeForm();
+        saveForm();
     }, false);
 }
 
@@ -114,7 +114,7 @@ function buildForm(fonts) {
 }
 
 // Store changes made to fonts
-function storeForm() {
+function saveForm() {
     const newFonts = [];
     const fieldsets = document.querySelectorAll("#fontsForm fieldset");
 
@@ -129,7 +129,7 @@ function storeForm() {
             } else if (input.name === "name" || input.name === "css") {
                 newFont[input.name] = input.value;
             } else {
-                if(fontFiles[input.name]) {
+                if (fontFiles[input.name]) {
                     newFont["file"] = fontFiles[input.name];
                 } else {
                     newFont["file"] = inputs["originalfile"];
@@ -149,6 +149,19 @@ function storeForm() {
     });
 }
 
+// Keep track of file data, and hook up to rest
+// of form data on submit
+function grabFont(e) {
+    const file = e.target.files[0];
+    const id = e.target.name;
+
+    const reader = new FileReader();
+    reader.onload = ({ target }) => {
+        fontFiles[id] = target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
 // Get current fonts from storage and show them in the popup
 chrome.storage.local.get(
     "fonts", ({ fonts }) => {
@@ -159,16 +172,3 @@ chrome.storage.local.get(
 // Initialise popup
 showStatus();
 initForm();
-
-// Keep track of file data, and hook up to rest
-// of form data on submit
-function grabFont(e) {
-    const file = e.target.files[0];
-    const id = e.target.name;
-
-    const reader = new FileReader();
-    reader.onload = ({target}) => {
-        fontFiles[id] = target.result;
-    };
-    reader.readAsDataURL(file);
-}

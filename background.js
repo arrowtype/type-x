@@ -51,7 +51,7 @@ const blacklist = (() => {
 })();
 
 chrome.runtime.onInstalled.addListener(() => {
-    if(chrome.runtime.lastError) {
+    if (chrome.runtime.lastError) {
         console.log(chrome.runtime.lastError);
     }
 
@@ -64,7 +64,7 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
-    if(chrome.runtime.lastError) {
+    if (chrome.runtime.lastError) {
         console.log(chrome.runtime.lastError);
     }
 
@@ -78,7 +78,7 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
 });
 
 chrome.tabs.onActivated.addListener(() => {
-    if(chrome.runtime.lastError) {
+    if (chrome.runtime.lastError) {
         console.log(chrome.runtime.lastError);
     }
 
@@ -90,7 +90,7 @@ chrome.tabs.onActivated.addListener(() => {
 });
 
 chrome.tabs.onRemoved.addListener(tabId => {
-    if(chrome.runtime.lastError) {
+    if (chrome.runtime.lastError) {
         console.log(chrome.runtime.lastError);
     }
 
@@ -106,7 +106,7 @@ function updateFonts(fontActivated, forceInsert) {
         active: true,
         currentWindow: true
     }, tabs => {
-        if(chrome.runtime.lastError) {
+        if (chrome.runtime.lastError) {
             console.log(chrome.runtime.lastError);
         }
 
@@ -119,7 +119,7 @@ function updateFonts(fontActivated, forceInsert) {
                     code: stylesheets.join('\n'),
                     runAt: "document_start"
                 }, () => {
-                    if(chrome.runtime.lastError) {
+                    if (chrome.runtime.lastError) {
                         console.log(chrome.runtime.lastError);
                     }
                 });
@@ -129,7 +129,7 @@ function updateFonts(fontActivated, forceInsert) {
             chrome.tabs.executeScript(tabId, {
                 code: `document.body.classList.remove("${className}");`
             }, () => {
-                if(chrome.runtime.lastError) {
+                if (chrome.runtime.lastError) {
                     console.log(chrome.runtime.lastError);
                 }
             });
@@ -138,7 +138,7 @@ function updateFonts(fontActivated, forceInsert) {
             chrome.tabs.executeScript(tabId, {
                 code: `document.body.classList.add("${className}");`
             }, () => {
-                if(chrome.runtime.lastError) {
+                if (chrome.runtime.lastError) {
                     console.log(chrome.runtime.lastError);
                 }
             });
@@ -181,6 +181,9 @@ function generateStyleSheet(callback) {
             }
 
             callback && callback();
+
+            // New stylesheet, reset all tabs
+            insertedTabs.clear();
         }
     );
 }
