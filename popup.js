@@ -83,7 +83,7 @@ function buildForm(fonts) {
         // File
         el = document.createElement("input");
         el.setAttribute("type", "file");
-        el.setAttribute("accept", ".ttf,.otf,.woff,.woff2");
+        el.setAttribute("accept", ".ttf,.otf,.eot,.woff,.woff2");
         el.setAttribute("name", (Math.random() + 1).toString(36).substring(7));
         el.onchange = grabFont;
         usedFont.appendChild(el);
