@@ -5,6 +5,13 @@ const addFont = document.querySelector("#addFont");
 const fontFiles = {};
 // const fontfile = document.querySelector("#fontfile");
 
+// Get current fonts from storage and show them in the popup
+chrome.storage.local.get(
+    "fonts", ({ fonts }) => {
+        buildForm(fonts);
+    }
+);
+
 // Toggle extension on/off using the button
 activateFonts.onclick = () => {
     chrome.storage.local.get(
@@ -169,13 +176,6 @@ function grabFont(e) {
     };
     reader.readAsDataURL(file);
 }
-
-// Get current fonts from storage and show them in the popup
-chrome.storage.local.get(
-    "fonts", ({ fonts }) => {
-        buildForm(fonts);
-    }
-);
 
 // Initialise popup
 showStatus();

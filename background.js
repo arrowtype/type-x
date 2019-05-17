@@ -36,6 +36,14 @@ chrome.runtime.onInstalled.addListener(() => {
     });
 });
 
+chrome.runtime.onStartup.addListener(() => {
+    chrome.storage.local.get(
+        "fonts", ({ fonts }) => {
+            generateStyleSheet();
+        }
+    );
+});
+
 chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
     if (chrome.runtime.lastError) {
         console.log(chrome.runtime.lastError);
