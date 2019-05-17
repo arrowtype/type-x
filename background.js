@@ -51,6 +51,10 @@ const blacklist = (() => {
 })();
 
 chrome.runtime.onInstalled.addListener(() => {
+    if(chrome.runtime.lastError) {
+        console.log(chrome.runtime.lastError);
+    }
+
     chrome.storage.local.set({
         "fontActivated": false,
         "fonts": defaultFonts
@@ -60,6 +64,10 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
+    if(chrome.runtime.lastError) {
+        console.log(chrome.runtime.lastError);
+    }
+
     if (active && status === "loading") {
         chrome.storage.local.get(
             "fontActivated", ({ fontActivated }) => {
@@ -70,6 +78,10 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
 });
 
 chrome.tabs.onActivated.addListener(() => {
+    if(chrome.runtime.lastError) {
+        console.log(chrome.runtime.lastError);
+    }
+
     chrome.storage.local.get(
         "fontActivated", ({ fontActivated }) => {
             updateFonts(fontActivated);
@@ -78,6 +90,10 @@ chrome.tabs.onActivated.addListener(() => {
 });
 
 chrome.tabs.onRemoved.addListener(tabId => {
+    if(chrome.runtime.lastError) {
+        console.log(chrome.runtime.lastError);
+    }
+
     insertedTabs.delete(tabId);
 });
 
@@ -90,6 +106,10 @@ function updateFonts(fontActivated, forceInsert) {
         active: true,
         currentWindow: true
     }, tabs => {
+        if(chrome.runtime.lastError) {
+            console.log(chrome.runtime.lastError);
+        }
+
         const tabId = tabs[0].id;
 
         if (fontActivated) {
@@ -98,17 +118,29 @@ function updateFonts(fontActivated, forceInsert) {
                 chrome.tabs.insertCSS(tabId, {
                     code: stylesheets.join('\n'),
                     runAt: "document_start"
+                }, () => {
+                    if(chrome.runtime.lastError) {
+                        console.log(chrome.runtime.lastError);
+                    }
                 });
                 insertedTabs.add(tabId);
             }
             // Remove force-disable class
             chrome.tabs.executeScript(tabId, {
                 code: `document.body.classList.remove("${className}");`
+            }, () => {
+                if(chrome.runtime.lastError) {
+                    console.log(chrome.runtime.lastError);
+                }
             });
         } else {
             // Add force-disable class
             chrome.tabs.executeScript(tabId, {
                 code: `document.body.classList.add("${className}");`
+            }, () => {
+                if(chrome.runtime.lastError) {
+                    console.log(chrome.runtime.lastError);
+                }
             });
         }
     });
