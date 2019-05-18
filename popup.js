@@ -87,19 +87,13 @@ function buildForm(fonts) {
         el.setAttribute("value", font.name);
         usedFont.appendChild(el);
 
-        // Original file
-        el = document.createElement("input");
-        el.setAttribute("type", "hidden");
-        el.setAttribute("name", "originalfile");
-        el.setAttribute("value", font.file);
-        usedFont.appendChild(el);
-
         // Optional new file
         el = document.createElement("input");
         el.setAttribute("type", "file");
         el.setAttribute("accept", ".ttf,.otf,.eot,.woff,.woff2");
         el.setAttribute("name", "file");
         el.setAttribute("id", (Math.random() + 1).toString(36).substring(7));
+        el.setAttribute("data-original", font.file);
         el.onchange = grabFont;
         usedFont.appendChild(el);
 
@@ -144,10 +138,10 @@ function saveForm() {
             } else if (input.name === "name" || input.name === "css") {
                 newFont[input.name] = input.value;
             } else if (input.name === "file") {
-                if (fontFiles[input.name]) {
-                    newFont["file"] = fontFiles[input.name];
+                if (fontFiles[input.id]) {
+                    newFont["file"] = fontFiles[input.id];
                 } else {
-                    newFont["file"] = inputs["originalfile"];
+                    newFont["file"] = input.dataset.original;
                 }
             }
         }
