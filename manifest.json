@@ -7,11 +7,11 @@
         "activeTab",
         "webNavigation",
         "storage",
-        "http://*/",
-        "https://*/"
+        "*://*/*"
     ],
     "background": {
         "scripts": [
+            "recursive-fonts.js",
             "background.js"
         ],
         "persistent": false

@@ -2,15 +2,16 @@
 <html lang="en">
 
 <head>
-    <style>
-        #activateFonts {
-            white-space: nowrap;
-        }
-    </style>
+    <link rel="stylesheet" href="css/css.css">
 </head>
 
 <body>
-    <button id="activateFonts">Font!</button>
+    <button id="activateFonts" class="activate-fonts"></button>
+    <form id="fontsForm">
+        <div id="usedFonts"></div>
+        <button type="submit">Apply</button>
+        <button type="button" id="addFont">Add font</button>
+    </form>
     <script src="popup.js"></script>
 </body>
 
