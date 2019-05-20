@@ -58,18 +58,6 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
     }
 });
 
-chrome.tabs.onActivated.addListener(() => {
-    if (chrome.runtime.lastError) {
-        console.log(chrome.runtime.lastError);
-    }
-
-    chrome.storage.local.get(
-        "fontActivated", ({ fontActivated }) => {
-            updateFonts(fontActivated);
-        }
-    );
-});
-
 chrome.tabs.onRemoved.addListener(tabId => {
     if (chrome.runtime.lastError) {
         console.log(chrome.runtime.lastError);
@@ -83,48 +71,49 @@ chrome.tabs.onRemoved.addListener(tabId => {
 // enable the fonts immediately, and we only add a class
 // when we want to *remove* the custom fonts.
 function updateFonts(fontActivated, forceInsert) {
-    chrome.tabs.query({
-        active: true,
-        currentWindow: true
-    }, tabs => {
-        if (chrome.runtime.lastError) {
-            console.log(chrome.runtime.lastError);
-        }
-
-        const tabId = tabs[0].id;
-
-        if (fontActivated) {
-            // Inject CSS to activate font
-            if (!insertedTabs.has(tabId) || forceInsert) {
-                chrome.tabs.insertCSS(tabId, {
-                    code: stylesheets.join('\n'),
-                    runAt: "document_start"
-                }, () => {
-                    if (chrome.runtime.lastError) {
-                        console.log(chrome.runtime.lastError);
-                    }
-                });
-                insertedTabs.add(tabId);
-            }
-            // Remove force-disable class
-            chrome.tabs.executeScript(tabId, {
-                code: `document.body.classList.remove("${className}");`
-            }, () => {
-                if (chrome.runtime.lastError) {
-                    console.log(chrome.runtime.lastError);
-                }
-            });
-        } else {
-            // Add force-disable class
-            chrome.tabs.executeScript(tabId, {
-                code: `document.body.classList.add("${className}");`
-            }, () => {
-                if (chrome.runtime.lastError) {
-                    console.log(chrome.runtime.lastError);
-                }
-            });
+    chrome.tabs.query({}, tabs => {
+        for (const tab of tabs) {
+            injectStyleSheet(tab.id, fontActivated, forceInsert);
         }
     });
+}
+
+function injectStyleSheet(tabId, fontActivated, forceInsert) {
+    if (chrome.runtime.lastError) {
+        console.log(chrome.runtime.lastError);
+    }
+
+    if (fontActivated) {
+        // Inject CSS to activate font
+        if (!insertedTabs.has(tabId) || forceInsert) {
+            chrome.tabs.insertCSS(tabId, {
+                code: stylesheets.join('\n'),
+                runAt: "document_start"
+            }, () => {
+                if (chrome.runtime.lastError) {
+                    console.log(chrome.runtime.lastError);
+                }
+            });
+            insertedTabs.add(tabId);
+        }
+        // Remove force-disable class
+        chrome.tabs.executeScript(tabId, {
+            code: `document.body.classList.remove("${className}");`
+        }, () => {
+            if (chrome.runtime.lastError) {
+                console.log(chrome.runtime.lastError);
+            }
+        });
+    } else {
+        // Add force-disable class
+        chrome.tabs.executeScript(tabId, {
+            code: `document.body.classList.add("${className}");`
+        }, () => {
+            if (chrome.runtime.lastError) {
+                console.log(chrome.runtime.lastError);
+            }
+        });
+    }
 }
 
 function generateStyleSheet(callback) {
