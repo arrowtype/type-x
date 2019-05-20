@@ -4,13 +4,13 @@
     --form-width: 300px;
 }
 
-@font-face {
+/* @font-face {
     font-family: "Recursive Sans";
     src: url("../fonts/recursive-sans-var.woff2");
-}
+} */
 
 * {
-    font-family: "Recursive Sans";
+    /* font-family: "Recursive Sans"; */
     font-size: 16px;
     box-sizing: border-box;
 }
