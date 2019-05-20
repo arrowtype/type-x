@@ -66,10 +66,7 @@ chrome.tabs.onRemoved.addListener(tabId => {
     insertedTabs.delete(tabId);
 });
 
-// Injecting the stylesheet is fast, adding a class to
-// the body isn't. We don't want a delay, so the CSS will
-// enable the fonts immediately, and we only add a class
-// when we want to *remove* the custom fonts.
+// Update fonts across all tabs
 function updateFonts(fontActivated, forceInsert) {
     chrome.tabs.query({}, tabs => {
         for (const tab of tabs) {
@@ -78,6 +75,10 @@ function updateFonts(fontActivated, forceInsert) {
     });
 }
 
+// Injecting the stylesheet is fast, adding a class to
+// the body isn't. We don't want a delay, so the CSS will
+// enable the fonts immediately, and we only add a class
+// when we want to *remove* the custom fonts.
 function injectStyleSheet(tabId, fontActivated, forceInsert) {
     if (chrome.runtime.lastError) {
         console.log(chrome.runtime.lastError);
