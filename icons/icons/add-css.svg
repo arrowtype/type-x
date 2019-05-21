@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55 (78076) - https://sketchapp.com -->
+    <title>icon/add-css</title>
+    <desc>Created with Sketch.</desc>
+    <g id="icon/add-css" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <g id="Group" transform="translate(0.495469, 1.000000)" stroke="#B6C1CE">
+            <g id="Group-2" transform="translate(2.000000, 2.500000) scale(1, -1) translate(-2.000000, -2.500000) ">
+                <path d="M4,-1.42108547e-14 C2,-1.42108547e-14 1.01598678,0.459063687 1.01598678,1.11113056 C1.01598678,2.05066991 2.67106566,1.86241754 2.67106566,2.86815776 C2.67106566,3.54151791 1.78071044,4.08546532 0,4.5" id="Path-3" transform="translate(2.000000, 2.250000) scale(1, -1) translate(-2.000000, -2.250000) "></path>
+            </g>
+            <g id="Group-2" transform="translate(0.000000, 5.000000)">
+                <path d="M4,-1.42108547e-14 C2,-1.42108547e-14 1.01598678,0.459063687 1.01598678,1.11113056 C1.01598678,2.05066991 2.67106566,1.86241754 2.67106566,2.86815776 C2.67106566,3.54151791 1.78071044,4.08546532 0,4.5" id="Path-3" transform="translate(2.000000, 2.250000) scale(1, -1) translate(-2.000000, -2.250000) "></path>
+            </g>
+        </g>
+        <g id="Group-Copy" transform="translate(9.500000, 8.500000) scale(-1, 1) translate(-9.500000, -8.500000) translate(7.000000, 6.000000)" stroke="#B6C1CE">
+            <g id="Group-2">
+                <path d="M4.50344857,9.76996262e-15 C2.50344857,9.76996262e-15 1.51943535,0.459063687 1.51943535,1.11113056 C1.51943535,2.05066991 3.17451423,1.86241754 3.17451423,2.86815776 C3.17451423,3.54151791 2.28415901,4.08546532 0.503448572,4.5" id="Path-3" transform="translate(2.503449, 2.250000) scale(1, -1) translate(-2.503449, -2.250000) "></path>
+            </g>
+        </g>
+        <g id="Group-Copy" transform="translate(9.500000, 3.500000) scale(-1, -1) translate(-9.500000, -3.500000) translate(7.000000, 1.000000)" stroke="#B6C1CE">
+            <g id="Group-2">
+                <path d="M4.50344857,9.76996262e-15 C2.50344857,9.76996262e-15 1.51943535,0.459063687 1.51943535,1.11113056 C1.51943535,2.05066991 3.17451423,1.86241754 3.17451423,2.86815776 C3.17451423,3.54151791 2.28415901,4.08546532 0.503448572,4.5" id="Path-3" transform="translate(2.503449, 2.250000) scale(1, -1) translate(-2.503449, -2.250000) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

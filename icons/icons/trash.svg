@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55 (78076) - https://sketchapp.com -->
+    <title>icon/trash</title>
+    <desc>Created with Sketch.</desc>
+    <g id="icon/trash" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polygon id="Rectangle" stroke="#E57880" stroke-linejoin="round" points="3.5 4.5 8.5 4.5 8.5 10.5 3.5 10.5"></polygon>
+        <path d="M2.49546891,2.5 L9.49655143,2.5" id="Line" stroke="#E57880" stroke-linecap="round"></path>
+        <path d="M7,2 L4.999517,2" id="Line-2" stroke="#E57880" stroke-width="2" stroke-linecap="round"></path>
+    </g>
+</svg>
