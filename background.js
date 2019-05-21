@@ -51,9 +51,6 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
         handleError(chrome.runtime.lastError);
     }
 
-    console.log("onUpdated");
-
-
     if (active && status === "loading") {
         chrome.storage.local.get(
             "fontActivated", ({ fontActivated }) => {
@@ -92,14 +89,9 @@ function injectStyleSheet(tabId, fontActivated, forceInsert, updateExisting) {
     const updateTrigger = window.crypto.getRandomValues(new Uint32Array(1)).join("");
 
     if (fontActivated) {
-        // console.log(updateExisting);
         generateStyleSheet(updateExisting, updateTrigger, (tabId, forceInsert) => {
             // Inject CSS to activate font
             if (!insertedTabs.has(tabId) || forceInsert) {
-                console.log(`${updateExisting} and injecting new CSS`);
-                console.log(stylesheets);
-
-
                 chrome.tabs.insertCSS(tabId, {
                     code: stylesheets.join('\n'),
                     runAt: "document_start"
@@ -111,7 +103,7 @@ function injectStyleSheet(tabId, fontActivated, forceInsert, updateExisting) {
 
                 insertedTabs.add(tabId);
 
-                if(updateExisting) {
+                if (updateExisting) {
                     chrome.tabs.executeScript(tabId, {
                         code: `document.documentElement.dataset.updatefont = "${updateTrigger}";`
                     }, () => {
@@ -122,7 +114,6 @@ function injectStyleSheet(tabId, fontActivated, forceInsert, updateExisting) {
                 }
             }
         });
-
 
         // Remove force-disable class
         chrome.tabs.executeScript(tabId, {
@@ -158,7 +149,7 @@ function generateStyleSheet(updateExisting, updateTrigger, callback) {
                 let selectors = [];
                 for (const selector of font.selectors) {
                     let updateSelector = "html:not([data-updatefont])";
-                    if(updateExisting) {
+                    if (updateExisting) {
                         updateSelector = `html[data-updatefont="${updateTrigger}"]`;
                         test = `color:#${Math.floor(Math.random()*16777215).toString(16)};`;
                     }

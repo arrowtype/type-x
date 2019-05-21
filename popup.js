@@ -150,11 +150,7 @@ function saveForm() {
 
     // Apply new fonts and activate extension
     chrome.storage.local.set({ "fonts": newFonts }, () => {
-        // chrome.runtime.getBackgroundPage(backgroundPage => {
-            // backgroundPage.generateStyleSheet(() => {
-                updateStatus(true, true);
-            // });
-        // });
+        updateStatus(true, true);
     });
 }
 
