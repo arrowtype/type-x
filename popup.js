@@ -3,7 +3,6 @@
 const activateFonts = document.querySelector("#activateFonts");
 const addFont = document.querySelector("#addFont");
 const fontFiles = {};
-// const fontfile = document.querySelector("#fontfile");
 
 // Get current fonts from storage and show them in the popup
 chrome.storage.local.get(
