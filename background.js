@@ -2,6 +2,7 @@
 
 // Extension variables
 let stylesheets = [];
+let updateCount = 0;
 const blacklistedClasses = [
     "icon",
     "Icon",
@@ -60,17 +61,16 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
 
 // Update fonts across all tabs
 function updateFonts(fontActivated, updateExisting) {
-    const updateTrigger = window.crypto.getRandomValues(new Uint32Array(1)).join("");
+    updateCount++;
 
-    generateStyleSheet(updateExisting, updateTrigger, () => {
-
+    generateStyleSheet(updateExisting, () => {
         chrome.tabs.query({}, tabs => {
             for (const tab of tabs) {
                 injectStyleSheet(tab.id, fontActivated);
 
                 if (updateExisting) {
                     chrome.tabs.executeScript(tab.id, {
-                        code: `document.documentElement.dataset.updatefont = "${updateTrigger}";`
+                        code: `document.documentElement.dataset.updatefont = "${updateCount}";`
                     }, () => {
                         if (chrome.runtime.lastError) {
                             handleError(chrome.runtime.lastError);
@@ -79,7 +79,6 @@ function updateFonts(fontActivated, updateExisting) {
                 }
             }
         });
-
     });
 }
 
@@ -123,8 +122,8 @@ function injectStyleSheet(tabId, fontActivated) {
     }
 }
 
-function generateStyleSheet(updateExisting, updateTrigger, callback) {
-    const updateSelector = updateExisting ? `html[data-updatefont="${updateTrigger}"]` : "html:not([data-updatefont])";
+function generateStyleSheet(updateExisting, callback) {
+    const updateSelector = updateExisting ? `html[data-updatefont="${updateCount}"]` : "html:not([data-updatefont])";
 
     chrome.storage.local.get(
         "fonts", ({ fonts }) => {
