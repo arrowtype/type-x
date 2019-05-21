@@ -25,7 +25,7 @@ const blacklist = (() => {
 
 chrome.runtime.onInstalled.addListener(() => {
     if (chrome.runtime.lastError) {
-        console.log(chrome.runtime.lastError);
+        handleError(chrome.runtime.lastError);
     }
 
     chrome.storage.local.set({
@@ -44,10 +44,15 @@ chrome.runtime.onStartup.addListener(() => {
     );
 });
 
+// Fires when an open tab updates (e.g. following a link)
+// and when a new tab is opened
 chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
     if (chrome.runtime.lastError) {
-        console.log(chrome.runtime.lastError);
+        handleError(chrome.runtime.lastError);
     }
+
+    console.log("onUpdated");
+
 
     if (active && status === "loading") {
         chrome.storage.local.get(
@@ -60,17 +65,17 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
 
 chrome.tabs.onRemoved.addListener(tabId => {
     if (chrome.runtime.lastError) {
-        console.log(chrome.runtime.lastError);
+        handleError(chrome.runtime.lastError);
     }
 
     insertedTabs.delete(tabId);
 });
 
 // Update fonts across all tabs
-function updateFonts(fontActivated, forceInsert) {
+function updateFonts(fontActivated, forceInsert, updateExisting) {
     chrome.tabs.query({}, tabs => {
         for (const tab of tabs) {
-            injectStyleSheet(tab.id, fontActivated, forceInsert);
+            injectStyleSheet(tab.id, fontActivated, forceInsert, updateExisting);
         }
     });
 }
@@ -79,30 +84,52 @@ function updateFonts(fontActivated, forceInsert) {
 // the body isn't. We don't want a delay, so the CSS will
 // enable the fonts immediately, and we only add a class
 // when we want to *remove* the custom fonts.
-function injectStyleSheet(tabId, fontActivated, forceInsert) {
+function injectStyleSheet(tabId, fontActivated, forceInsert, updateExisting) {
     if (chrome.runtime.lastError) {
-        console.log(chrome.runtime.lastError);
+        handleError(chrome.runtime.lastError);
     }
 
+    const updateTrigger = window.crypto.getRandomValues(new Uint32Array(1)).join("");
+
     if (fontActivated) {
-        // Inject CSS to activate font
-        if (!insertedTabs.has(tabId) || forceInsert) {
-            chrome.tabs.insertCSS(tabId, {
-                code: stylesheets.join('\n'),
-                runAt: "document_start"
-            }, () => {
-                if (chrome.runtime.lastError) {
-                    console.log(chrome.runtime.lastError);
+        // console.log(updateExisting);
+        generateStyleSheet(updateExisting, updateTrigger, (tabId, forceInsert) => {
+            // Inject CSS to activate font
+            if (!insertedTabs.has(tabId) || forceInsert) {
+                console.log(`${updateExisting} and injecting new CSS`);
+                console.log(stylesheets);
+
+
+                chrome.tabs.insertCSS(tabId, {
+                    code: stylesheets.join('\n'),
+                    runAt: "document_start"
+                }, () => {
+                    if (chrome.runtime.lastError) {
+                        handleError(chrome.runtime.lastError);
+                    }
+                });
+
+                insertedTabs.add(tabId);
+
+                if(updateExisting) {
+                    chrome.tabs.executeScript(tabId, {
+                        code: `document.documentElement.dataset.updatefont = "${updateTrigger}";`
+                    }, () => {
+                        if (chrome.runtime.lastError) {
+                            handleError(chrome.runtime.lastError);
+                        }
+                    });
                 }
-            });
-            insertedTabs.add(tabId);
-        }
+            }
+        });
+
+
         // Remove force-disable class
         chrome.tabs.executeScript(tabId, {
             code: `document.body.classList.remove("${className}");`
         }, () => {
             if (chrome.runtime.lastError) {
-                console.log(chrome.runtime.lastError);
+                handleError(chrome.runtime.lastError);
             }
         });
     } else {
@@ -111,27 +138,35 @@ function injectStyleSheet(tabId, fontActivated, forceInsert) {
             code: `document.body.classList.add("${className}");`
         }, () => {
             if (chrome.runtime.lastError) {
-                console.log(chrome.runtime.lastError);
+                handleError(chrome.runtime.lastError);
             }
         });
     }
 }
 
-function generateStyleSheet(callback) {
+function generateStyleSheet(updateExisting, updateTrigger, callback) {
     chrome.storage.local.get(
         "fonts", ({ fonts }) => {
             stylesheets = [];
 
+            let test = "";
+
             for (const font of fonts) {
                 let universal = false;
-                // const fontURL = chrome.runtime.getURL(`fonts/${font.file}`);
                 const fontURL = font.file;
 
                 let selectors = [];
                 for (const selector of font.selectors) {
+                    let updateSelector = "html:not([data-updatefont])";
+                    if(updateExisting) {
+                        updateSelector = `html[data-updatefont="${updateTrigger}"]`;
+                        test = `color:#${Math.floor(Math.random()*16777215).toString(16)};`;
+                    }
+
                     // Is this font using the `*` CSS selector? Put it last.
                     if (selector === "*") universal = true;
-                    selectors.push(`body:not(.recursivetypetester-disabled) ${selector}${blacklist}`);
+
+                    selectors.push(`${updateSelector} body:not(.recursivetypetester-disabled) ${selector}${blacklist}`);
                 }
 
                 const stylesheet = `
@@ -142,6 +177,7 @@ function generateStyleSheet(callback) {
                 ${selectors.join(",")} {
                     font-family: '${font.name}' !important;
                     ${font.css}
+                    ${test}
                 }`
 
                 if (universal) {
@@ -154,7 +190,13 @@ function generateStyleSheet(callback) {
             callback && callback();
 
             // New stylesheet, reset all tabs
+            // TODO: we might not need this anymore. The tabs should _know_
+            // that a new stylesheet is getting injected
             insertedTabs.clear();
         }
     );
+}
+
+function handleError(error) {
+    // console.error(error);
 }

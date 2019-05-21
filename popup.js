@@ -37,12 +37,12 @@ addFont.onclick = () => {
 };
 
 // Toggle extension on/off
-function updateStatus(status) {
+function updateStatus(status, updateExisting) {
     chrome.storage.local.set({
         "fontActivated": status
     }, () => {
         chrome.runtime.getBackgroundPage(backgroundPage => {
-            backgroundPage.updateFonts(status, true);
+            backgroundPage.updateFonts(status, true, updateExisting);
         });
         showStatus();
     });
@@ -150,11 +150,11 @@ function saveForm() {
 
     // Apply new fonts and activate extension
     chrome.storage.local.set({ "fonts": newFonts }, () => {
-        chrome.runtime.getBackgroundPage(backgroundPage => {
-            backgroundPage.generateStyleSheet(() => {
-                updateStatus(true);
-            });
-        });
+        // chrome.runtime.getBackgroundPage(backgroundPage => {
+            // backgroundPage.generateStyleSheet(() => {
+                updateStatus(true, true);
+            // });
+        // });
     });
 }
 
