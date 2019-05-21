@@ -4,20 +4,21 @@
 let stylesheets = [];
 let updateCount = 0;
 const blacklistedClasses = [
-    "icon",
-    "Icon",
-    "fa",
-    "fas",
-    "far",
-    "fal",
-    "fab",
-    "font-fontello",
-    "glyphicon"
+    ".icon",
+    ".Icon",
+    ".fa",
+    ".fas",
+    ".far",
+    ".fal",
+    ".fab",
+    ".font-fontello",
+    ".glyphicon",
+    '[class*="ico-"]'
 ];
 const blacklist = (() => {
     let b = "";
     for (const blacklistedClass of blacklistedClasses) {
-        b += `:not(.${blacklistedClass})`;
+        b += `:not(${blacklistedClass})`;
     }
     return b;
 })();
