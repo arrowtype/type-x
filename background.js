@@ -2,7 +2,6 @@
 
 // Extension variables
 let stylesheets = [];
-const insertedTabs = new Set();
 const className = "recursivetypetester-disabled";
 const blacklistedClasses = [
     "icon",
@@ -64,8 +63,6 @@ chrome.tabs.onRemoved.addListener(tabId => {
     if (chrome.runtime.lastError) {
         handleError(chrome.runtime.lastError);
     }
-
-    insertedTabs.delete(tabId);
 });
 
 // Update fonts across all tabs
@@ -90,30 +87,26 @@ function injectStyleSheet(tabId, fontActivated, updateExisting) {
 
     if (fontActivated) {
         // Inject CSS to activate font
-        if (!insertedTabs.has(tabId)) {
-            generateStyleSheet(updateExisting, updateTrigger, () => {
-                chrome.tabs.insertCSS(tabId, {
-                    code: stylesheets.join('\n'),
-                    runAt: "document_start"
+        generateStyleSheet(updateExisting, updateTrigger, () => {
+            chrome.tabs.insertCSS(tabId, {
+                code: stylesheets.join('\n'),
+                runAt: "document_start"
+            }, () => {
+                if (chrome.runtime.lastError) {
+                    handleError(chrome.runtime.lastError);
+                }
+            });
+
+            if (updateExisting) {
+                chrome.tabs.executeScript(tabId, {
+                    code: `document.documentElement.dataset.updatefont = "${updateTrigger}";`
                 }, () => {
                     if (chrome.runtime.lastError) {
                         handleError(chrome.runtime.lastError);
                     }
                 });
-
-                insertedTabs.add(tabId);
-
-                if (updateExisting) {
-                    chrome.tabs.executeScript(tabId, {
-                        code: `document.documentElement.dataset.updatefont = "${updateTrigger}";`
-                    }, () => {
-                        if (chrome.runtime.lastError) {
-                            handleError(chrome.runtime.lastError);
-                        }
-                    });
-                }
-            });
-        }
+            }
+        });
 
         // Remove force-disable class
         chrome.tabs.executeScript(tabId, {
@@ -179,11 +172,6 @@ function generateStyleSheet(updateExisting, updateTrigger, callback) {
             }
 
             callback && callback();
-
-            // New stylesheet, reset all tabs
-            // TODO: we might not need this anymore. The tabs should _know_
-            // that a new stylesheet is getting injected
-            insertedTabs.clear();
         }
     );
 }
