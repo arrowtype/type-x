@@ -2,7 +2,6 @@
 
 // Extension variables
 let stylesheets = [];
-const className = "recursivetypetester-disabled";
 const blacklistedClasses = [
     "icon",
     "Icon",
@@ -106,7 +105,7 @@ function injectStyleSheet(tabId, fontActivated) {
 
         // Remove force-disable class
         chrome.tabs.executeScript(tabId, {
-            code: `document.body.classList.remove("${className}");`
+            code: `delete document.documentElement.dataset.disablefont;`
         }, () => {
             if (chrome.runtime.lastError) {
                 handleError(chrome.runtime.lastError);
@@ -115,7 +114,7 @@ function injectStyleSheet(tabId, fontActivated) {
     } else {
         // Add force-disable class
         chrome.tabs.executeScript(tabId, {
-            code: `document.body.classList.add("${className}");`
+            code: `document.documentElement.dataset.disablefont = "";`
         }, () => {
             if (chrome.runtime.lastError) {
                 handleError(chrome.runtime.lastError);
@@ -140,7 +139,7 @@ function generateStyleSheet(updateExisting, updateTrigger, callback) {
 
                     const updateSelector = updateExisting ? `html[data-updatefont="${updateTrigger}"]` : "html:not([data-updatefont])";
 
-                    selectors.push(`${updateSelector} body:not(.recursivetypetester-disabled) ${selector}${blacklist}`);
+                    selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklist}`);
                 }
 
                 const stylesheet = `
