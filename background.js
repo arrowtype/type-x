@@ -59,18 +59,28 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
     }
 });
 
-chrome.tabs.onRemoved.addListener(tabId => {
-    if (chrome.runtime.lastError) {
-        handleError(chrome.runtime.lastError);
-    }
-});
-
 // Update fonts across all tabs
 function updateFonts(fontActivated, updateExisting) {
-    chrome.tabs.query({}, tabs => {
-        for (const tab of tabs) {
-            injectStyleSheet(tab.id, fontActivated, updateExisting);
-        }
+    const updateTrigger = window.crypto.getRandomValues(new Uint32Array(1)).join("");
+
+    generateStyleSheet(updateExisting, updateTrigger, () => {
+
+        chrome.tabs.query({}, tabs => {
+            for (const tab of tabs) {
+                injectStyleSheet(tab.id, fontActivated);
+
+                if (updateExisting) {
+                    chrome.tabs.executeScript(tab.id, {
+                        code: `document.documentElement.dataset.updatefont = "${updateTrigger}";`
+                    }, () => {
+                        if (chrome.runtime.lastError) {
+                            handleError(chrome.runtime.lastError);
+                        }
+                    });
+                }
+            }
+        });
+
     });
 }
 
@@ -78,33 +88,19 @@ function updateFonts(fontActivated, updateExisting) {
 // the body isn't. We don't want a delay, so the CSS will
 // enable the fonts immediately, and we only add a class
 // when we want to *remove* the custom fonts.
-function injectStyleSheet(tabId, fontActivated, updateExisting) {
+function injectStyleSheet(tabId, fontActivated) {
     if (chrome.runtime.lastError) {
         handleError(chrome.runtime.lastError);
     }
 
-    const updateTrigger = window.crypto.getRandomValues(new Uint32Array(1)).join("");
-
     if (fontActivated) {
         // Inject CSS to activate font
-        generateStyleSheet(updateExisting, updateTrigger, () => {
-            chrome.tabs.insertCSS(tabId, {
-                code: stylesheets.join('\n'),
-                runAt: "document_start"
-            }, () => {
-                if (chrome.runtime.lastError) {
-                    handleError(chrome.runtime.lastError);
-                }
-            });
-
-            if (updateExisting) {
-                chrome.tabs.executeScript(tabId, {
-                    code: `document.documentElement.dataset.updatefont = "${updateTrigger}";`
-                }, () => {
-                    if (chrome.runtime.lastError) {
-                        handleError(chrome.runtime.lastError);
-                    }
-                });
+        chrome.tabs.insertCSS(tabId, {
+            code: stylesheets.join('\n'),
+            runAt: "document_start"
+        }, () => {
+            if (chrome.runtime.lastError) {
+                handleError(chrome.runtime.lastError);
             }
         });
 
@@ -133,8 +129,6 @@ function generateStyleSheet(updateExisting, updateTrigger, callback) {
         "fonts", ({ fonts }) => {
             stylesheets = [];
 
-            let test = "";
-
             for (const font of fonts) {
                 let universal = false;
                 const fontURL = font.file;
@@ -144,7 +138,6 @@ function generateStyleSheet(updateExisting, updateTrigger, callback) {
                     let updateSelector = "html:not([data-updatefont])";
                     if (updateExisting) {
                         updateSelector = `html[data-updatefont="${updateTrigger}"]`;
-                        test = `color:#${Math.floor(Math.random()*16777215).toString(16)};`;
                     }
 
                     // Is this font using the `*` CSS selector? Put it last.
@@ -161,7 +154,6 @@ function generateStyleSheet(updateExisting, updateTrigger, callback) {
                 ${selectors.join(",")} {
                     font-family: '${font.name}' !important;
                     ${font.css}
-                    ${test}
                 }`
 
                 if (universal) {
