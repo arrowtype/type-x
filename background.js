@@ -124,28 +124,27 @@ function injectStyleSheet(tabId, fontActivated) {
 }
 
 function generateStyleSheet(updateExisting, updateTrigger, callback) {
+    const updateSelector = updateExisting ? `html[data-updatefont="${updateTrigger}"]` : "html:not([data-updatefont])";
+
     chrome.storage.local.get(
         "fonts", ({ fonts }) => {
             stylesheets = [];
 
             for (const font of fonts) {
-                let universal = false;
-                const fontURL = font.file;
+                let universal;
+                const selectors = [];
 
-                let selectors = [];
                 for (const selector of font.selectors) {
                     // Is this font using the `*` CSS selector? Put it last.
-                    if (selector === "*") universal = true;
-
-                    const updateSelector = updateExisting ? `html[data-updatefont="${updateTrigger}"]` : "html:not([data-updatefont])";
-
+                    // if (selector === "*") universal = true;
+                    universal = selector === "*" ? true : false;
                     selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklist}`);
                 }
 
                 const stylesheet = `
                 @font-face {
                     font-family: '${font.name}';
-                    src: url('${fontURL}');
+                    src: url('${font.file}');
                 }
                 ${selectors.join(",")} {
                     font-family: '${font.name}' !important;
