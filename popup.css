@@ -1,22 +1,23 @@
 /* Generic setup */
 
 :root {
-    --form-width: 300px;
+    --extension-width: 300px;
 }
 
-/* @font-face {
+@font-face {
     font-family: "Recursive Sans";
-    src: url("../fonts/recursive-sans-var.woff2");
-} */
+    src: url("./fonts/recursive-sans-var.woff2");
+}
 
 * {
-    /* font-family: "Recursive Sans"; */
+    font-family: "Recursive Sans";
     font-size: 16px;
     box-sizing: border-box;
 }
 
 body {
     background: #3c464c;
+    width: var(--extension-width);
 }
 
 button {
@@ -34,6 +35,21 @@ button {
     background: rgba(255, 255, 255, 0.3);
 }
 
+/* Activate button */
+
+.main-button {
+    display: flex;
+}
+
+.activate-fonts {
+    background: linear-gradient(45deg, rgba(16, 205, 103, 1) 0%, rgba(251, 208, 0, 1) 100%);
+    flex: auto;
+}
+
+.show-fonts {
+    flex: none;
+    margin-left: 0.25em;
+}
 
 /* Form stuff */
 
@@ -41,7 +57,7 @@ fieldset {
     border: none;
     margin-bottom: 1em;
     padding: 0;
-    width: var(--form-width);
+    width: 100%;
 }
 
 fieldset:first-child {
@@ -60,8 +76,11 @@ input {
 }
 
 
-/* Activate button */
 
-.activate-fonts {
-    background: linear-gradient(45deg, rgba(16, 205, 103, 1) 0%, rgba(251, 208, 0, 1) 100%);
+.main-fonts {
+    display: none;
+}
+
+.main-fonts.show {
+    display: block;
 }

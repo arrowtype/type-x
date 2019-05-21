@@ -1,6 +1,7 @@
 // Recursive
 
 const activateFonts = document.querySelector("#activateFonts");
+const showFonts = document.querySelector("#showFonts");
 const addFont = document.querySelector("#addFont");
 const fontFiles = {};
 
@@ -19,6 +20,11 @@ activateFonts.onclick = () => {
         }
     );
 };
+
+// Show/hide font form
+showFonts.onclick = () => {
+    document.querySelector(".main-fonts").classList.toggle("show");
+}
 
 // Toggle extension on/off using the button
 addFont.onclick = () => {
@@ -51,7 +57,7 @@ function updateStatus(status, updateExisting) {
 const showStatus = () => {
     chrome.storage.local.get(
         "fontActivated", ({ fontActivated }) => {
-            activateFonts.innerText = fontActivated ? "Turn off" : "Turn on";
+            activateFonts.innerText = fontActivated ? "Unactivate fonts!" : "Activate fonts!";
         }
     );
 }

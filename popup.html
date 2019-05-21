@@ -2,16 +2,22 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="css/css.css">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="popup.css">
 </head>
 
 <body>
-    <button id="activateFonts" class="activate-fonts"></button>
-    <form id="fontsForm">
-        <div id="usedFonts"></div>
-        <button type="submit">Apply</button>
-        <button type="button" id="addFont">Add font</button>
-    </form>
+    <section class="main-button">
+        <button type="button" id="activateFonts" class="activate-fonts"></button>
+        <button type="button" id="showFonts" class="show-fonts">⬇︎</button>
+    </section>
+    <section class="main-fonts">
+        <form id="fontsForm">
+            <div id="usedFonts"></div>
+            <button type="submit">Apply</button>
+            <button type="button" id="addFont">Add font</button>
+        </form>
+    </section>
     <script src="popup.js"></script>
 </body>
 
