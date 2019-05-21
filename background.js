@@ -135,13 +135,10 @@ function generateStyleSheet(updateExisting, updateTrigger, callback) {
 
                 let selectors = [];
                 for (const selector of font.selectors) {
-                    let updateSelector = "html:not([data-updatefont])";
-                    if (updateExisting) {
-                        updateSelector = `html[data-updatefont="${updateTrigger}"]`;
-                    }
-
                     // Is this font using the `*` CSS selector? Put it last.
                     if (selector === "*") universal = true;
+
+                    const updateSelector = updateExisting ? `html[data-updatefont="${updateTrigger}"]` : "html:not([data-updatefont])";
 
                     selectors.push(`${updateSelector} body:not(.recursivetypetester-disabled) ${selector}${blacklist}`);
                 }
