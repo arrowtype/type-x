@@ -54,7 +54,7 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
     if (active && status === "loading") {
         chrome.storage.local.get(
             "fontActivated", ({ fontActivated }) => {
-                updateFonts(fontActivated, true);
+                updateFonts(fontActivated);
             }
         );
     }
@@ -69,10 +69,10 @@ chrome.tabs.onRemoved.addListener(tabId => {
 });
 
 // Update fonts across all tabs
-function updateFonts(fontActivated, forceInsert, updateExisting) {
+function updateFonts(fontActivated, updateExisting) {
     chrome.tabs.query({}, tabs => {
         for (const tab of tabs) {
-            injectStyleSheet(tab.id, fontActivated, forceInsert, updateExisting);
+            injectStyleSheet(tab.id, fontActivated, updateExisting);
         }
     });
 }
@@ -81,7 +81,7 @@ function updateFonts(fontActivated, forceInsert, updateExisting) {
 // the body isn't. We don't want a delay, so the CSS will
 // enable the fonts immediately, and we only add a class
 // when we want to *remove* the custom fonts.
-function injectStyleSheet(tabId, fontActivated, forceInsert, updateExisting) {
+function injectStyleSheet(tabId, fontActivated, updateExisting) {
     if (chrome.runtime.lastError) {
         handleError(chrome.runtime.lastError);
     }
@@ -89,9 +89,9 @@ function injectStyleSheet(tabId, fontActivated, forceInsert, updateExisting) {
     const updateTrigger = window.crypto.getRandomValues(new Uint32Array(1)).join("");
 
     if (fontActivated) {
-        generateStyleSheet(updateExisting, updateTrigger, (tabId, forceInsert) => {
-            // Inject CSS to activate font
-            if (!insertedTabs.has(tabId) || forceInsert) {
+        // Inject CSS to activate font
+        if (!insertedTabs.has(tabId)) {
+            generateStyleSheet(updateExisting, updateTrigger, () => {
                 chrome.tabs.insertCSS(tabId, {
                     code: stylesheets.join('\n'),
                     runAt: "document_start"
@@ -112,8 +112,8 @@ function injectStyleSheet(tabId, fontActivated, forceInsert, updateExisting) {
                         }
                     });
                 }
-            }
-        });
+            });
+        }
 
         // Remove force-disable class
         chrome.tabs.executeScript(tabId, {

@@ -42,7 +42,7 @@ function updateStatus(status, updateExisting) {
         "fontActivated": status
     }, () => {
         chrome.runtime.getBackgroundPage(backgroundPage => {
-            backgroundPage.updateFonts(status, true, updateExisting);
+            backgroundPage.updateFonts(status, updateExisting);
         });
         showStatus();
     });
