@@ -1,0 +1,119 @@
+[
+  {
+    "name": "BackgroundMain",
+    "color": {
+      "r": 47,
+      "g": 49,
+      "b": 55,
+      "a": 1,
+      "color-hex": "#2F3137 100%",
+      "argb-hex": "#FF2F3137",
+      "css-rgba": "rgba(47,49,55,1)",
+      "ui-color": "(r:0.18 g:0.19 b:0.22 a:1.00)"
+    }
+  },
+  {
+    "name": "Separator",
+    "color": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 1,
+      "color-hex": "#000000 100%",
+      "argb-hex": "#FF000000",
+      "css-rgba": "rgba(0,0,0,1)",
+      "ui-color": "(r:0.00 g:0.00 b:0.00 a:1.00)"
+    }
+  },
+  {
+    "name": "TextP1",
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 1,
+      "color-hex": "#FFFFFF 100%",
+      "argb-hex": "#FFFFFFFF",
+      "css-rgba": "rgba(255,255,255,1)",
+      "ui-color": "(r:1.00 g:1.00 b:1.00 a:1.00)"
+    }
+  },
+  {
+    "name": "TextP2",
+    "color": {
+      "r": 182,
+      "g": 193,
+      "b": 206,
+      "a": 1,
+      "color-hex": "#B6C1CE 100%",
+      "argb-hex": "#FFB6C1CE",
+      "css-rgba": "rgba(182,193,206,1)",
+      "ui-color": "(r:0.71 g:0.76 b:0.81 a:1.00)"
+    }
+  },
+  {
+    "name": "Accent",
+    "color": {
+      "r": 68,
+      "g": 215,
+      "b": 182,
+      "a": 1,
+      "color-hex": "#44D7B6 100%",
+      "argb-hex": "#FF44D7B6",
+      "css-rgba": "rgba(68,215,182,1)",
+      "ui-color": "(r:0.27 g:0.84 b:0.71 a:1.00)"
+    }
+  },
+  {
+    "name": "BackgroundRaised",
+    "color": {
+      "r": 28,
+      "g": 29,
+      "b": 35,
+      "a": 1,
+      "color-hex": "#1C1D23 100%",
+      "argb-hex": "#FF1C1D23",
+      "css-rgba": "rgba(28,29,35,1)",
+      "ui-color": "(r:0.11 g:0.11 b:0.14 a:1.00)"
+    }
+  },
+  {
+    "name": "Destructive",
+    "color": {
+      "r": 229,
+      "g": 120,
+      "b": 128,
+      "a": 1,
+      "color-hex": "#E57880 100%",
+      "argb-hex": "#FFE57880",
+      "css-rgba": "rgba(229,120,128,1)",
+      "ui-color": "(r:0.90 g:0.47 b:0.50 a:1.00)"
+    }
+  },
+  {
+    "name": "SliderTrack",
+    "color": {
+      "r": 75,
+      "g": 78,
+      "b": 91,
+      "a": 1,
+      "color-hex": "#4B4E5B 100%",
+      "argb-hex": "#FF4B4E5B",
+      "css-rgba": "rgba(75,78,91,1)",
+      "ui-color": "(r:0.29 g:0.30 b:0.36 a:1.00)"
+    }
+  },
+  {
+    "name": "InteractiveObject",
+    "color": {
+      "r": 109,
+      "g": 114,
+      "b": 120,
+      "a": 1,
+      "color-hex": "#6D7278 100%",
+      "argb-hex": "#FF6D7278",
+      "css-rgba": "rgba(109,114,120,1)",
+      "ui-color": "(r:0.43 g:0.45 b:0.47 a:1.00)"
+    }
+  }
+]

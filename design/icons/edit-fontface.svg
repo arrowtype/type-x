@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55 (78076) - https://sketchapp.com -->
+    <title>icon/edit-fontface</title>
+    <desc>Created with Sketch.</desc>
+    <g id="icon/edit-fontface" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(1.500000, 1.500000)" stroke="#B6C1CE">
+            <circle id="Oval" cx="4.5" cy="4.5" r="1.5"></circle>
+            <path d="M6,4.5 L6,5 C6,5.82842712 6.67157288,6.5 7.5,6.5 C8.32842712,6.5 9,5.82842712 9,5 L9,4.5" id="Path" stroke-linecap="round"></path>
+            <path d="M9,4.5 C9,2.01471863 6.98528137,0 4.5,0 C2.01471863,0 0,2.01471863 0,4.5 C0,6.98528137 2.01471863,9 4.5,9 C5.23651294,9 5.93169952,8.82306081 6.54537089,8.50937128" id="Path" stroke-linecap="round"></path>
+        </g>
+    </g>
+</svg>
