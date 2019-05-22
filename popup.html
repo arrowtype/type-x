@@ -23,8 +23,12 @@
 
     <template id="newFont">
         <fieldset>
-            <input type="text" name="name" value="">
-            <input type="file" name="file" value="" accept=".ttf,.otf,.eot,.woff,.woff2">
+            <div class="select-font">
+                <input type="text" name="name" value="" readonly>
+                <label class="select-font-button label-button">
+                    <input type="file" name="file" value="" accept=".ttf,.otf,.eot,.woff,.woff2">
+                </label>
+            </div>
             <input type="text" name="selectors" value="">
             <input type="text" name="css" value="">
             <button type="button">Remove</button>
