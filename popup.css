@@ -34,6 +34,10 @@ button {
     outline: 0;
     cursor: pointer;
     color: inherit;
+}
+
+.label-button,
+.button {
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.25);
 }
@@ -72,6 +76,12 @@ button {
 .show-fonts {
     flex: none;
     margin-left: 0.25em;
+}
+
+.show-fonts svg {
+    vertical-align: middle;
+    width: 1.5em;
+    fill: white;
 }
 
 

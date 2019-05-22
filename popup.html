@@ -9,15 +9,15 @@
 <body>
 
     <section class="main-button">
-        <button type="button" id="activateFonts" class="activate-fonts">Activate Fonts!</button>
-        <button type="button" id="showFonts" class="show-fonts">⬇︎</button>
+        <button type="button" id="activateFonts" class="button activate-fonts">Activate Fonts!</button>
+        <button type="button" id="showFonts" class="show-fonts"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M.7 2.5h14.7c.3 0 .5-.2.5-.5s-.2-.5-.5-.5H.7c-.3 0-.5.2-.5.5s.2.5.5.5zm14.6 11H.7c-.3 0-.5.2-.5.5s.2.5.5.5h14.7c.3 0 .5-.2.5-.5s-.3-.5-.6-.5zm0-6H.7c-.3 0-.5.2-.5.5s.2.5.5.5h14.7c.3 0 .5-.2.5-.5s-.3-.5-.6-.5z"/></svg></button>
     </section>
 
     <section class="main-fonts">
         <form id="fontsForm">
             <div id="usedFonts"></div>
-            <button type="submit">Apply</button>
-            <button type="button" id="addFont">Add font</button>
+            <button class="button" type="submit">Apply</button>
+            <button class="button" type="button" id="addFont">Add font</button>
         </form>
     </section>
 
@@ -31,7 +31,7 @@
             </div>
             <input type="text" name="selectors" value="">
             <input type="text" name="css" value="">
-            <button type="button">Remove</button>
+            <button type="button" class="button">Remove</button>
         </fieldset>
     </template>
 

@@ -3,7 +3,7 @@
 // Extension variables
 let stylesheets = [];
 let updateCount = 0;
-const blacklistedClasses = [
+const blacklistedSelectors = [
     ".icon",
     ".Icon",
     ".fa",
@@ -17,8 +17,8 @@ const blacklistedClasses = [
 ];
 const blacklist = (() => {
     let b = "";
-    for (const blacklistedClass of blacklistedClasses) {
-        b += `:not(${blacklistedClass})`;
+    for (const blacklistedSelector of blacklistedSelectors) {
+        b += `:not(${blacklistedSelector})`;
     }
     return b;
 })();
