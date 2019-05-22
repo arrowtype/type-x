@@ -5,6 +5,7 @@
     --section-color: rgba(255, 255, 255, 0.15);
     --icon-color: white;
     --icon-color-hover: #44d7b6;
+    --delete-icon-color: hotpink; /* todo */
     --item-padding: 0.5em 1em;
 }
 
@@ -214,4 +215,26 @@ input {
 
 .show-font-details .font-details {
     display: block;
+}
+
+.delete-button-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.delete-button-container span {
+    color: var(--delete-icon-color);
+    display: flex;
+    align-items: center;
+}
+
+.delete-button-container svg {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+    margin-right: 0.25em;
+}
+
+.temp-apply-button {
+    margin: 1rem;
 }

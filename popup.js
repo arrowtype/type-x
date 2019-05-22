@@ -96,7 +96,7 @@ function buildForm(fonts) {
         el.querySelector("[name=file]").dataset.original = font.file;
         el.querySelector("[name=file]").onchange = grabFont;
 
-        el.querySelector("button").onclick = (e) => {
+        el.querySelector(".delete-button-container button").onclick = (e) => {
             e.target.closest("fieldset").remove()
         };
 
