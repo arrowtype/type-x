@@ -68,13 +68,50 @@ button {
 }
 
 .activate-fonts {
+    text-align: left;
+    padding: 0.25em;
     color: white;
-    text-shadow: 0 0 8px rgba(0, 0, 0, 0.75);
+    /* text-shadow: 0 0 8px rgba(0, 0, 0, 0.75); */
     flex: auto;
 }
 
-.activate-fonts.active {
+.activate-fonts>span {
+    display: flex;
+    align-items: center;
+}
+
+.toggle-switch {
+    position: relative;
+    flex: none;
+    width: 2.5em;
+    height: 1em;
+    border-radius: 999px;
+    background: #777;
+    margin-right: 1em;
+}
+
+.toggle-switch::after,
+.toggle-switch::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -0.25em;
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 50%;
+    transition: left 100ms ease-in-out, opacity 100ms ease-in-out;
+    background: white;
+}
+
+.activate-fonts.active .toggle-switch::before,
+.activate-fonts.active .toggle-switch::after {
+    opacity: 1;
+    left: calc(100% - 1.5em);
+}
+
+.toggle-switch::after {
     background: linear-gradient(45deg, rgba(16, 205, 103, 1) 0%, rgba(251, 208, 0, 1) 100%);
+    opacity: 0;
 }
 
 .show-fonts {
