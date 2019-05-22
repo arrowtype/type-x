@@ -32,6 +32,7 @@ addFont.onclick = () => {
     chrome.storage.local.get(
         "fonts", ({ fonts }) => {
             fonts.push({
+                "new": true,
                 "name": "",
                 "file": "",
                 "selectors": [],
@@ -102,6 +103,10 @@ function buildForm(fonts) {
         el.querySelector(".font-title button").onclick = (e) => {
             e.target.closest("fieldset").classList.toggle("show-font-details")
         };
+
+        if (font.new) {
+            el.querySelector("fieldset").classList.add("show-font-details");
+        }
 
         usedFonts.appendChild(el);
     }

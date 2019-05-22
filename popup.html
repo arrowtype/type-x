@@ -1,32 +1,39 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="popup.css">
-</head>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="popup.css">
+    </head>
 
-<body>
+    <body>
 
-    <section class="main-button">
-        <button type="button" id="activateFonts" class="activate-fonts">
+        <section class="main-button">
+            <button type="button" id="activateFonts" class="activate-fonts">
             <span>
                 <span class="toggle-switch"></span>
                 Font Overrides
             </span>
         </button>
-        <button type="button" id="showFonts" class="show-fonts"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M.7 2.5h14.7c.3 0 .5-.2.5-.5s-.2-.5-.5-.5H.7c-.3 0-.5.2-.5.5s.2.5.5.5zm14.6 11H.7c-.3 0-.5.2-.5.5s.2.5.5.5h14.7c.3 0 .5-.2.5-.5s-.3-.5-.6-.5zm0-6H.7c-.3 0-.5.2-.5.5s.2.5.5.5h14.7c.3 0 .5-.2.5-.5s-.3-.5-.6-.5z"/></svg></button>
-    </section>
+            <button type="button" id="showFonts" class="show-fonts">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M.7 2.5h14.7c.3 0 .5-.2.5-.5s-.2-.5-.5-.5H.7c-.3 0-.5.2-.5.5s.2.5.5.5zm14.6 11H.7c-.3 0-.5.2-.5.5s.2.5.5.5h14.7c.3 0 .5-.2.5-.5s-.3-.5-.6-.5zm0-6H.7c-.3 0-.5.2-.5.5s.2.5.5.5h14.7c.3 0 .5-.2.5-.5s-.3-.5-.6-.5z"/></svg>
+        </button>
+        </section>
 
-    <section class="main-fonts">
-        <form id="fontsForm">
-            <div id="usedFonts"></div>
-            <button class="button" type="submit">Apply</button>
-            <button class="button" type="button" id="addFont">Add font</button>
-        </form>
-    </section>
+        <section class="main-fonts">
+            <div class="overrides-title">
+                Font overrides:
+                <button type="button" id="addFont">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11 11"><path d="M5.5 10.5c-.3 0-.5-.2-.5-.5V6H1c-.3 0-.5-.2-.5-.5S.7 5 1 5h4V1c0-.3.2-.5.5-.5s.5.2.5.5v4h4c.3 0 .5.2.5.5s-.2.5-.5.5H6v4c0 .3-.2.5-.5.5z"/></svg>
+            </button>
+            </div>
+            <form id="fontsForm">
+                <div id="usedFonts"></div>
+                <button class="button" type="submit">Apply</button>
+            </form>
+        </section>
 
-    <template id="newFont">
+        <template id="newFont">
         <fieldset>
             <div class="font-title">
                 <button type="button">
@@ -50,7 +57,7 @@
         </fieldset>
     </template>
 
-    <script src="popup.js"></script>
-</body>
+        <script src="popup.js"></script>
+    </body>
 
 </html>

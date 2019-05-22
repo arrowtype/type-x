@@ -5,6 +5,7 @@
     --section-color: rgba(255, 255, 255, 0.15);
     --icon-color: white;
     --icon-color-hover: #44d7b6;
+    --item-padding: 0.5em 1em;
 }
 
 @font-face {
@@ -22,6 +23,7 @@
 
 body {
     background: black;
+    color: white;
     width: var(--extension-width);
     margin: 0;
 }
@@ -64,14 +66,12 @@ button {
 
 .main-button {
     display: flex;
-    padding: 0.5em 1em;
+    padding: var(--item-padding);
 }
 
 .activate-fonts {
     text-align: left;
     padding: 0.25em;
-    color: white;
-    /* text-shadow: 0 0 8px rgba(0, 0, 0, 0.75); */
     flex: auto;
 }
 
@@ -101,6 +101,7 @@ button {
     border-radius: 50%;
     transition: left 100ms ease-in-out, opacity 100ms ease-in-out;
     background: white;
+    box-shadow: 0 0 0.25em rgba(0, 0, 0, 0.5);
 }
 
 .activate-fonts.active .toggle-switch::before,
@@ -121,7 +122,7 @@ button {
 
 .show-fonts svg {
     vertical-align: middle;
-    width: 1.5em;
+    width: 1.25em;
     fill: var(--icon-color);
 }
 
@@ -136,7 +137,7 @@ button {
 fieldset {
     border: none;
     margin: 0 0 2px 0;
-    padding: 0.5em 1em;
+    padding: var(--item-padding);
     width: 100%;
     background: var(--section-color);
 }
@@ -146,6 +147,22 @@ input {
     width: 100%;
     padding: 0.25em;
     border-radius: 4px;
+}
+
+.overrides-title {
+    padding: var(--item-padding);
+    display: flex;
+    align-items: center;
+}
+
+.overrides-title button {
+    flex: none;
+    margin-left: auto;
+}
+
+.overrides-title svg {
+    width: 1.25em;
+    fill: var(--icon-color);
 }
 
 .select-font {
@@ -171,8 +188,6 @@ input {
 }
 
 .font-title span {
-    /* background: hotpink; */
-    color: white;
     display: flex;
     align-items: center;
 }
