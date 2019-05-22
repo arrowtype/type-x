@@ -2,6 +2,9 @@
 
 :root {
     --extension-width: 300px;
+    --section-color: rgba(255, 255, 255, 0.15);
+    --icon-color: white;
+    --icon-color-hover: #44d7b6;
 }
 
 @font-face {
@@ -18,8 +21,9 @@
 }
 
 body {
-    background: #3c464c;
+    background: black;
     width: var(--extension-width);
+    margin: 0;
 }
 
 .label-button,
@@ -46,13 +50,13 @@ button {
 /* General extension styles */
 
 .main-fonts {
-    /* display: none; */
-    display: block; /* dev */
+    display: none;
+    /* display: block; */
 }
 
 .main-fonts.show {
-    /* display: block; */
-    display: none; /* dev */
+    display: block;
+    /* display: none; */
 }
 
 
@@ -60,13 +64,13 @@ button {
 
 .main-button {
     display: flex;
+    padding: 0.5em 1em;
 }
 
 .activate-fonts {
     color: white;
     text-shadow: 0 0 8px rgba(0, 0, 0, 0.75);
     flex: auto;
-    font-size: 1.25em;
 }
 
 .activate-fonts.active {
@@ -81,7 +85,12 @@ button {
 .show-fonts svg {
     vertical-align: middle;
     width: 1.5em;
-    fill: white;
+    fill: var(--icon-color);
+}
+
+.show-fonts.active svg,
+.show-fonts:hover svg {
+    fill: var(--icon-color-hover);
 }
 
 
@@ -89,17 +98,10 @@ button {
 
 fieldset {
     border: none;
-    margin-bottom: 1em;
-    padding: 0;
+    margin: 0 0 2px 0;
+    padding: 0.5em 1em;
     width: 100%;
-}
-
-fieldset:first-child {
-    margin-top: 1em;
-}
-
-fieldset>*+* {
-    margin-top: 0.25em;
+    background: var(--section-color);
 }
 
 input {
@@ -112,6 +114,7 @@ input {
 .select-font {
     display: flex;
 }
+
 .select-font-button {
     flex: none;
     margin-left: 0.25em;
@@ -123,4 +126,40 @@ input {
     opacity: 0;
     height: 0;
     padding: 0;
+}
+
+.font-title button {
+    width: 100%;
+    text-align: left;
+}
+
+.font-title span {
+    /* background: hotpink; */
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.font-title svg {
+    width: 1em;
+    height: 1em;
+    margin-left: auto;
+    fill: var(--icon-color);
+}
+
+.show-font-details .font-title svg {
+    fill: var(--icon-color-hover);
+    transform: rotate(90deg);
+}
+
+.font-details {
+    display: none;
+}
+
+.font-details>* {
+    margin-bottom: 4px;
+}
+
+.show-font-details .font-details {
+    display: block;
 }

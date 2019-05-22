@@ -19,8 +19,8 @@
     "web_accessible_resources": [
         "fonts/*"
     ],
-
     "browser_action": {
+        "default_title": "Recursive Font Swapper",
         "default_popup": "popup.html",
         "default_icon": {
             "16": "images/get_started16.png",

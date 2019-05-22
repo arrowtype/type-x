@@ -24,6 +24,7 @@ activateFonts.onclick = () => {
 // Show/hide font form
 showFonts.onclick = () => {
     document.querySelector(".main-fonts").classList.toggle("show");
+    showFonts.classList.toggle("active");
 }
 
 // Toggle extension on/off using the button
@@ -94,7 +95,13 @@ function buildForm(fonts) {
         el.querySelector("[name=file]").dataset.original = font.file;
         el.querySelector("[name=file]").onchange = grabFont;
 
-        el.querySelector("button").onclick = (e) => { e.target.closest("fieldset").remove() };
+        el.querySelector("button").onclick = (e) => {
+            e.target.closest("fieldset").remove()
+        };
+
+        el.querySelector(".font-title button").onclick = (e) => {
+            e.target.closest("fieldset").classList.toggle("show-font-details")
+        };
 
         usedFonts.appendChild(el);
     }
