@@ -5,6 +5,8 @@
 }
 
 @font-face {
+    /* TODO: load this from JavaScript through FontFaceSet
+       so we can re-use recursive-fonts.js */
     font-family: "Recursive Sans";
     src: url("./fonts/recursive-sans-var.woff2");
 }
@@ -25,14 +27,14 @@ button {
     font-family: inherit;
     font-weight: inherit;
     background: none;
-    padding: 0.5em 1em;
+    padding: 0.25em;
     margin: 0;
     border: 0;
     outline: 0;
     cursor: pointer;
     color: inherit;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.25);
 }
 
 /* Activate button */
@@ -42,8 +44,12 @@ button {
 }
 
 .activate-fonts {
-    background: linear-gradient(45deg, rgba(16, 205, 103, 1) 0%, rgba(251, 208, 0, 1) 100%);
+    color: white;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.75);
     flex: auto;
+}
+.activate-fonts.active {
+    background: linear-gradient(45deg, rgba(16, 205, 103, 1) 0%, rgba(251, 208, 0, 1) 100%);
 }
 
 .show-fonts {
@@ -74,7 +80,6 @@ input {
     padding: 0.25em;
     border-radius: 4px;
 }
-
 
 
 .main-fonts {

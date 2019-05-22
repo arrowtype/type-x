@@ -7,10 +7,12 @@
 </head>
 
 <body>
+
     <section class="main-button">
-        <button type="button" id="activateFonts" class="activate-fonts"></button>
+        <button type="button" id="activateFonts" class="activate-fonts">Activate Fonts!</button>
         <button type="button" id="showFonts" class="show-fonts">⬇︎</button>
     </section>
+
     <section class="main-fonts">
         <form id="fontsForm">
             <div id="usedFonts"></div>
@@ -18,6 +20,17 @@
             <button type="button" id="addFont">Add font</button>
         </form>
     </section>
+
+    <template id="newFont">
+        <fieldset>
+            <input type="text" name="name" value="">
+            <input type="file" name="file" value="" accept=".ttf,.otf,.eot,.woff,.woff2">
+            <input type="text" name="selectors" value="">
+            <input type="text" name="css" value="">
+            <button type="button">Remove</button>
+        </fieldset>
+    </template>
+
     <script src="popup.js"></script>
 </body>
 
