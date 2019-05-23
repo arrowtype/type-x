@@ -100,9 +100,14 @@ button {
     width: 1.5em;
     height: 1.5em;
     border-radius: 50%;
-    transition: left 100ms ease-in-out, opacity 100ms ease-in-out;
     background: white;
     box-shadow: 0 0 0.25em rgba(0, 0, 0, 0.5);
+    transition: left 100ms ease-in-out, opacity 100ms ease-in-out;
+}
+
+.first-run .toggle-switch::after,
+.first-run .toggle-switch::before {
+    transition: none;
 }
 
 .activate-fonts.active .toggle-switch::before,

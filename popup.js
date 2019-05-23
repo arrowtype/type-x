@@ -56,13 +56,14 @@ function updateStatus(status, updateExisting) {
 }
 
 // Show status of extension in the popup
-const showStatus = () => {
+const showStatus = (firstRun) => {
     chrome.storage.local.get(
         "fontActivated", ({ fontActivated }) => {
             chrome.browserAction.setIcon({
                 path: `icons/typex-${fontActivated ? "active" : "off"}@128.png`
             });
             activateFonts.classList.toggle("active", fontActivated);
+            !firstRun && activateFonts.classList.remove("first-run");
         }
     );
 }
@@ -161,5 +162,5 @@ function grabFont(e) {
 }
 
 // Initialise popup
-showStatus();
+showStatus(true);
 initForm();
