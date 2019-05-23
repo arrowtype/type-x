@@ -2,14 +2,18 @@
 
 :root {
     --extension-width: 16rem;
+    --top-button-height: 3rem;
+    --footer-height: 1rem;
     --item-padding: 0.5rem 1rem;
     --item-padding-tall: 0.75rem 1rem;
+    --item-padding-tall-w_icon: 0.75rem 0.75rem 0.75rem 1rem;
     --item-padding-taller: 1rem 1rem;
     --spacing-unit: 1rem;
     --spacing-unit-half: 0.5rem;
 
     --bg-main: #2f3137;
     --bg-alt: #1c1d23;
+    --bg-input: #26262c;
     --separator: #000000;
     --text-p1: #ffffff;
     --text-p2: #efefef;
@@ -17,6 +21,7 @@
     --gray-1: #6d7278;
     --gray-2: #4b4e5b;
     --accent: #44d7b6;
+    --code: #9efff4;
     --destructive: #e57880;
 
     font-size: 20px;
@@ -24,6 +29,10 @@
     --t1: 1rem;
     --t2: 0.75rem;
     --t3: 0.625rem;
+
+    --wght: "wght" 400;
+    --XPRN: "XPRN" 0;
+    --slnt: "slnt" 0;
 }
 
 
@@ -33,10 +42,17 @@
     font-family: "Recursive Sans";
     src: url("./fonts/recursive-sans-var.woff2");
 }
+@font-face {
+    /* TODO: load this from JavaScript through FontFaceSet
+    so we can re-use recursive-fonts.js */
+    font-family: "Recursive Mono";
+    src: url("./fonts/recursive-mono-var.woff2");
+}
 
 * {
     font-family: "Recursive Sans";
     box-sizing: border-box;
+    
 }
 
 body {
@@ -44,6 +60,9 @@ body {
     color: var(--text-p1);
     width: var(--extension-width);
     margin: 0;
+    min-height: var(--top-button-height);
+    display: grid;
+    
 }
 
 .label-button,
@@ -72,6 +91,9 @@ button {
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-size: var(--t3);
+    font-variation-settings: var(--wght), var(--XPRN), var(--slnt);
+    --XPRN: "XPRN" 1;
+    --wght: "wght" 500;
 }
 
 
@@ -81,7 +103,9 @@ button {
 .main-fonts {
     display: none;
     background: var(--bg-main);
-    /* display: block; */
+    padding-top: var(--top-button-height);
+    /* padding-bottom: var(--footer-height); */ /* if footer is fixed */
+    width: 100%;
 }
 
 .main-fonts.show {
@@ -94,6 +118,10 @@ button {
 
 .main-button {
     display: flex;
+    position: fixed;
+    background: var(--bg-alt);
+    width: 100%;
+    z-index: 1000;
 }
 
 .activate-fonts {
@@ -102,21 +130,34 @@ button {
     flex: auto;
     font-size: var(--t2);
     padding: var(--item-padding-tall);
+    transition: 0.25s;
+    color: var(--text-p2);
+    font-variation-settings: "XPRN" 1, "wght" 600, "slnt" 1;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: 0.25s;
+}
+
+.activate-fonts:hover, .activate-fonts.active {
+    color: var(--text-p1);
+    font-variation-settings: "XPRN" 1, "wght" 800, "slnt" 14;
+
 }
 
 .activate-fonts>span {
     display: flex;
     align-items: center;
+    font-size: 1rem;
 }
 
 .toggle-switch {
     position: relative;
     flex: none;
-    width: 2.5em;
-    height: 1em;
+    width: 2rem;
+    height: 1rem;
     border-radius: 999px;
-    margin-right: 1em;
-    background: var(--gray-1);
+    margin-right: 0.5rem;
+    background: var(--gray-2);
     transition: background 100ms ease-in-out;
 }
 
@@ -125,9 +166,9 @@ button {
     content: '';
     position: absolute;
     left: 0;
-    top: -0.25em;
-    width: 1.5em;
-    height: 1.5em;
+    top: -0.125rem;
+    width: 1.25rem;
+    height: 1.25rem;
     border-radius: 50%;
     background: var(--text-p1);
     transition: left 100ms ease-in-out, opacity 100ms ease-in-out;
@@ -146,12 +187,12 @@ button {
 .activate-fonts.active .toggle-switch::before,
 .activate-fonts.active .toggle-switch::after {
     opacity: 1;
-    left: calc(100% - 1.5em);
+    left: calc(100% - 1.25em);
 }
 
 .toggle-switch::after {
     opacity: 0;
-    box-shadow: 0 0 2px #4C00FF, 0 1px 3px #4C00FF;
+    box-shadow: 0 0 2px #4C00FF, 0 1px 3px #4C00FF, 0 0 2px #4C00FF, 0 0 2px #4C00FF, 0 0 2px #4C00FF;
     background: linear-gradient(135deg, rgba(16, 205, 103, 1), rgba(16, 205, 103, 0) 55%),
         linear-gradient(225deg, rgba(251, 208, 0, 1), rgba(251, 208, 0, 0) 70%),
         linear-gradient(315deg, rgba(210, 46, 237, 1), rgba(210, 46, 237, 0) 55%),
@@ -163,6 +204,8 @@ button {
     flex: none;
     margin-left: 0.25em;
     padding: var(--item-padding-taller);
+    background: var(--bg-alt);
+    transition: 0.25s;
 }
 .show-fonts:hover:hover {
     background: var(--bg-main);
@@ -171,12 +214,15 @@ button {
 .show-fonts svg {
     vertical-align: middle;
     width: 1.25em;
-    fill: currentColor;
 }
 
-.show-fonts.active svg,
-.show-fonts:hover svg {
-    fill: var(--accent);
+.show-fonts svg g {
+    transition: stroke 0.25s;
+}
+
+.show-fonts.active svg g,
+.show-fonts:hover svg g {
+    stroke: var(--accent);
 }
 
 
@@ -185,7 +231,7 @@ button {
 fieldset {
     border: none;
     margin: 0;
-    padding: var(--item-padding-tall);
+    padding: var(--item-padding-tall-w_icon);
     width: 100%;
     background: var(--bg-main);
     border-bottom: 1px solid var(--separator);
@@ -194,31 +240,48 @@ fieldset {
 input, textarea {
     border: none;
     width: 100%;
-    padding: 0.25em;
-    border-radius: 4px;
+    width: calc(100% + 0.75rem); /* make wider so text aligns; compensate for icon padding on right*/
+    margin-left: -0.5rem;
+    padding: 0.25rem 0.75em;
+    line-height: 1.5em;
+    border-radius: 0.25rem;
     font-size: var(--t2);
-    background: var(--bg-alt);
+    background: var(--bg-input);
     color: var(--text-p2);
     border: 1px transparent solid;
 }
 
-label {
+input {
+    width: calc(100% + 0.5rem);
+    background: var(--bg-main);
+    border: 2px solid var(--gray-2);
+}
+
+label.all-caps {
     font-size: var(--t3);
     color: var(--text-p3);
+    margin-bottom: 0.125rem;
+    --XPRN: "XPRN" 0;
 }
 
 textarea {
     resize: vertical;
+    font-family: "Recursive Mono", monospace;
+    color: var(--code);
+    margin-top: 0.125rem;
 }
 
 input:focus, textarea:focus {
     outline: none;
-    border: 1px var(--gray-1) solid;
 }
 
+textarea:focus {
+    border: 1px var(--separator) solid;
+    background: var(--bg-alt);
+}
 .overrides-title {
     background: var(--bg-main);
-    padding: var(--item-padding-tall);
+    padding: var(--item-padding-tall-w_icon);
     display: flex;
     align-items: center;
     border-bottom: 1px solid var(--separator);
@@ -230,8 +293,8 @@ input:focus, textarea:focus {
     flex: none;
     margin-left: auto;
     border-radius: 50%;
-    width: 1.5em;
-    height: 1.5em;
+    width: 1.5rem;
+    height: 1.5rem;
     transition: 0.35s;
 }
 
@@ -248,13 +311,14 @@ input:focus, textarea:focus {
 .select-font {
     display: flex;
     align-items: center;
+    margin-bottom: 4px;
 }
 
 .select-font-button {
     flex: none;
     margin-left: 0.25em;
-    width: 1.125rem;
-    height: 1.125rem;
+    width: 1.375rem;
+    height: 1.375rem;
     padding: 0.1875rem; /* 3px, because overall height is 18px*/
     overflow: hidden;
     background: transparent;
@@ -284,6 +348,8 @@ input:focus, textarea:focus {
 .font-title span {
     display: flex;
     align-items: center;
+    font-variation-settings: "XPRN" 1, "wght" 500;
+    font-size: var(--t1);
 }
 
 .font-title svg {
@@ -293,6 +359,9 @@ input:focus, textarea:focus {
     fill: currentColor;
 }
 
+.show-font-details:hover .font-title svg {
+    fill: var(--accent);
+}
 .show-font-details .font-title svg {
     fill: var(--accent);
     transform: rotate(90deg);
@@ -300,10 +369,6 @@ input:focus, textarea:focus {
 
 .font-details {
     display: none;
-}
-
-.font-details>* {
-    margin-bottom: 4px;
 }
 
 .show-font-details .font-details {
@@ -321,17 +386,19 @@ input:focus, textarea:focus {
 .delete-button-container span {
     color: var(--destructive);
     display: flex;
+    align-items: center;
+    --XPRN: "XPRN" 0;
 }
 
 .delete-button-container svg {
-    width: 1em;
-    height: 1em;
+    width: 1rem;
+    height: 0.75rem;
     fill: currentColor;
     margin-right: 0.25em;
 }
 
 .temp-apply {
-    padding: var(--spacing-unit-half) 1rem;
+    padding: var(--spacing-unit-half) var(--spacing-unit-half);
 }
 
 .temp-apply-button {
@@ -350,8 +417,14 @@ footer {
     display: none;
     align-items: center;
     font-size: var(--t3);
-    padding: 0.25rem 0.5rem;
+    padding: 0.5rem;
     color: var(--gray-1);
+    /* position: fixed; */
+    align-self: end;
+    z-index: 1001;
+    background: var(--bg-alt);
+    width: 100%;
+    height: var(--footer-height);
 }
 
 footer a { 
