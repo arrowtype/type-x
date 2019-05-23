@@ -1,7 +1,9 @@
 /* Generic setup */
 
 :root {
-    --extension-width: 16rem;
+    font-size: 18px;
+
+    --extension-width: 18rem;
     --top-button-height: 3rem;
     --footer-height: 1rem;
     --item-padding: 0.5rem 1rem;
@@ -24,7 +26,6 @@
     --code: #9efff4;
     --destructive: #e57880;
 
-    font-size: 20px;
 
     --t1: 1rem;
     --t2: 0.75rem;
