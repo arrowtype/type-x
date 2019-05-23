@@ -125,23 +125,32 @@ function saveForm() {
     for (const fieldset of fieldsets) {
         const newFont = {}
         const textareas = fieldset.querySelectorAll("textarea");
+        const inputs = fieldset.querySelectorAll("input");
 
         for (const textarea of textareas) {
             if (textarea.name === "selectors") {
                 // Selectors should become an array
                 newFont["selectors"] = textarea.value.split(",").map(i => i.trim());
-            } else if (textarea.name === "name" || textarea.name === "css") {
+            } else if (textarea.name === "css") {
                 newFont[textarea.name] = textarea.value;
-            } else if (textarea.name === "file") {
-                if (fontFiles[textarea.id]) {
-                    newFont["file"] = fontFiles[textarea.id];
+            }
+        }
+        for (const input of inputs) {
+            if (input.name === "name") {
+                newFont[input.name] = input.value;
+            } else if (input.name === "file") {
+                if (fontFiles[input.id]) {
+                    newFont["file"] = fontFiles[input.id];
                 } else {
-                    newFont["file"] = textarea.dataset.original;
+                    newFont["file"] = input.dataset.original;
                 }
             }
         }
+
+
         newFonts.push(newFont);
     }
+
 
     // Apply new fonts and activate extension
     chrome.storage.local.set({ "fonts": newFonts }, () => {
