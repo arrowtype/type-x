@@ -250,6 +250,7 @@ input, textarea {
     background: var(--bg-input);
     color: var(--text-p2);
     border: 1px transparent solid;
+    margin-bottom: 0.25rem;
 }
 
 input {
@@ -317,7 +318,6 @@ textarea:focus {
 .select-font {
     display: flex;
     align-items: center;
-    margin-bottom: 4px;
     width: calc(100% + 0.25rem);
 }
 
@@ -429,7 +429,7 @@ footer {
     display: none;
     align-items: center;
     font-size: var(--t3);
-    padding: 0.5rem;
+    padding: 0.75rem 0.5rem;
     color: var(--gray-1);
     /* position: fixed; */
     align-self: end;
