@@ -59,6 +59,9 @@ function updateStatus(status, updateExisting) {
 const showStatus = () => {
     chrome.storage.local.get(
         "fontActivated", ({ fontActivated }) => {
+            chrome.browserAction.setIcon({
+                path: `icons/typex-${fontActivated ? "active" : "off"}@128.png`
+            });
             activateFonts.classList.toggle("active", fontActivated);
         }
     );
