@@ -23,8 +23,13 @@
     --gray-1: #6d7278;
     --gray-2: #4b4e5b;
     --accent: #44d7b6;
-    --code: #9efff4;
+    --code: #F0D6B4;
     --destructive: #e57880;
+    --magic: linear-gradient(135deg, rgba(16, 205, 103, 1), rgba(16, 205, 103, 0) 55%),
+    linear-gradient(225deg, rgba(251, 208, 0, 1), rgba(251, 208, 0, 0) 70%),
+    linear-gradient(315deg, rgba(210, 46, 237, 1), rgba(210, 46, 237, 0) 55%),
+    linear-gradient(45deg, rgba(83, 59, 230, 1), rgba(83, 59, 230, 0) 95%),
+    linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%);
 
 
     --t1: 1rem;
@@ -194,11 +199,7 @@ button {
 .toggle-switch::after {
     opacity: 0;
     box-shadow: 0 0 2px #4C00FF, 0 1px 3px #4C00FF, 0 0 2px #4C00FF, 0 0 2px #4C00FF, 0 0 2px #4C00FF;
-    background: linear-gradient(135deg, rgba(16, 205, 103, 1), rgba(16, 205, 103, 0) 55%),
-        linear-gradient(225deg, rgba(251, 208, 0, 1), rgba(251, 208, 0, 0) 70%),
-        linear-gradient(315deg, rgba(210, 46, 237, 1), rgba(210, 46, 237, 0) 55%),
-        linear-gradient(45deg, rgba(83, 59, 230, 1), rgba(83, 59, 230, 0) 95%),
-        linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%);
+    background: var(--magic);
 }
 
 .show-fonts {
@@ -407,10 +408,11 @@ textarea:focus {
     padding: var(--spacing-unit-half);
     background: var(--bg-main);
     transition: 0.25s;
+    /* border: 2px solid var(--gray-1); */
 }
 
 .temp-apply-button:hover {
-    background: var(--bg-alt)
+    background: var(--bg-alt);
 }
 
 /* Footer */
