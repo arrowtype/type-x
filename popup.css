@@ -1,8 +1,8 @@
 /* Generic setup */
 
 :root {
-    --extension-width: 300px;
-    --item-padding: 0.5em 1em;
+    --extension-width: 16rem;
+    --item-padding: 0.5rem 1rem;
 
     --bg-main: #2f3137;
     --bg-alt: #1c1d23;
@@ -13,6 +13,12 @@
     --gray-2: #4b4e5b;
     --accent: #44d7b6;
     --destructive: #e57880;
+
+    font-size: 16px;
+
+    --t1: 1rem;
+    --t2: 0.75rem;
+    --t3: 0.625rem;
 }
 
 @font-face {
@@ -24,7 +30,6 @@
 
 * {
     font-family: "Recursive Sans";
-    font-size: 16px;
     box-sizing: border-box;
 }
 
@@ -80,6 +85,7 @@ button {
     text-align: left;
     padding: 0.25em;
     flex: auto;
+    font-size: var(--t2);
 }
 
 .activate-fonts>span {
@@ -111,6 +117,7 @@ button {
     transition: left 100ms ease-in-out, opacity 100ms ease-in-out;
 }
 
+.first-run .toggle-switch,
 .first-run .toggle-switch::after,
 .first-run .toggle-switch::before {
     transition: none;
@@ -178,6 +185,7 @@ input {
     align-items: center;
     border-bottom: 2px solid var(--separator);
     color: var(--text-p2);
+    font-size: var(--t2);
 }
 
 .overrides-title button {
@@ -250,6 +258,7 @@ input {
 }
 
 .delete-button-container {
+    font-size: var(--t3);
     display: flex;
     justify-content: flex-end;
 }
@@ -257,7 +266,6 @@ input {
 .delete-button-container span {
     color: var(--destructive);
     display: flex;
-    align-items: center;
 }
 
 .delete-button-container svg {
@@ -269,4 +277,26 @@ input {
 
 .temp-apply-button {
     margin: 1rem;
+}
+
+/* Footer */
+footer {
+    display: none;
+    align-items: center;
+    font-size: var(--t3);
+    padding: 0.25rem 0.5rem;
+    color: var(--gray-1);
+}
+
+footer span a {
+    color: var(--text-p2);
+}
+
+footer > a {
+    margin-left: auto;
+    color: inherit;
+}
+
+footer.show {
+    display: flex;
 }

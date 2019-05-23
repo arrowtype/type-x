@@ -24,6 +24,7 @@ activateFonts.onclick = () => {
 // Show/hide font form
 showFonts.onclick = () => {
     document.querySelector(".main-fonts").classList.toggle("show");
+    document.querySelector("footer").classList.toggle("show");
     showFonts.classList.toggle("active");
 }
 
