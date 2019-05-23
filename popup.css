@@ -5,14 +5,14 @@
     --item-padding: 0.5em 1em;
 
     --bg-main: #2f3137;
-    --bg-alt: #1C1D23;
+    --bg-alt: #1c1d23;
     --separator: #000000;
     --text-p1: #ffffff;
-    --text-p2: #B6C1CE;
-    --gray-1: #6D7278;
-    --gray-2: #4B4E5B;
-    --accent: #44D7B6;
-    --destructive: #E57880;
+    --text-p2: #b6c1ce;
+    --gray-1: #6d7278;
+    --gray-2: #4b4e5b;
+    --accent: #44d7b6;
+    --destructive: #e57880;
 }
 
 @font-face {
@@ -93,8 +93,9 @@ button {
     width: 2.5em;
     height: 1em;
     border-radius: 999px;
-    background: #777;
     margin-right: 1em;
+    background: var(--gray-1);
+    transition: background 100ms ease-in-out;
 }
 
 .toggle-switch::after,
@@ -113,6 +114,10 @@ button {
 .first-run .toggle-switch::after,
 .first-run .toggle-switch::before {
     transition: none;
+}
+
+.activate-fonts.active .toggle-switch {
+    background: var(--text-p2);
 }
 
 .activate-fonts.active .toggle-switch::before,
@@ -152,10 +157,11 @@ button {
 
 fieldset {
     border: none;
-    margin: 0 0 2px 0;
+    margin: 0;
     padding: var(--item-padding);
     width: 100%;
     background: var(--bg-main);
+    border-bottom: 2px solid var(--separator);
 }
 
 input {
@@ -166,18 +172,29 @@ input {
 }
 
 .overrides-title {
+    background: var(--bg-main);
     padding: var(--item-padding);
     display: flex;
     align-items: center;
+    border-bottom: 2px solid var(--separator);
+    color: var(--text-p2);
 }
 
 .overrides-title button {
     flex: none;
     margin-left: auto;
+    border-radius: 50%;
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.overrides-title button:hover {
+    background: var(--bg-alt);
+    color: var(--accent);
 }
 
 .overrides-title svg {
-    width: 1.25em;
+    width: 100%;
     fill: currentColor;
 }
 
