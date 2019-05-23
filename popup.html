@@ -24,8 +24,8 @@
     </section>
 
     <section class="main-fonts">
-        <div class="overrides-title">
-            FONT OVERRIDES
+        <div class="overrides-title all-caps">
+            Font Overrides
             <button type="button" id="addFont">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11 11">
                     <path
@@ -35,15 +35,17 @@
         </div>
         <form id="fontsForm">
             <div id="usedFonts"></div>
-            <button class="button temp-apply-button" type="submit">Apply</button>
+            <div class="temp-apply">
+                <button class="button temp-apply-button" type="submit">Apply Changes</button>
+            </div>
         </form>
     </section>
 
     <footer>
-        <span>
-            BY <a href="#">PIXELAMBACHT</a> & <a href="#">ARROW TYPE</a>
+        <span class="all-caps">
+            BY <a href="http://pixelambacht.nl">PixelAmbacht</a> & <a href="https://arrowtype.com/">Arrow Type</a>
         </span>
-        <a href="#">SOURCE</a>
+        <a href="#">Source</a>
     </footer>
 
     <!-- Template:  -->
@@ -78,13 +80,13 @@
                 <input type="text" name="selectors" value="">
                 <input type="text" name="css" value="">
                 <div class="delete-button-container">
-                    <button type="button">
+                    <button type="button" class="all-caps">
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12">
                                 <path
                                     d="M8.5 4h-5c-.3 0-.5.2-.5.5v6c0 .3.2.5.5.5h5c.3 0 .5-.2.5-.5v-6c0-.3-.2-.5-.5-.5zM8 10H4V5h4v5zm1.5-8H8c0-.6-.4-1-1-1H5c-.6 0-1 .4-1 1H2.5c-.3 0-.5.2-.5.5s.2.5.5.5h7c.3 0 .5-.2.5-.5S9.8 2 9.5 2z" />
                             </svg>
-                            DELETE
+                            Delete
                         </span>
                     </button>
                 </div>

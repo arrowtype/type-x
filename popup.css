@@ -3,7 +3,8 @@
 :root {
     --extension-width: 16rem;
     --item-padding: 0.5rem 1rem;
-    --item-padding-tall: 0.75rem 1rem ;
+    --item-padding-tall: 0.75rem 1rem;
+    --item-padding-taller: 1rem 1rem;
     --spacing-unit: 1rem;
     --spacing-unit-half: 0.5rem;
 
@@ -25,9 +26,10 @@
     --t3: 0.625rem;
 }
 
+
 @font-face {
     /* TODO: load this from JavaScript through FontFaceSet
-       so we can re-use recursive-fonts.js */
+    so we can re-use recursive-fonts.js */
     font-family: "Recursive Sans";
     src: url("./fonts/recursive-sans-var.woff2");
 }
@@ -64,6 +66,14 @@ button {
     background: rgba(255, 255, 255, 0.25);
 }
 
+/* Global styles */
+
+.all-caps {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+
 
 /* General extension styles */
 
@@ -83,7 +93,6 @@ button {
 
 .main-button {
     display: flex;
-    padding: var(--item-padding-tall);
 }
 
 .activate-fonts {
@@ -91,6 +100,7 @@ button {
     padding: 0.25em;
     flex: auto;
     font-size: var(--t2);
+    padding: var(--item-padding-tall);
 }
 
 .activate-fonts>span {
@@ -151,6 +161,10 @@ button {
 .show-fonts {
     flex: none;
     margin-left: 0.25em;
+    padding: var(--item-padding-taller);
+}
+.show-fonts:hover:hover {
+    background: var(--bg-main);
 }
 
 .show-fonts svg {
@@ -223,6 +237,7 @@ input:focus {
 
 .select-font {
     display: flex;
+    align-items: center;
 }
 
 .select-font-button {
@@ -305,8 +320,19 @@ input:focus {
     margin-right: 0.25em;
 }
 
+.temp-apply {
+    padding: var(--spacing-unit-half) 1rem;
+}
+
 .temp-apply-button {
-    margin: var(--spacing-unit-half) 1rem;
+    width: 100%;
+    padding: var(--spacing-unit-half);
+    background: var(--bg-main);
+    transition: 0.25s;
+}
+
+.temp-apply-button:hover {
+    background: var(--bg-alt)
 }
 
 /* Footer */
@@ -318,13 +344,22 @@ footer {
     color: var(--gray-1);
 }
 
+footer a { 
+    transition: 0.25s;
+}
+footer a:hover {
+    color: var(--accent);
+}
+
 footer span a {
     color: var(--text-p3);
+    text-decoration: none;
 }
 
 footer > a {
     margin-left: auto;
     color: inherit;
+    text-decoration: underline;
 }
 
 footer.show {
