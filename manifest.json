@@ -19,20 +19,18 @@
     "web_accessible_resources": [
         "fonts/*"
     ],
-
     "browser_action": {
+        "default_title": "Recursive Font Swapper",
         "default_popup": "popup.html",
         "default_icon": {
-            "16": "images/get_started16.png",
-            "32": "images/get_started32.png",
-            "48": "images/get_started48.png",
-            "128": "images/get_started128.png"
+            "16": "icons/typex-off@16.png",
+            "48": "icons/typex-off@48.png",
+            "128": "icons/typex-off@128.png"
         }
     },
     "icons": {
-        "16": "images/get_started16.png",
-        "32": "images/get_started32.png",
-        "48": "images/get_started48.png",
-        "128": "images/get_started128.png"
+        "16": "icons/typex-off@16.png",
+        "48": "icons/typex-off@48.png",
+        "128": "icons/typex-off@128.png"
     }
 }

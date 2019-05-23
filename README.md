@@ -1,6 +1,6 @@
 # Recursive type tester
 
-Work in progress for the Recursive type tester.
+Work in progress for the Recursive type tester!
 
 ## Install
 

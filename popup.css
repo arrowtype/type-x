@@ -1,0 +1,451 @@
+/* Generic setup */
+
+:root {
+    font-size: 18px;
+
+    --extension-width: 18rem;
+    --top-button-height: 3rem;
+    --footer-height: 1rem;
+    --item-padding: 0.5rem 1rem;
+    --item-padding-tall: 0.75rem 1rem;
+    --item-padding-tall-w_icon: 0.75rem 0.75rem 0.75rem 1rem;
+    --item-padding-taller: 1rem 1rem;
+    --spacing-unit: 1rem;
+    --spacing-unit-half: 0.5rem;
+
+    --bg-main: #2f3137;
+    --bg-alt: #1c1d23;
+    --bg-input: #26262c;
+    --separator: #000000;
+    --text-p1: #ffffff;
+    --text-p2: #efefef;
+    --text-p3: #b6c1ce;
+    --gray-1: #6d7278;
+    --gray-2: #4b4e5b;
+    --accent: #44d7b6;
+    --code: #9efff4;
+    --destructive: #e57880;
+
+
+    --t1: 1rem;
+    --t2: 0.75rem;
+    --t3: 0.625rem;
+
+    --wght: "wght" 400;
+    --XPRN: "XPRN" 0;
+    --slnt: "slnt" 0;
+}
+
+
+@font-face {
+    /* TODO: load this from JavaScript through FontFaceSet
+    so we can re-use recursive-fonts.js */
+    font-family: "Recursive Sans";
+    src: url("./fonts/recursive-sans-var.woff2");
+}
+@font-face {
+    /* TODO: load this from JavaScript through FontFaceSet
+    so we can re-use recursive-fonts.js */
+    font-family: "Recursive Mono";
+    src: url("./fonts/recursive-mono-var.woff2");
+}
+
+* {
+    font-family: "Recursive Sans";
+    box-sizing: border-box;
+    
+}
+
+body {
+    background: var(--bg-alt);
+    color: var(--text-p1);
+    width: var(--extension-width);
+    margin: 0;
+    min-height: var(--top-button-height);
+    display: grid;
+    
+}
+
+.label-button,
+button {
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    background: none;
+    padding: 0.25em;
+    margin: 0;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+    color: inherit;
+}
+
+.label-button,
+.button {
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Global styles */
+
+.all-caps {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: var(--t3);
+    font-variation-settings: var(--wght), var(--XPRN), var(--slnt);
+    --XPRN: "XPRN" 1;
+    --wght: "wght" 500;
+}
+
+
+
+/* General extension styles */
+
+.main-fonts {
+    display: none;
+    background: var(--bg-main);
+    padding-top: var(--top-button-height);
+    /* padding-bottom: var(--footer-height); */ /* if footer is fixed */
+    width: 100%;
+}
+
+.main-fonts.show {
+    display: block;
+    /* display: none; */
+}
+
+
+/* Activate button */
+
+.main-button {
+    display: flex;
+    position: fixed;
+    background: var(--bg-alt);
+    width: 100%;
+    z-index: 1000;
+}
+
+.activate-fonts {
+    text-align: left;
+    padding: 0.25em;
+    flex: auto;
+    font-size: var(--t2);
+    padding: var(--item-padding-tall);
+    transition: 0.25s;
+    color: var(--text-p2);
+    font-variation-settings: "XPRN" 1, "wght" 600, "slnt" 1;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: 0.25s;
+}
+
+.activate-fonts:hover, .activate-fonts.active {
+    color: var(--text-p1);
+    font-variation-settings: "XPRN" 1, "wght" 800, "slnt" 14;
+
+}
+
+.activate-fonts>span {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.toggle-switch {
+    position: relative;
+    flex: none;
+    width: 2rem;
+    height: 1rem;
+    border-radius: 999px;
+    margin-right: 0.5rem;
+    background: var(--gray-2);
+    transition: background 100ms ease-in-out;
+}
+
+.toggle-switch::after,
+.toggle-switch::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -0.125rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: var(--text-p1);
+    transition: left 100ms ease-in-out, opacity 100ms ease-in-out;
+}
+
+.first-run .toggle-switch,
+.first-run .toggle-switch::after,
+.first-run .toggle-switch::before {
+    transition: none;
+}
+
+.activate-fonts.active .toggle-switch {
+    background: var(--text-p3);
+}
+
+.activate-fonts.active .toggle-switch::before,
+.activate-fonts.active .toggle-switch::after {
+    opacity: 1;
+    left: calc(100% - 1.25em);
+}
+
+.toggle-switch::after {
+    opacity: 0;
+    box-shadow: 0 0 2px #4C00FF, 0 1px 3px #4C00FF, 0 0 2px #4C00FF, 0 0 2px #4C00FF, 0 0 2px #4C00FF;
+    background: linear-gradient(135deg, rgba(16, 205, 103, 1), rgba(16, 205, 103, 0) 55%),
+        linear-gradient(225deg, rgba(251, 208, 0, 1), rgba(251, 208, 0, 0) 70%),
+        linear-gradient(315deg, rgba(210, 46, 237, 1), rgba(210, 46, 237, 0) 55%),
+        linear-gradient(45deg, rgba(83, 59, 230, 1), rgba(83, 59, 230, 0) 95%),
+        linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%);
+}
+
+.show-fonts {
+    flex: none;
+    margin-left: 0.25em;
+    padding: var(--item-padding-taller);
+    background: var(--bg-alt);
+    transition: 0.25s;
+}
+.show-fonts:hover:hover {
+    background: var(--bg-main);
+}
+
+.show-fonts svg {
+    vertical-align: middle;
+    width: 1.25em;
+}
+
+.show-fonts svg g {
+    transition: stroke 0.25s;
+}
+
+.show-fonts.active svg g,
+.show-fonts:hover svg g {
+    stroke: var(--accent);
+}
+
+
+/* Form stuff */
+
+fieldset {
+    border: none;
+    margin: 0;
+    padding: var(--item-padding-tall-w_icon);
+    width: 100%;
+    background: var(--bg-main);
+    border-bottom: 1px solid var(--separator);
+}
+
+input, textarea {
+    border: none;
+    width: 100%;
+    width: calc(100% + 0.75rem); /* make wider so text aligns; compensate for icon padding on right*/
+    margin-left: -0.5rem;
+    padding: 0.25rem 0.75em;
+    line-height: 1.5em;
+    border-radius: 0.25rem;
+    font-size: var(--t2);
+    background: var(--bg-input);
+    color: var(--text-p2);
+    border: 1px transparent solid;
+}
+
+input {
+    width: calc(100% + 0.5rem);
+    background: var(--bg-main);
+    border: 2px solid var(--gray-2);
+}
+
+label.all-caps {
+    font-size: var(--t3);
+    color: var(--text-p3);
+    margin-bottom: 0.125rem;
+    --XPRN: "XPRN" 0;
+}
+
+textarea {
+    resize: vertical;
+    font-family: "Recursive Mono", monospace;
+    color: var(--code);
+    margin-top: 0.125rem;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+}
+
+textarea:focus {
+    border: 1px var(--separator) solid;
+    background: var(--bg-alt);
+}
+.overrides-title {
+    background: var(--bg-main);
+    padding: var(--item-padding-tall-w_icon);
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--separator);
+    color: var(--text-p3);
+    font-size: var(--t2);
+}
+
+.overrides-title button {
+    flex: none;
+    margin-left: auto;
+    border-radius: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    transition: 0.35s;
+}
+
+.overrides-title button:hover {
+    background: var(--bg-alt);
+    color: var(--accent);
+}
+
+.overrides-title svg {
+    width: 100%;
+    fill: currentColor;
+}
+
+.select-font {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.select-font-button {
+    flex: none;
+    margin-left: 0.25em;
+    width: 1.375rem;
+    height: 1.375rem;
+    padding: 0.1875rem; /* 3px, because overall height is 18px*/
+    overflow: hidden;
+    background: transparent;
+    transition: 0.35s;
+}
+
+.select-font-button:hover {
+    background: var(--bg-alt);
+}
+
+.select-font-button svg {
+    width: 100%;
+}
+
+.select-font-button input {
+    opacity: 0;
+    height: 0;
+    padding: 0;
+    display: none;
+}
+
+.font-title button {
+    width: 100%;
+    text-align: left;
+}
+
+.font-title span {
+    display: flex;
+    align-items: center;
+    font-variation-settings: "XPRN" 1, "wght" 500;
+    font-size: var(--t1);
+}
+
+.font-title svg {
+    width: 1em;
+    height: 1em;
+    margin-left: auto;
+    fill: currentColor;
+}
+
+.show-font-details:hover .font-title svg {
+    fill: var(--accent);
+}
+.show-font-details .font-title svg {
+    fill: var(--accent);
+    transform: rotate(90deg);
+}
+
+.font-details {
+    display: none;
+}
+
+.show-font-details .font-details {
+    display: block;
+    padding-top: var(--spacing-unit-half);
+}
+
+.delete-button-container {
+    font-size: var(--t3);
+    display: flex;
+    justify-content: flex-end;
+    padding-top: var(--spacing-unit-half);
+}
+
+.delete-button-container span {
+    color: var(--destructive);
+    display: flex;
+    align-items: center;
+    --XPRN: "XPRN" 0;
+}
+
+.delete-button-container svg {
+    width: 1rem;
+    height: 0.75rem;
+    fill: currentColor;
+    margin-right: 0.25em;
+}
+
+.temp-apply {
+    padding: var(--spacing-unit-half) var(--spacing-unit-half);
+}
+
+.temp-apply-button {
+    width: 100%;
+    padding: var(--spacing-unit-half);
+    background: var(--bg-main);
+    transition: 0.25s;
+}
+
+.temp-apply-button:hover {
+    background: var(--bg-alt)
+}
+
+/* Footer */
+footer {
+    display: none;
+    align-items: center;
+    font-size: var(--t3);
+    padding: 0.5rem;
+    color: var(--gray-1);
+    /* position: fixed; */
+    align-self: end;
+    z-index: 1001;
+    background: var(--bg-alt);
+    width: 100%;
+    height: var(--footer-height);
+}
+
+footer a { 
+    transition: 0.25s;
+}
+footer a:hover {
+    color: var(--accent);
+}
+
+footer span a {
+    color: var(--text-p3);
+    text-decoration: none;
+}
+
+footer > a {
+    margin-left: auto;
+    color: inherit;
+    text-decoration: underline;
+}
+
+footer.show {
+    display: flex;
+}
