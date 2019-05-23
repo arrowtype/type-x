@@ -3,18 +3,22 @@
 :root {
     --extension-width: 16rem;
     --item-padding: 0.5rem 1rem;
+    --item-padding-tall: 0.75rem 1rem ;
+    --spacing-unit: 1rem;
+    --spacing-unit-half: 0.5rem;
 
     --bg-main: #2f3137;
     --bg-alt: #1c1d23;
     --separator: #000000;
     --text-p1: #ffffff;
-    --text-p2: #b6c1ce;
+    --text-p2: #efefef;
+    --text-p3: #b6c1ce;
     --gray-1: #6d7278;
     --gray-2: #4b4e5b;
     --accent: #44d7b6;
     --destructive: #e57880;
 
-    font-size: 16px;
+    font-size: 20px;
 
     --t1: 1rem;
     --t2: 0.75rem;
@@ -65,6 +69,7 @@ button {
 
 .main-fonts {
     display: none;
+    background: var(--bg-main);
     /* display: block; */
 }
 
@@ -78,7 +83,7 @@ button {
 
 .main-button {
     display: flex;
-    padding: var(--item-padding);
+    padding: var(--item-padding-tall);
 }
 
 .activate-fonts {
@@ -124,7 +129,7 @@ button {
 }
 
 .activate-fonts.active .toggle-switch {
-    background: var(--text-p2);
+    background: var(--text-p3);
 }
 
 .activate-fonts.active .toggle-switch::before,
@@ -165,10 +170,10 @@ button {
 fieldset {
     border: none;
     margin: 0;
-    padding: var(--item-padding);
+    padding: var(--item-padding-tall);
     width: 100%;
     background: var(--bg-main);
-    border-bottom: 2px solid var(--separator);
+    border-bottom: 1px solid var(--separator);
 }
 
 input {
@@ -176,15 +181,24 @@ input {
     width: 100%;
     padding: 0.25em;
     border-radius: 4px;
+    font-size: var(--t2);
+    background: var(--bg-alt);
+    color: var(--text-p2);
+    border: 1px transparent solid;
+}
+
+input:focus {
+    outline: none;
+    border: 1px var(--gray-1) solid;
 }
 
 .overrides-title {
     background: var(--bg-main);
-    padding: var(--item-padding);
+    padding: var(--item-padding-tall);
     display: flex;
     align-items: center;
-    border-bottom: 2px solid var(--separator);
-    color: var(--text-p2);
+    border-bottom: 1px solid var(--separator);
+    color: var(--text-p3);
     font-size: var(--t2);
 }
 
@@ -194,6 +208,7 @@ input {
     border-radius: 50%;
     width: 1.5em;
     height: 1.5em;
+    transition: 0.35s;
 }
 
 .overrides-title button:hover {
@@ -213,14 +228,27 @@ input {
 .select-font-button {
     flex: none;
     margin-left: 0.25em;
-    width: 2em;
+    width: 1.125rem;
+    height: 1.125rem;
+    padding: 0.1875rem; /* 3px, because overall height is 18px*/
     overflow: hidden;
+    background: transparent;
+    transition: 0.35s;
+}
+
+.select-font-button:hover {
+    background: var(--bg-alt);
+}
+
+.select-font-button svg {
+    width: 100%;
 }
 
 .select-font-button input {
     opacity: 0;
     height: 0;
     padding: 0;
+    display: none;
 }
 
 .font-title button {
@@ -255,12 +283,14 @@ input {
 
 .show-font-details .font-details {
     display: block;
+    padding-top: var(--spacing-unit-half);
 }
 
 .delete-button-container {
     font-size: var(--t3);
     display: flex;
     justify-content: flex-end;
+    padding-top: var(--spacing-unit-half);
 }
 
 .delete-button-container span {
@@ -276,7 +306,7 @@ input {
 }
 
 .temp-apply-button {
-    margin: 1rem;
+    margin: var(--spacing-unit-half) 1rem;
 }
 
 /* Footer */
@@ -289,7 +319,7 @@ footer {
 }
 
 footer span a {
-    color: var(--text-p2);
+    color: var(--text-p3);
 }
 
 footer > a {
