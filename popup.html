@@ -35,8 +35,8 @@
         </div>
         <form id="fontsForm">
             <div id="usedFonts"></div>
-            <div class="temp-apply">
-                <button class="button temp-apply-button" type="submit">Apply Changes</button>
+            <div class="temp-apply ">
+                <button class="button temp-apply-button all-caps" type="submit">Apply Changes</button>
             </div>
         </form>
     </section>
@@ -77,8 +77,10 @@
                         <input type="file" name="file" value="" accept=".ttf,.otf,.eot,.woff,.woff2">
                     </label>
                 </div>
-                <input type="text" name="selectors" value="">
-                <input type="text" name="css" value="">
+                <label id="selectors" class="all-caps">CSS Selectors</label>
+                <textarea rows="2" id="selectors" name="selectors"></textarea>
+                <label id="styles" class="all-caps">CSS Styles</label>
+                <textarea rows="4" cols="33" id="styles" name="css"></textarea>
                 <div class="delete-button-container">
                     <button type="button" class="all-caps">
                         <span>

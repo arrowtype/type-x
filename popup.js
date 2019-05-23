@@ -124,19 +124,19 @@ function saveForm() {
 
     for (const fieldset of fieldsets) {
         const newFont = {}
-        const inputs = fieldset.querySelectorAll("input");
+        const textareas = fieldset.querySelectorAll("textarea");
 
-        for (const input of inputs) {
-            if (input.name === "selectors") {
+        for (const textarea of textareas) {
+            if (textarea.name === "selectors") {
                 // Selectors should become an array
-                newFont["selectors"] = input.value.split(",").map(i => i.trim());
-            } else if (input.name === "name" || input.name === "css") {
-                newFont[input.name] = input.value;
-            } else if (input.name === "file") {
-                if (fontFiles[input.id]) {
-                    newFont["file"] = fontFiles[input.id];
+                newFont["selectors"] = textarea.value.split(",").map(i => i.trim());
+            } else if (textarea.name === "name" || textarea.name === "css") {
+                newFont[textarea.name] = textarea.value;
+            } else if (textarea.name === "file") {
+                if (fontFiles[textarea.id]) {
+                    newFont["file"] = fontFiles[textarea.id];
                 } else {
-                    newFont["file"] = input.dataset.original;
+                    newFont["file"] = textarea.dataset.original;
                 }
             }
         }

@@ -71,6 +71,7 @@ button {
 .all-caps {
     text-transform: uppercase;
     letter-spacing: 0.1em;
+    font-size: var(--t3);
 }
 
 
@@ -190,7 +191,7 @@ fieldset {
     border-bottom: 1px solid var(--separator);
 }
 
-input {
+input, textarea {
     border: none;
     width: 100%;
     padding: 0.25em;
@@ -201,7 +202,16 @@ input {
     border: 1px transparent solid;
 }
 
-input:focus {
+label {
+    font-size: var(--t3);
+    color: var(--text-p3);
+}
+
+textarea {
+    resize: vertical;
+}
+
+input:focus, textarea:focus {
     outline: none;
     border: 1px var(--gray-1) solid;
 }
