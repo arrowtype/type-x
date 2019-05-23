@@ -1,0 +1,302 @@
+/* Generic setup */
+
+:root {
+    --extension-width: 16rem;
+    --item-padding: 0.5rem 1rem;
+
+    --bg-main: #2f3137;
+    --bg-alt: #1c1d23;
+    --separator: #000000;
+    --text-p1: #ffffff;
+    --text-p2: #b6c1ce;
+    --gray-1: #6d7278;
+    --gray-2: #4b4e5b;
+    --accent: #44d7b6;
+    --destructive: #e57880;
+
+    font-size: 16px;
+
+    --t1: 1rem;
+    --t2: 0.75rem;
+    --t3: 0.625rem;
+}
+
+@font-face {
+    /* TODO: load this from JavaScript through FontFaceSet
+       so we can re-use recursive-fonts.js */
+    font-family: "Recursive Sans";
+    src: url("./fonts/recursive-sans-var.woff2");
+}
+
+* {
+    font-family: "Recursive Sans";
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg-alt);
+    color: var(--text-p1);
+    width: var(--extension-width);
+    margin: 0;
+}
+
+.label-button,
+button {
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    background: none;
+    padding: 0.25em;
+    margin: 0;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+    color: inherit;
+}
+
+.label-button,
+.button {
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+
+/* General extension styles */
+
+.main-fonts {
+    display: none;
+    /* display: block; */
+}
+
+.main-fonts.show {
+    display: block;
+    /* display: none; */
+}
+
+
+/* Activate button */
+
+.main-button {
+    display: flex;
+    padding: var(--item-padding);
+}
+
+.activate-fonts {
+    text-align: left;
+    padding: 0.25em;
+    flex: auto;
+    font-size: var(--t2);
+}
+
+.activate-fonts>span {
+    display: flex;
+    align-items: center;
+}
+
+.toggle-switch {
+    position: relative;
+    flex: none;
+    width: 2.5em;
+    height: 1em;
+    border-radius: 999px;
+    margin-right: 1em;
+    background: var(--gray-1);
+    transition: background 100ms ease-in-out;
+}
+
+.toggle-switch::after,
+.toggle-switch::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -0.25em;
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 50%;
+    background: var(--text-p1);
+    transition: left 100ms ease-in-out, opacity 100ms ease-in-out;
+}
+
+.first-run .toggle-switch,
+.first-run .toggle-switch::after,
+.first-run .toggle-switch::before {
+    transition: none;
+}
+
+.activate-fonts.active .toggle-switch {
+    background: var(--text-p2);
+}
+
+.activate-fonts.active .toggle-switch::before,
+.activate-fonts.active .toggle-switch::after {
+    opacity: 1;
+    left: calc(100% - 1.5em);
+}
+
+.toggle-switch::after {
+    opacity: 0;
+    box-shadow: 0 0 2px #4C00FF, 0 1px 3px #4C00FF;
+    background: linear-gradient(135deg, rgba(16, 205, 103, 1), rgba(16, 205, 103, 0) 55%),
+        linear-gradient(225deg, rgba(251, 208, 0, 1), rgba(251, 208, 0, 0) 70%),
+        linear-gradient(315deg, rgba(210, 46, 237, 1), rgba(210, 46, 237, 0) 55%),
+        linear-gradient(45deg, rgba(83, 59, 230, 1), rgba(83, 59, 230, 0) 95%),
+        linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%);
+}
+
+.show-fonts {
+    flex: none;
+    margin-left: 0.25em;
+}
+
+.show-fonts svg {
+    vertical-align: middle;
+    width: 1.25em;
+    fill: currentColor;
+}
+
+.show-fonts.active svg,
+.show-fonts:hover svg {
+    fill: var(--accent);
+}
+
+
+/* Form stuff */
+
+fieldset {
+    border: none;
+    margin: 0;
+    padding: var(--item-padding);
+    width: 100%;
+    background: var(--bg-main);
+    border-bottom: 2px solid var(--separator);
+}
+
+input {
+    border: none;
+    width: 100%;
+    padding: 0.25em;
+    border-radius: 4px;
+}
+
+.overrides-title {
+    background: var(--bg-main);
+    padding: var(--item-padding);
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid var(--separator);
+    color: var(--text-p2);
+    font-size: var(--t2);
+}
+
+.overrides-title button {
+    flex: none;
+    margin-left: auto;
+    border-radius: 50%;
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.overrides-title button:hover {
+    background: var(--bg-alt);
+    color: var(--accent);
+}
+
+.overrides-title svg {
+    width: 100%;
+    fill: currentColor;
+}
+
+.select-font {
+    display: flex;
+}
+
+.select-font-button {
+    flex: none;
+    margin-left: 0.25em;
+    width: 2em;
+    overflow: hidden;
+}
+
+.select-font-button input {
+    opacity: 0;
+    height: 0;
+    padding: 0;
+}
+
+.font-title button {
+    width: 100%;
+    text-align: left;
+}
+
+.font-title span {
+    display: flex;
+    align-items: center;
+}
+
+.font-title svg {
+    width: 1em;
+    height: 1em;
+    margin-left: auto;
+    fill: currentColor;
+}
+
+.show-font-details .font-title svg {
+    fill: var(--accent);
+    transform: rotate(90deg);
+}
+
+.font-details {
+    display: none;
+}
+
+.font-details>* {
+    margin-bottom: 4px;
+}
+
+.show-font-details .font-details {
+    display: block;
+}
+
+.delete-button-container {
+    font-size: var(--t3);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.delete-button-container span {
+    color: var(--destructive);
+    display: flex;
+}
+
+.delete-button-container svg {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+    margin-right: 0.25em;
+}
+
+.temp-apply-button {
+    margin: 1rem;
+}
+
+/* Footer */
+footer {
+    display: none;
+    align-items: center;
+    font-size: var(--t3);
+    padding: 0.25rem 0.5rem;
+    color: var(--gray-1);
+}
+
+footer span a {
+    color: var(--text-p2);
+}
+
+footer > a {
+    margin-left: auto;
+    color: inherit;
+}
+
+footer.show {
+    display: flex;
+}

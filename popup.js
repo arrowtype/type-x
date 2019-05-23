@@ -1,6 +1,7 @@
 // Recursive
 
 const activateFonts = document.querySelector("#activateFonts");
+const showFonts = document.querySelector("#showFonts");
 const addFont = document.querySelector("#addFont");
 const fontFiles = {};
 
@@ -20,11 +21,19 @@ activateFonts.onclick = () => {
     );
 };
 
+// Show/hide font form
+showFonts.onclick = () => {
+    document.querySelector(".main-fonts").classList.toggle("show");
+    document.querySelector("footer").classList.toggle("show");
+    showFonts.classList.toggle("active");
+}
+
 // Toggle extension on/off using the button
 addFont.onclick = () => {
     chrome.storage.local.get(
         "fonts", ({ fonts }) => {
             fonts.push({
+                "new": true,
                 "name": "",
                 "file": "",
                 "selectors": [],
@@ -48,10 +57,14 @@ function updateStatus(status, updateExisting) {
 }
 
 // Show status of extension in the popup
-const showStatus = () => {
+const showStatus = (firstRun) => {
     chrome.storage.local.get(
         "fontActivated", ({ fontActivated }) => {
-            activateFonts.innerText = fontActivated ? "Turn off" : "Turn on";
+            chrome.browserAction.setIcon({
+                path: `icons/typex-${fontActivated ? "active" : "off"}@128.png`
+            });
+            activateFonts.classList.toggle("active", fontActivated);
+            !firstRun && activateFonts.classList.remove("first-run");
         }
     );
 }
@@ -69,55 +82,38 @@ function initForm() {
 // Generate form based on current settings
 function buildForm(fonts) {
     const usedFonts = document.querySelector("#usedFonts");
+    const template = document.querySelector("#newFont");
 
     while (usedFonts.firstChild) {
         usedFonts.removeChild(usedFonts.firstChild);
     }
 
+    let id = 0;
+
     for (const font of fonts) {
-        const usedFont = document.createElement("fieldset");
+        const el = document.importNode(template.content, true);
 
-        let el = null;
+        el.querySelector("[name=name]").value = font.name;
+        el.querySelector("[name=css]").value = font.css;
+        el.querySelector("[name=selectors]").value = font.selectors.join(", ");
 
-        // Name
-        el = document.createElement("input");
-        el.setAttribute("type", "text");
-        el.setAttribute("name", "name");
-        el.setAttribute("value", font.name);
-        usedFont.appendChild(el);
+        el.querySelector("[name=file]").setAttribute("id", `font${id++}`);
+        el.querySelector("[name=file]").dataset.original = font.file;
+        el.querySelector("[name=file]").onchange = grabFont;
 
-        // Optional new file
-        el = document.createElement("input");
-        el.setAttribute("type", "file");
-        el.setAttribute("accept", ".ttf,.otf,.eot,.woff,.woff2");
-        el.setAttribute("name", "file");
-        el.setAttribute("id", (Math.random() + 1).toString(36).substring(7));
-        el.setAttribute("data-original", font.file);
-        el.onchange = grabFont;
-        usedFont.appendChild(el);
+        el.querySelector(".delete-button-container button").onclick = (e) => {
+            e.target.closest("fieldset").remove()
+        };
 
-        // Selectors
-        el = document.createElement("input");
-        el.setAttribute("type", "text");
-        el.setAttribute("name", "selectors");
-        el.setAttribute("value", font.selectors.join(", "));
-        usedFont.appendChild(el);
+        el.querySelector(".font-title button").onclick = (e) => {
+            e.target.closest("fieldset").classList.toggle("show-font-details")
+        };
 
-        // CSS
-        el = document.createElement("input");
-        el.setAttribute("type", "text");
-        el.setAttribute("name", "css");
-        el.setAttribute("value", font.css);
-        usedFont.appendChild(el);
+        if (font.new) {
+            el.querySelector("fieldset").classList.add("show-font-details");
+        }
 
-        // Delete button
-        el = document.createElement("button");
-        el.setAttribute("type", "button");
-        el.innerHTML = "Remove font";
-        el.onclick = (e) => { e.target.closest("fieldset").remove() };
-        usedFont.appendChild(el);
-
-        usedFonts.appendChild(usedFont);
+        usedFonts.appendChild(el);
     }
 }
 
@@ -167,5 +163,5 @@ function grabFont(e) {
 }
 
 // Initialise popup
-showStatus();
+showStatus(true);
 initForm();
