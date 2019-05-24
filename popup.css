@@ -2,17 +2,14 @@
 
 :root {
     font-size: 18px;
-
     --extension-width: 18rem;
     --header-height: 3rem;
     --footer-height: 1rem;
-
     --item-padding: 0.5rem 1rem;
     --item-padding-tall: 0.75rem 1rem;
     --item-padding-taller: 1rem 1rem;
     --spacing-unit: 1rem;
     --spacing-unit-half: 0.5rem;
-
     --bg-main: #2f3137;
     --bg-alt: #1c1d23;
     --bg-input: #26262c;
@@ -26,20 +23,17 @@
     --code: #F0D6B4;
     --destructive: #e57880;
     --magic: linear-gradient(135deg, rgba(16, 205, 103, 1), rgba(16, 205, 103, 0) 55%),
-    linear-gradient(225deg, rgba(251, 208, 0, 1), rgba(251, 208, 0, 0) 70%),
-    linear-gradient(315deg, rgba(210, 46, 237, 1), rgba(210, 46, 237, 0) 55%),
-    linear-gradient(45deg, rgba(83, 59, 230, 1), rgba(83, 59, 230, 0) 95%),
-    linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%);
-
+        linear-gradient(225deg, rgba(251, 208, 0, 1), rgba(251, 208, 0, 0) 70%),
+        linear-gradient(315deg, rgba(210, 46, 237, 1), rgba(210, 46, 237, 0) 55%),
+        linear-gradient(45deg, rgba(83, 59, 230, 1), rgba(83, 59, 230, 0) 95%),
+        linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%);
     --t1: 1rem;
     --t2: 0.75rem;
     --t3: 0.625rem;
-
     --wght: "wght" 400;
     --XPRN: "XPRN" 0;
     --slnt: "slnt" 0;
 }
-
 
 @font-face {
     /* TODO: load this from JavaScript through FontFaceSet
@@ -47,6 +41,7 @@
     font-family: "Recursive Sans";
     src: url("./fonts/recursive-sans-var.woff2");
 }
+
 @font-face {
     /* TODO: load this from JavaScript through FontFaceSet
     so we can re-use recursive-fonts.js */
@@ -64,6 +59,7 @@ body {
     color: var(--text-p1);
     width: var(--extension-width);
     margin: 0;
+    min-height: var(--header-height);
 }
 
 .label-button,
@@ -86,6 +82,7 @@ button {
     background: rgba(255, 255, 255, 0.25);
 }
 
+
 /* Global styles */
 
 .all-caps {
@@ -97,22 +94,30 @@ button {
     --wght: "wght" 500;
 }
 
+
 /* General extension styles (MAIN) */
 
 .main-fonts {
-    /* display: none; */                  /*******************/
+    display: none;
     background: var(--bg-main);
     width: 100%;
+    flex: auto;
+    margin-top: var(--header-height);
+    margin-bottom: var(--footer-height);
 }
 
 .main-fonts.show {
     display: block;
-    /* display: none; */
 }
+
 
 /* Activate button (HEADER) */
 
 header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     display: flex;
     background: var(--bg-alt);
     width: 100%;
@@ -132,10 +137,10 @@ header {
     transition: 0.25s;
 }
 
-.activate-fonts:hover, .activate-fonts.active {
+.activate-fonts:hover,
+.activate-fonts.active {
     color: var(--text-p1);
     font-variation-settings: "XPRN" 1, "wght" 800, "slnt" 14;
-
 }
 
 .activate-fonts>span {
@@ -197,6 +202,7 @@ header {
     background: var(--bg-alt);
     transition: 0.25s;
 }
+
 .show-fonts:hover:hover {
     background: var(--bg-main);
 }
@@ -227,7 +233,8 @@ fieldset {
     border-bottom: 1px solid var(--separator);
 }
 
-input, textarea {
+input,
+textarea {
     border: none;
     width: 100%;
     width: calc(100% + 1rem);
@@ -262,7 +269,8 @@ textarea {
     margin-top: 0.125rem;
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
     outline: none;
 }
 
@@ -270,6 +278,7 @@ textarea:focus {
     border: 1px var(--separator) solid;
     background: var(--bg-alt);
 }
+
 .overrides-title {
     background: var(--bg-main);
     padding: var(--item-padding-tall);
@@ -360,6 +369,7 @@ textarea:focus {
 .font-title:hover svg path {
     stroke: var(--accent);
 }
+
 .show-font-details .font-title svg {
     transform: rotate(90deg);
 }
@@ -369,7 +379,7 @@ textarea:focus {
 }
 
 .font-details {
-    /* display: none; */                        /*******************/
+    display: none;
 }
 
 .show-font-details .font-details {
@@ -413,9 +423,15 @@ textarea:focus {
     background: var(--bg-alt);
 }
 
+
 /* Footer */
+
 footer {
-    /* display: none; */          /******************/
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     align-items: center;
     font-size: var(--t3);
     padding: 0 0.5rem;
@@ -429,6 +445,7 @@ footer {
 footer a {
     transition: 0.25s;
 }
+
 footer a:hover {
     color: var(--accent);
 }
@@ -438,7 +455,7 @@ footer span a {
     text-decoration: none;
 }
 
-footer > a {
+footer>a {
     margin-left: auto;
     color: inherit;
     text-decoration: underline;
