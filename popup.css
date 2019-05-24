@@ -121,7 +121,6 @@ header {
     right: 0;
     display: flex;
     background: var(--bg-alt);
-    width: 100%;
     height: var(--header-height);
 }
 
@@ -438,9 +437,7 @@ footer {
     font-size: var(--t3);
     padding: 0 0.5rem;
     color: var(--gray-1);
-    align-self: end;
     background: var(--bg-alt);
-    width: 100%;
     height: var(--footer-height);
 }
 
