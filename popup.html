@@ -28,19 +28,12 @@
         <div class="overrides-title all-caps">
             Font Overrides
             <button type="button" id="addFont">
-                <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11 11">
-                    <path
-                        d="M5.5 10.5c-.3 0-.5-.2-.5-.5V6H1c-.3 0-.5-.2-.5-.5S.7 5 1 5h4V1c0-.3.2-.5.5-.5s.5.2.5.5v4h4c.3 0 .5.2.5.5s-.2.5-.5.5H6v4c0 .3-.2.5-.5.5z" />
-                </svg> -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                     <g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke="#b6c1ce" stroke-width="2">
                         <path d="M2,8 L14,8" />
                         <path d="M2,8 L14,8" transform="rotate(90 8 8)" />
                     </g>
                 </svg>
-
-
-
             </button>
         </div>
         <form id="fontsForm">
@@ -66,10 +59,6 @@
                 <button type="button">
                     <span>
                         Font name TODO
-                        <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12">
-                            <path
-                                d="M4.5 11c-.1 0-.2 0-.3-.1-.2-.2-.2-.5 0-.7L7.8 6 4.1 1.8c-.2-.2-.1-.5.1-.7.2-.2.5-.2.7 0l4 4.5c.1.3.1.5 0 .7l-4 4.5c-.1.1-.3.2-.4.2z" />
-                        </svg> -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <path fill="none" stroke-linecap="round" stroke="#b6c1ce" stroke-width="2"
                                 d="M11 8L6 3M6 13L11 8" />
@@ -89,14 +78,13 @@
                                 <path d="M3 7L8 2M8 2L13 7" />
                             </g>
                         </svg>
-
                         <input type="file" name="file" value="" accept=".ttf,.otf,.eot,.woff,.woff2">
                     </label>
                 </div>
-                <label id="selectors" class="all-caps">CSS Selectors</label>
-                <textarea rows="3" id="selectors" name="selectors"></textarea>
-                <label id="styles" class="all-caps">CSS Styles</label>
-                <textarea rows="3" cols="33" id="styles" name="css"></textarea>
+                <label class="all-caps">CSS Selectors</label>
+                <textarea rows="3" name="selectors"></textarea>
+                <label class="all-caps">CSS Styles</label>
+                <textarea rows="3" name="css"></textarea>
                 <div class="delete-button-container">
                     <button type="button" class="all-caps">
                         <span>
@@ -108,7 +96,6 @@
                                     <path d="M3.5,4 L12.5,4" />
                                 </g>
                             </svg>
-
                             Delete
                         </span>
                     </button>
