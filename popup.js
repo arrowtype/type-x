@@ -96,6 +96,7 @@ function addFormElement(font) {
     const el = document.importNode(template.content, true);
 
     el.querySelector("[name=name]").value = font.name;
+    el.querySelector(".font-name-title").innerText = font.name;
     el.querySelector("[name=css]").value = font.css;
     el.querySelector("[name=selectors]").value = font.selectors.join(", ");
 
