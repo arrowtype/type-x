@@ -12,11 +12,12 @@
     --spacing-unit-half: 0.5rem;
     --bg-main: #2f3137;
     --bg-alt: #1c1d23;
-    --bg-input: #26262c;
-    --separator: #000000;
+    --bg-input: hsla(240, 9%, 16%, 1);
+    --separator: #1a1a1a;
     --text-p1: #ffffff;
     --text-p2: #efefef;
     --text-p3: #b6c1ce;
+    --gray-0: hsla(230, 4%, 68%, 1);
     --gray-1: #6d7278;
     --gray-2: #4b4e5b;
     --accent: #44d7b6;
@@ -34,6 +35,24 @@
     --XPRN: "XPRN" 0;
     --slnt: "slnt" 0;
 }
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg-main: hsl(230, 3%, 96%);
+        --bg-alt: hsl(230, 3%, 88%);
+        --bg-input: hsl(230, 3%, 90%);
+        --separator: hsl(0, 0%, 80%);
+        --text-p1: #333;
+        --text-p2: #444;
+        --text-p3: #555;
+        --gray-0: hsla(230, 3%, 50%, 1);
+        --gray-1: hsla(230, 3%, 72%, 1);
+        --gray-2: hsla(230, 3%, 85%, 1);
+        --accent: hsla(255, 100%, 50%, 1);
+        --code: hsla(255, 60%, 47%, 1);
+        --destructive: #bd000d;
+    }
+  }
 
 @font-face {
     /* TODO: load this from JavaScript through FontFaceSet
@@ -110,6 +129,10 @@ button {
     display: block;
 }
 
+svg path {
+    stroke: var(--gray-0);
+}
+
 
 /* Activate button (HEADER) */
 
@@ -120,8 +143,9 @@ header {
     left: 0;
     right: 0;
     display: flex;
-    background: var(--bg-alt);
     height: var(--header-height);
+    background: var(--bg-alt);
+    box-shadow: 0 1px 0 var(--separator);
 }
 
 .activate-fonts {
@@ -156,7 +180,7 @@ header {
     height: 1rem;
     border-radius: 999px;
     margin-right: 0.5rem;
-    background: var(--gray-2);
+    background: var(--gray-1);
     transition: background 100ms ease-in-out;
 }
 
@@ -169,7 +193,7 @@ header {
     width: 1.25rem;
     height: 1.25rem;
     border-radius: 50%;
-    background: var(--text-p1);
+    background: var(--text-p2);
     transition: left 100ms ease-in-out, opacity 100ms ease-in-out;
 }
 
@@ -180,7 +204,7 @@ header {
 }
 
 .activate-fonts.active .toggle-switch {
-    background: var(--text-p3);
+    background: var(--gray-1);
 }
 
 .activate-fonts.active .toggle-switch::before,
@@ -210,6 +234,10 @@ header {
 .show-fonts svg {
     vertical-align: middle;
     width: 1.25em;
+}
+
+.show-fonts svg path {
+    stroke: var(--text-p2);
 }
 
 .show-fonts svg path {
@@ -251,8 +279,7 @@ textarea {
 
 input {
     width: calc(100% + 0.5rem);
-    background: var(--bg-main);
-    border: 2px solid var(--gray-2);
+    background: var(--gray-2);
 }
 
 label.all-caps {
@@ -400,11 +427,18 @@ textarea:focus {
     align-items: center;
     font-size: var(--t2);
     --XPRN: "XPRN" 0;
+    --wght: "wght" 700;
 }
 
 .delete-button-container svg {
     fill: currentColor;
     margin-right: 0.25em;
+}
+
+.delete-button-container svg path,
+.delete-button-container svg rect,
+.delete-button-container svg polygon {
+    stroke: var(--destructive);
 }
 
 .temp-apply {
@@ -435,10 +469,11 @@ footer {
     right: 0;
     align-items: center;
     font-size: var(--t3);
-    padding: 0 0.5rem;
+    padding: 0.5rem 0.5rem;
     color: var(--gray-1);
     background: var(--bg-alt);
     height: var(--footer-height);
+    box-shadow: 0 -1px 0 var(--separator);
 }
 
 footer a {
