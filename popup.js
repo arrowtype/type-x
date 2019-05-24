@@ -4,7 +4,6 @@ const activateFonts = document.querySelector("#activateFonts");
 const showFonts = document.querySelector("#showFonts");
 const addFont = document.querySelector("#addFont");
 const fontFiles = {};
-let tempFontId = 0;
 
 // Get current fonts from storage and show them in the popup
 chrome.storage.local.get(
@@ -31,14 +30,21 @@ showFonts.onclick = () => {
 
 // Add new font fieldset to form
 addFont.onclick = () => {
+    const randomId = window.crypto.getRandomValues(new Uint32Array(2)).join("");
     const newFont = {
         "new": true,
+        "id": randomId,
         "name": "",
         "file": "",
         "selectors": [],
         "css": ""
     };
-    addFormElement(newFont);
+
+    chrome.storage.local.get(
+        "fonts", ({ fonts }) => {
+            addFormElement(newFont, fonts);
+        }
+    );
 };
 
 // Toggle extension on/off
@@ -86,21 +92,29 @@ function buildForm(fonts) {
     }
 
     for (const font of fonts) {
-        addFormElement(font);
+        addFormElement(font, fonts);
     }
 }
 
-function addFormElement(font) {
+function addFormElement(font, fonts) {
     const usedFonts = document.querySelector("#usedFonts");
     const template = document.querySelector("#newFont");
     const el = document.importNode(template.content, true);
 
-    el.querySelector("[name=name]").value = font.name;
-    el.querySelector(".font-name-title").innerText = font.name;
+    el.querySelector(".font-name-title").innerText = font.id;
+
+    const dropdown = document.createElement("select");
+    for (const f of fonts) {
+        const selected = f.id === font.id;
+        dropdown.options.add(new Option(f.name, f.id, false, selected));
+    }
+    el.querySelector(".select-font").prepend(dropdown);
+
+    el.querySelector("[name=id]").value = font.id;
     el.querySelector("[name=css]").value = font.css;
     el.querySelector("[name=selectors]").value = font.selectors.join(", ");
 
-    el.querySelector("[name=file]").setAttribute("id", `font${tempFontId++}`);
+    el.querySelector("[name=file]").setAttribute("id", `font${font.id}`);
     el.querySelector("[name=file]").dataset.original = font.file;
     el.querySelector("[name=file]").onchange = grabFont;
 
@@ -129,7 +143,7 @@ function saveForm() {
         const inputs = fieldset.querySelectorAll("*[name]");
 
         for (const input of inputs) {
-            if (input.name === "name" || input.name === "css") {
+            if (input.name === "id" || input.name === "name" || input.name === "css") {
                 newFont[input.name] = input.value;
             } else if (input.name === "selectors") {
                 // Selectors should become an array
