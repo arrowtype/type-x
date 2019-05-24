@@ -125,20 +125,14 @@ function saveForm() {
 
     for (const fieldset of fieldsets) {
         const newFont = {}
-        const textareas = fieldset.querySelectorAll("textarea");
-        const inputs = fieldset.querySelectorAll("input");
+        const inputs = fieldset.querySelectorAll("*[name]");
 
-        for (const textarea of textareas) {
-            if (textarea.name === "selectors") {
-                // Selectors should become an array
-                newFont["selectors"] = textarea.value.split(",").map(i => i.trim());
-            } else if (textarea.name === "css") {
-                newFont[textarea.name] = textarea.value;
-            }
-        }
         for (const input of inputs) {
-            if (input.name === "name") {
+            if (input.name === "name" || input.name === "css") {
                 newFont[input.name] = input.value;
+            } else if (input.name === "selectors") {
+                // Selectors should become an array
+                newFont["selectors"] = input.value.split(",").map(i => i.trim());
             } else if (input.name === "file") {
                 if (fontFiles[input.id]) {
                     newFont["file"] = fontFiles[input.id];
@@ -148,10 +142,8 @@ function saveForm() {
             }
         }
 
-
         newFonts.push(newFont);
     }
-
 
     // Apply new fonts and activate extension
     chrome.storage.local.set({ "fonts": newFonts }, () => {
