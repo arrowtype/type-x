@@ -16,7 +16,7 @@
     --separator: #1a1a1a;
     --text-p1: #ffffff;
     --text-p2: #efefef;
-    --text-p3: #b6c1ce;
+    --text-p3: hsla(212, 5%, 80%, 1);
     --gray-0: hsla(230, 4%, 68%, 1);
     --gray-1: #6d7278;
     --gray-2: #4b4e5b;
@@ -38,19 +38,19 @@
 
 @media (prefers-color-scheme: light) {
     :root {
-        --bg-main: hsl(230, 3%, 96%);
-        --bg-alt: hsl(230, 3%, 88%);
-        --bg-input: hsl(230, 3%, 90%);
+        --bg-main: hsl(230, 3%, 98%);
+        --bg-alt: hsl(230, 3%, 93%);
+        --bg-input: hsl(230, 3%, 94%);
         --separator: hsl(0, 0%, 80%);
         --text-p1: #333;
         --text-p2: #444;
         --text-p3: #555;
-        --gray-0: hsla(230, 3%, 50%, 1);
-        --gray-1: hsla(230, 3%, 72%, 1);
-        --gray-2: hsla(230, 3%, 85%, 1);
+        --gray-0: hsla(230, 3%, 55%, 1);
+        --gray-1: hsla(230, 3%, 76%, 1);
+        --gray-2: hsla(230, 3%, 91%, 1);
         --accent: hsla(255, 100%, 50%, 1);
-        --code: hsla(255, 60%, 47%, 1);
-        --destructive: #bd000d;
+        --code: hsla(255, 40%, 45%, 1);
+        --destructive: hsla(355, 90%, 64%, 1);
     }
   }
 
@@ -193,7 +193,8 @@ header {
     width: 1.25rem;
     height: 1.25rem;
     border-radius: 50%;
-    background: var(--text-p2);
+    background: var(--text-p1);
+    box-shadow: 0 1px 2px  #000;
     transition: left 100ms ease-in-out, opacity 100ms ease-in-out;
 }
 
@@ -215,7 +216,7 @@ header {
 
 .toggle-switch::after {
     opacity: 0;
-    box-shadow: 0 0 2px #4C00FF, 0 1px 3px #4C00FF, 0 0 2px #4C00FF, 0 0 2px #4C00FF, 0 0 2px #4C00FF;
+    box-shadow: 0 1px 3px #4C00FF, 0 0 2px #4C00FF;
     background: var(--magic);
 }
 
@@ -421,24 +422,53 @@ textarea:focus {
     padding-top: var(--spacing-unit-half);
 }
 
-.delete-button-container span {
+.delete-button-container button span {
     color: var(--destructive);
     display: flex;
     align-items: center;
     font-size: var(--t2);
     --XPRN: "XPRN" 0;
     --wght: "wght" 700;
+    transition: 0.4s;
 }
 
 .delete-button-container svg {
     fill: currentColor;
     margin-right: 0.25em;
+    transform: translateY(-1px);
 }
 
 .delete-button-container svg path,
 .delete-button-container svg rect,
 .delete-button-container svg polygon {
     stroke: var(--destructive);
+    transition: 0.4s;
+}
+
+.delete-button-container button {
+    padding: 0.25rem 0.5rem;
+    margin-right: -0.5rem;
+    transition: 0.4s;
+    border-radius: 1rem;
+}
+
+.delete-button-container button:hover {
+    background: var(--bg-alt);
+}
+
+.delete-button-container button g.lid{
+    transition: 0.4s;
+}
+.delete-button-container button:hover g.lid{
+    transform: rotate(-15deg) translate(-15%, 5%);
+}
+
+.delete-button-container button:hover span,
+.delete-button-container button:hover svg path,
+.delete-button-container button:hover svg rect,
+.delete-button-container button:hover svg polygon {
+    color: var(--text-p1);
+    stroke: var(--text-p1);
 }
 
 .temp-apply {
@@ -470,7 +500,7 @@ footer {
     align-items: center;
     font-size: var(--t3);
     padding: 0.5rem 0.5rem;
-    color: var(--gray-1);
+    color: var(--gray-0);
     background: var(--bg-alt);
     height: var(--footer-height);
     box-shadow: 0 -1px 0 var(--separator);
