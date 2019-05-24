@@ -4,8 +4,9 @@
     font-size: 18px;
 
     --extension-width: 18rem;
-    --top-button-height: 3rem;
+    --header-height: 3rem;
     --footer-height: 1rem;
+
     --item-padding: 0.5rem 1rem;
     --item-padding-tall: 0.75rem 1rem;
     --item-padding-taller: 1rem 1rem;
@@ -29,7 +30,6 @@
     linear-gradient(315deg, rgba(210, 46, 237, 1), rgba(210, 46, 237, 0) 55%),
     linear-gradient(45deg, rgba(83, 59, 230, 1), rgba(83, 59, 230, 0) 95%),
     linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%);
-
 
     --t1: 1rem;
     --t2: 0.75rem;
@@ -57,7 +57,6 @@
 * {
     font-family: "Recursive Sans";
     box-sizing: border-box;
-    
 }
 
 body {
@@ -65,9 +64,6 @@ body {
     color: var(--text-p1);
     width: var(--extension-width);
     margin: 0;
-    min-height: var(--top-button-height);
-    display: grid;
-    
 }
 
 .label-button,
@@ -101,15 +97,11 @@ button {
     --wght: "wght" 500;
 }
 
-
-
-/* General extension styles */
+/* General extension styles (MAIN) */
 
 .main-fonts {
-    display: none;
+    /* display: none; */                  /*******************/
     background: var(--bg-main);
-    padding-top: var(--top-button-height);
-    /* padding-bottom: var(--footer-height); */ /* if footer is fixed */
     width: 100%;
 }
 
@@ -118,23 +110,20 @@ button {
     /* display: none; */
 }
 
+/* Activate button (HEADER) */
 
-/* Activate button */
-
-.main-button {
+header {
     display: flex;
-    position: fixed;
     background: var(--bg-alt);
     width: 100%;
-    z-index: 1000;
+    height: var(--header-height);
 }
 
 .activate-fonts {
     text-align: left;
-    padding: 0.25em;
     flex: auto;
     font-size: var(--t2);
-    padding: var(--item-padding-tall);
+    padding: 0 var(--spacing-unit);
     transition: 0.25s;
     color: var(--text-p2);
     font-variation-settings: "XPRN" 1, "wght" 600, "slnt" 1;
@@ -380,7 +369,7 @@ textarea:focus {
 }
 
 .font-details {
-    display: none;
+    /* display: none; */                        /*******************/
 }
 
 .show-font-details .font-details {
@@ -426,20 +415,18 @@ textarea:focus {
 
 /* Footer */
 footer {
-    display: none;
+    /* display: none; */          /******************/
     align-items: center;
     font-size: var(--t3);
-    padding: 0.75rem 0.5rem;
+    padding: 0 0.5rem;
     color: var(--gray-1);
-    /* position: fixed; */
     align-self: end;
-    z-index: 1001;
     background: var(--bg-alt);
     width: 100%;
     height: var(--footer-height);
 }
 
-footer a { 
+footer a {
     transition: 0.25s;
 }
 footer a:hover {
