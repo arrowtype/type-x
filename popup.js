@@ -4,6 +4,7 @@ const activateFonts = document.querySelector("#activateFonts");
 const showFonts = document.querySelector("#showFonts");
 const addFont = document.querySelector("#addFont");
 const fontFiles = {};
+let tempFontId = 0;
 
 // Get current fonts from storage and show them in the popup
 chrome.storage.local.get(
@@ -28,20 +29,16 @@ showFonts.onclick = () => {
     showFonts.classList.toggle("active");
 }
 
-// Toggle extension on/off using the button
+// Add new font fieldset to form
 addFont.onclick = () => {
-    chrome.storage.local.get(
-        "fonts", ({ fonts }) => {
-            fonts.push({
-                "new": true,
-                "name": "",
-                "file": "",
-                "selectors": [],
-                "css": ""
-            });
-            buildForm(fonts);
-        }
-    );
+    const newFont = {
+        "new": true,
+        "name": "",
+        "file": "",
+        "selectors": [],
+        "css": ""
+    };
+    addFormElement(newFont);
 };
 
 // Toggle extension on/off
@@ -82,39 +79,43 @@ function initForm() {
 // Generate form based on current settings
 function buildForm(fonts) {
     const usedFonts = document.querySelector("#usedFonts");
-    const template = document.querySelector("#newFont");
 
+    // Clear out previous form
     while (usedFonts.firstChild) {
         usedFonts.removeChild(usedFonts.firstChild);
     }
 
-    let id = 0;
-
     for (const font of fonts) {
-        const el = document.importNode(template.content, true);
-
-        el.querySelector("[name=name]").value = font.name;
-        el.querySelector("[name=css]").value = font.css;
-        el.querySelector("[name=selectors]").value = font.selectors.join(", ");
-
-        el.querySelector("[name=file]").setAttribute("id", `font${id++}`);
-        el.querySelector("[name=file]").dataset.original = font.file;
-        el.querySelector("[name=file]").onchange = grabFont;
-
-        el.querySelector(".delete-button-container button").onclick = (e) => {
-            e.target.closest("fieldset").remove()
-        };
-
-        el.querySelector(".font-title button").onclick = (e) => {
-            e.target.closest("fieldset").classList.toggle("show-font-details")
-        };
-
-        if (font.new) {
-            el.querySelector("fieldset").classList.add("show-font-details");
-        }
-
-        usedFonts.appendChild(el);
+        addFormElement(font);
     }
+}
+
+function addFormElement(font) {
+    const usedFonts = document.querySelector("#usedFonts");
+    const template = document.querySelector("#newFont");
+    const el = document.importNode(template.content, true);
+
+    el.querySelector("[name=name]").value = font.name;
+    el.querySelector("[name=css]").value = font.css;
+    el.querySelector("[name=selectors]").value = font.selectors.join(", ");
+
+    el.querySelector("[name=file]").setAttribute("id", `font${tempFontId++}`);
+    el.querySelector("[name=file]").dataset.original = font.file;
+    el.querySelector("[name=file]").onchange = grabFont;
+
+    el.querySelector(".delete-button-container button").onclick = (e) => {
+        e.target.closest("fieldset").remove()
+    };
+
+    el.querySelector(".font-title button").onclick = (e) => {
+        e.target.closest("fieldset").classList.toggle("show-font-details")
+    };
+
+    if (font.new) {
+        el.querySelector("fieldset").classList.add("show-font-details");
+    }
+
+    usedFonts.appendChild(el);
 }
 
 // Store changes made to fonts
