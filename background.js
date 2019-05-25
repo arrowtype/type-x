@@ -30,7 +30,8 @@ chrome.runtime.onInstalled.addListener(() => {
 
     chrome.storage.local.set({
         "fontActivated": false,
-        "fonts": defaultFonts
+        "fonts": defaultFonts,
+        "files": defaultFiles
     }, () => {
         generateStyleSheet();
     });
@@ -127,7 +128,7 @@ function generateStyleSheet(updateExisting, callback) {
     const updateSelector = updateExisting ? `html[data-updatefont="${updateCount}"]` : "html:not([data-updatefont])";
 
     chrome.storage.local.get(
-        "fonts", ({ fonts }) => {
+        ["fonts", "files"], ({ fonts, files }) => {
             stylesheets = [];
 
             for (const font of fonts) {
@@ -136,7 +137,6 @@ function generateStyleSheet(updateExisting, callback) {
 
                 for (const selector of font.selectors) {
                     // Is this font using the `*` CSS selector? Put it last.
-                    // if (selector === "*") universal = true;
                     universal = selector === "*" ? true : false;
                     selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklist}`);
                 }
@@ -144,7 +144,7 @@ function generateStyleSheet(updateExisting, callback) {
                 const stylesheet = `
                 @font-face {
                     font-family: '${font.name}';
-                    src: url('${font.file}');
+                    src: url('${files[font.id]}');
                 }
                 ${selectors.join(",")} {
                     font-family: '${font.name}' !important;
