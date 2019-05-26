@@ -441,8 +441,9 @@ textarea:focus {
 .delete-button-container button {
     padding: 0.25rem 0.5rem;
     margin-right: -0.5rem;
-    transition: background var(--speed-2);
     border-radius: 1rem;
+    color: var(--destructive);
+    transition: background var(--speed-2), color var(--speed-2);
     font-size: var(--t2);
     --XPRN: "XPRN" 0;
     --wght: "wght" 600;
@@ -450,41 +451,26 @@ textarea:focus {
 
 .delete-button-container button:hover {
     background: var(--bg-alt);
+    color: var(--text-p1);
 }
 
 .delete-button-container button span {
-    color: var(--destructive);
     display: flex;
     align-items: center;
-    transition: color var(--speed-2);
 }
 
 .delete-button-container svg {
     margin-right: 0.25em;
     transform: translateY(-1px);
+    stroke: currentColor;
+    path: currentColor;
 }
-
-.delete-button-container svg path,
-.delete-button-container svg rect,
-.delete-button-container svg polygon {
-    stroke: var(--destructive);
-    transition: stroke var(--speed-2);
-}
-
 
 .delete-button-container button g.lid{
     transition: transform var(--speed-2);
 }
 .delete-button-container button:hover g.lid{
     transform: rotate(-15deg) translate(-15%, 5%);
-}
-
-.delete-button-container button:hover span,
-.delete-button-container button:hover svg path,
-.delete-button-container button:hover svg rect,
-.delete-button-container button:hover svg polygon {
-    color: var(--text-p1);
-    stroke: var(--text-p1);
 }
 
 .temp-apply {
