@@ -9,7 +9,7 @@
     --wght: "wght" 400;
     --XPRN: "XPRN" 0;
     --slnt: "slnt" 0;
-    
+
     /* sizing */
     --extension-width: 18rem;
     --header-height: 3rem;
@@ -19,7 +19,7 @@
     --item-padding-taller: 1rem 1rem;
     --spacing-unit: 1rem;
     --spacing-unit-half: 0.5rem;
-    
+
     /* colors */
     --bg-main: #2f3137;
     --bg-alt: #1c1d23;
@@ -142,7 +142,7 @@ button {
     display: block;
 }
 
-svg path {
+svg {
     stroke: var(--gray-0);
 }
 
