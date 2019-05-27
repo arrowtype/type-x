@@ -1,7 +1,16 @@
 /* Generic setup */
 
 :root {
+    /* typography */
     font-size: 18px;
+    --t1: 1rem;
+    --t2: 0.75rem;
+    --t3: 0.625rem;
+    --wght: "wght" 400;
+    --XPRN: "XPRN" 0;
+    --slnt: "slnt" 0;
+
+    /* sizing */
     --extension-width: 18rem;
     --header-height: 3rem;
     --footer-height: 1rem;
@@ -10,13 +19,18 @@
     --item-padding-taller: 1rem 1rem;
     --spacing-unit: 1rem;
     --spacing-unit-half: 0.5rem;
+
+    /* colors */
     --bg-main: #2f3137;
     --bg-alt: #1c1d23;
-    --bg-input: #26262c;
-    --separator: #000000;
+    --bg-input: hsla(240, 9%, 16%, 1);
+    --separator: #1a1a1a;
+    --shadow: #000000;
+    --accent-shadow:#4C00FF;
     --text-p1: #ffffff;
     --text-p2: #efefef;
-    --text-p3: #b6c1ce;
+    --text-p3: hsla(212, 5%, 80%, 1);
+    --gray-0: hsla(230, 4%, 68%, 1);
     --gray-1: #6d7278;
     --gray-2: #4b4e5b;
     --accent: #44d7b6;
@@ -27,13 +41,31 @@
         linear-gradient(315deg, rgba(210, 46, 237, 1), rgba(210, 46, 237, 0) 55%),
         linear-gradient(45deg, rgba(83, 59, 230, 1), rgba(83, 59, 230, 0) 95%),
         linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%);
-    --t1: 1rem;
-    --t2: 0.75rem;
-    --t3: 0.625rem;
-    --wght: "wght" 400;
-    --XPRN: "XPRN" 0;
-    --slnt: "slnt" 0;
+
+    /* transitions */
+    --speed-1: 0.25s;
+    --speed-2: 0.4s;
 }
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg-main: hsl(230, 3%, 98%);
+        --bg-alt: hsl(230, 3%, 93%);
+        --bg-input: hsl(230, 3%, 94%);
+        --separator: hsl(0, 0%, 80%);
+        --shadow: #000000;
+        --accent-shadow:#4C00FF;
+        --text-p1: #333;
+        --text-p2: #444;
+        --text-p3: #555;
+        --gray-0: hsla(230, 3%, 55%, 1);
+        --gray-1: hsla(230, 3%, 76%, 1);
+        --gray-2: hsla(230, 3%, 91%, 1);
+        --accent: #4C00FF;
+        --code: hsla(255, 40%, 45%, 1);
+        --destructive: hsla(355, 90%, 64%, 1);
+    }
+  }
 
 @font-face {
     /* TODO: load this from JavaScript through FontFaceSet
@@ -110,6 +142,10 @@ button {
     display: block;
 }
 
+svg {
+    stroke: var(--gray-0);
+}
+
 
 /* Activate button (HEADER) */
 
@@ -120,8 +156,9 @@ header {
     left: 0;
     right: 0;
     display: flex;
-    background: var(--bg-alt);
     height: var(--header-height);
+    background: var(--bg-alt);
+    box-shadow: 0 1px 0 var(--separator);
 }
 
 .activate-fonts {
@@ -129,12 +166,11 @@ header {
     flex: auto;
     font-size: var(--t2);
     padding: 0 var(--spacing-unit);
-    transition: 0.25s;
     color: var(--text-p2);
     font-variation-settings: "XPRN" 1, "wght" 600, "slnt" 1;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    transition: 0.25s;
+    transition: color var(--speed-1), font-variation-settings var(--speed-1);
 }
 
 .activate-fonts:hover,
@@ -156,7 +192,7 @@ header {
     height: 1rem;
     border-radius: 999px;
     margin-right: 0.5rem;
-    background: var(--gray-2);
+    background: var(--gray-1);
     transition: background 100ms ease-in-out;
 }
 
@@ -170,6 +206,7 @@ header {
     height: 1.25rem;
     border-radius: 50%;
     background: var(--text-p1);
+    box-shadow: 0 1px 2px  var(--shadow);
     transition: left 100ms ease-in-out, opacity 100ms ease-in-out;
 }
 
@@ -180,7 +217,7 @@ header {
 }
 
 .activate-fonts.active .toggle-switch {
-    background: var(--text-p3);
+    background: var(--gray-1);
 }
 
 .activate-fonts.active .toggle-switch::before,
@@ -191,7 +228,7 @@ header {
 
 .toggle-switch::after {
     opacity: 0;
-    box-shadow: 0 0 2px #4C00FF, 0 1px 3px #4C00FF, 0 0 2px #4C00FF, 0 0 2px #4C00FF, 0 0 2px #4C00FF;
+    box-shadow: 0 1px 3px #4C00FF, 0 0 2px #4C00FF;
     background: var(--magic);
 }
 
@@ -200,7 +237,7 @@ header {
     margin-left: 0.25em;
     padding: var(--item-padding-taller);
     background: var(--bg-alt);
-    transition: 0.25s;
+    transition: background var(--speed-1), stroke var(--speed-1);
 }
 
 .show-fonts:hover:hover {
@@ -212,12 +249,16 @@ header {
     width: 1.25em;
 }
 
-.show-fonts svg path {
-    transition: stroke 0.25s;
+.show-fonts path {
+    stroke: var(--text-p2);
 }
 
-.show-fonts.active svg path,
-.show-fonts:hover svg path {
+.show-fonts path {
+    transition: stroke var(--speed-1);
+}
+
+.show-fonts.active path,
+.show-fonts:hover path {
     stroke: var(--accent);
 }
 
@@ -249,10 +290,13 @@ textarea {
     margin-bottom: 0.25rem;
 }
 
+textarea:last-of-type {
+    margin-bottom: 0;
+}
+
 input {
     width: calc(100% + 0.5rem);
-    background: var(--bg-main);
-    border: 2px solid var(--gray-2);
+    background: var(--gray-2);
 }
 
 label.all-caps {
@@ -295,7 +339,7 @@ textarea:focus {
     border-radius: 50%;
     width: 1.5rem;
     height: 1.5rem;
-    transition: 0.35s;
+    transition: color var(--speed-2), background var(--speed-2);
     padding: 0;
     display: flex;
     align-items: center;
@@ -308,9 +352,9 @@ textarea:focus {
     color: var(--accent);
 }
 
-.overrides-title svg {
+.overrides-title path {
     width: 100%;
-    fill: currentColor;
+    stroke: currentColor;
 }
 
 .select-font {
@@ -366,7 +410,7 @@ textarea:focus {
     stroke: currentColor;
 }
 
-.font-title:hover svg path {
+.font-title:hover path {
     stroke: var(--accent);
 }
 
@@ -374,7 +418,7 @@ textarea:focus {
     transform: rotate(90deg);
 }
 
-.show-font-details .font-title svg path {
+.show-font-details .font-title path {
     stroke: var(--accent);
 }
 
@@ -394,17 +438,39 @@ textarea:focus {
     padding-top: var(--spacing-unit-half);
 }
 
-.delete-button-container span {
+.delete-button-container button {
+    padding: 0.25rem 0.5rem;
+    margin-right: -0.5rem;
+    border-radius: 1rem;
     color: var(--destructive);
-    display: flex;
-    align-items: center;
+    transition: background var(--speed-2), color var(--speed-2);
     font-size: var(--t2);
     --XPRN: "XPRN" 0;
+    --wght: "wght" 600;
+}
+
+.delete-button-container button:hover {
+    background: var(--bg-alt);
+    color: var(--text-p1);
+}
+
+.delete-button-container button span {
+    display: flex;
+    align-items: center;
 }
 
 .delete-button-container svg {
-    fill: currentColor;
     margin-right: 0.25em;
+    transform: translateY(-1px);
+    stroke: currentColor;
+    path: currentColor;
+}
+
+.delete-button-container button g.lid{
+    transition: transform var(--speed-2);
+}
+.delete-button-container button:hover g.lid{
+    transform: rotate(-15deg) translate(-15%, 5%);
 }
 
 .temp-apply {
@@ -415,8 +481,7 @@ textarea:focus {
     width: 100%;
     padding: var(--spacing-unit-half);
     background: var(--bg-main);
-    transition: 0.25s;
-    /* border: 2px solid var(--gray-1); */
+    transition: background var(--speed-1);
 }
 
 .temp-apply-button:hover {
@@ -435,14 +500,15 @@ footer {
     right: 0;
     align-items: center;
     font-size: var(--t3);
-    padding: 0 0.5rem;
-    color: var(--gray-1);
+    padding: 0.5rem;
+    color: var(--gray-0);
     background: var(--bg-alt);
     height: var(--footer-height);
+    box-shadow: 0 -1px 0 var(--separator);
 }
 
 footer a {
-    transition: 0.25s;
+    transition: color var(--speed-1);
 }
 
 footer a:hover {

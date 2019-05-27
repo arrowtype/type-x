@@ -1,2 +1,3 @@
 .DS_Store
-todo.md
+venv
+node_modules
