@@ -4,6 +4,13 @@ const activateFonts = document.querySelector("#activateFonts");
 const showFonts = document.querySelector("#showFonts");
 const addFont = document.querySelector("#addFont");
 const fontFiles = {};
+const localFonts = {};
+
+chrome.fontSettings.getFontList((fonts) => {
+    for(const font of fonts) {
+        localFonts[font.displayName] = font.fontId;
+    }
+});
 
 // Get current fonts from storage and show them in the popup
 chrome.storage.local.get(
@@ -125,6 +132,10 @@ function addFormElement(font, files) {
     dropdown.setAttribute("name", "file");
     dropdown.setAttribute("id", `file${font.id}`);
     for (const id in files) {
+        const selected = font.file == id;
+        dropdown.options.add(new Option(id, id, false, selected));
+    }
+    for (const id in localFonts) {
         const selected = font.file == id;
         dropdown.options.add(new Option(id, id, false, selected));
     }
