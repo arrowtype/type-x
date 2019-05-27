@@ -6,18 +6,18 @@ const addFont = document.querySelector("#addFont");
 const fontFiles = {};
 const localFonts = {};
 
+// Get current fonts from storage and show them in the popup
 chrome.fontSettings.getFontList((fonts) => {
     for (const font of fonts) {
         localFonts[font.displayName] = font.fontId;
     }
+    chrome.storage.local.get(
+        ["fonts", "files"], ({ fonts, files }) => {
+            buildForm(fonts, files);
+        }
+    );
 });
 
-// Get current fonts from storage and show them in the popup
-chrome.storage.local.get(
-    ["fonts", "files"], ({ fonts, files }) => {
-        buildForm(fonts, files);
-    }
-);
 
 // Toggle extension on/off using the button
 activateFonts.onclick = () => {
@@ -103,18 +103,21 @@ function buildForm(fonts, files) {
 }
 
 // New file uploaded, append to all selects
-function updateFontDropdowns(name) {
-    const dropdowns = document.querySelectorAll(".select-font select");
-    for (const dropdown of dropdowns) {
-        const selected = false;
+function updateFontDropdowns(id) {
+    const optgroups = document.querySelectorAll(".select-font select optgroup:first-child");
+    for (const optgroup of optgroups) {
+        const options = optgroup.querySelectorAll("option");
         let present = false;
-        for (const option of dropdown.options) {
-            present = option.value === name ? true : present;
+        for (const option of options) {
+            present = option.value === id ? true : present;
         }
         if (present) {
-            dropdown.value = name;
+            optgroup.value = id;
         } else {
-            dropdown.options.add(new Option(name, name, false, selected));
+            const option = document.createElement("option");
+            option.value = id;
+            option.text = id;
+            optgroup.append(option);
         }
     }
 }

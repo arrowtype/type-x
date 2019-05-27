@@ -363,6 +363,10 @@ textarea:focus {
     width: calc(100% + 0.25rem);
 }
 
+.select-font select {
+    flex: auto;
+}
+
 .select-font-button {
     flex: none;
     margin-left: 0.25em;
