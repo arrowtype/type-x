@@ -9,7 +9,6 @@
     --wght: "wght" 400;
     --XPRN: "XPRN" 0;
     --slnt: "slnt" 0;
-
     /* sizing */
     --extension-width: 18rem;
     --header-height: 3rem;
@@ -19,14 +18,13 @@
     --item-padding-taller: 1rem 1rem;
     --spacing-unit: 1rem;
     --spacing-unit-half: 0.5rem;
-
     /* colors */
     --bg-main: #2f3137;
     --bg-alt: #1c1d23;
     --bg-input: hsla(240, 9%, 16%, 1);
     --separator: #1a1a1a;
     --shadow: #000000;
-    --accent-shadow:#4C00FF;
+    --accent-shadow: #4c00ff;
     --text-p1: #ffffff;
     --text-p2: #efefef;
     --text-p3: hsla(212, 5%, 80%, 1);
@@ -34,14 +32,9 @@
     --gray-1: #6d7278;
     --gray-2: #4b4e5b;
     --accent: #44d7b6;
-    --code: #F0D6B4;
+    --code: #f0d6b4;
     --destructive: #e57880;
-    --magic: linear-gradient(135deg, rgba(16, 205, 103, 1), rgba(16, 205, 103, 0) 55%),
-        linear-gradient(225deg, rgba(251, 208, 0, 1), rgba(251, 208, 0, 0) 70%),
-        linear-gradient(315deg, rgba(210, 46, 237, 1), rgba(210, 46, 237, 0) 55%),
-        linear-gradient(45deg, rgba(83, 59, 230, 1), rgba(83, 59, 230, 0) 95%),
-        linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%);
-
+    --magic: linear-gradient(135deg, rgba(16, 205, 103, 1), rgba(16, 205, 103, 0) 55%), linear-gradient(225deg, rgba(251, 208, 0, 1), rgba(251, 208, 0, 0) 70%), linear-gradient(315deg, rgba(210, 46, 237, 1), rgba(210, 46, 237, 0) 55%), linear-gradient(45deg, rgba(83, 59, 230, 1), rgba(83, 59, 230, 0) 95%), linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%);
     /* transitions */
     --speed-1: 0.25s;
     --speed-2: 0.4s;
@@ -54,18 +47,18 @@
         --bg-input: hsl(230, 3%, 94%);
         --separator: hsl(0, 0%, 80%);
         --shadow: #000000;
-        --accent-shadow:#4C00FF;
+        --accent-shadow: #4c00ff;
         --text-p1: #333;
         --text-p2: #444;
         --text-p3: #555;
         --gray-0: hsla(230, 3%, 55%, 1);
         --gray-1: hsla(230, 3%, 76%, 1);
         --gray-2: hsla(230, 3%, 91%, 1);
-        --accent: #4C00FF;
+        --accent: #4c00ff;
         --code: hsla(255, 40%, 45%, 1);
         --destructive: hsla(355, 90%, 64%, 1);
     }
-  }
+}
 
 @font-face {
     /* TODO: load this from JavaScript through FontFaceSet
@@ -111,7 +104,6 @@ button {
 .label-button,
 .button {
     border-radius: 1rem;
-    background: rgba(255, 255, 255, 0.25);
 }
 
 
@@ -206,7 +198,7 @@ header {
     height: 1.25rem;
     border-radius: 50%;
     background: var(--text-p1);
-    box-shadow: 0 1px 2px  var(--shadow);
+    box-shadow: 0 1px 2px var(--shadow);
     transition: left 100ms ease-in-out, opacity 100ms ease-in-out;
 }
 
@@ -266,7 +258,7 @@ header {
 /* Form stuff */
 
 fieldset {
-    border: none;
+    border: 0;
     margin: 0;
     padding: var(--item-padding-tall);
     width: 100%;
@@ -276,8 +268,8 @@ fieldset {
 
 input,
 textarea {
-    border: none;
-    width: 100%;
+    border: 0;
+    outline: 0;
     width: calc(100% + 1rem);
     margin-left: -0.5rem;
     padding: 0.25rem 0.75em;
@@ -360,11 +352,26 @@ textarea:focus {
 .select-font {
     display: flex;
     align-items: center;
-    width: calc(100% + 0.25rem);
+    width: calc(100% + 0.75rem);
+    margin-left: -0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .select-font select {
     flex: auto;
+    font-size: inherit;
+    border: 0;
+    outline: 0;
+    border-radius: 0.25rem;
+    height: 1.75rem;
+    -webkit-appearance: none;
+    padding: 0 1.5rem 0 0.6rem;
+    background: var(--gray-2);
+    color: var(--text-p1);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 11l5-5M3 6l5 5' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-position: calc(100% - 0.5rem) 50%;
+    background-repeat: no-repeat;
+    background-size: 0.75rem;
 }
 
 .select-font-button {
@@ -470,10 +477,11 @@ textarea:focus {
     path: currentColor;
 }
 
-.delete-button-container button g.lid{
+.delete-button-container button g.lid {
     transition: transform var(--speed-2);
 }
-.delete-button-container button:hover g.lid{
+
+.delete-button-container button:hover g.lid {
     transform: rotate(-15deg) translate(-15%, 5%);
 }
 
