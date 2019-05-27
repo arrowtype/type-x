@@ -37,8 +37,8 @@ addFont.onclick = () => {
                 "new": true,
                 "id": randomId,
                 "file": Object.keys(files)[0],
-                "selectors": [],
-                "css": ""
+                "selectors": ["/* Add CSS selectors here */"],
+                "css": "/* Additional CSS to apply next to font-family */"
             };
 
             addFormElement(newFont, files);
