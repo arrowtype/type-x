@@ -352,7 +352,8 @@ textarea:focus {
 .select-font {
     display: flex;
     align-items: center;
-    width: calc(100% + 0.25rem);
+    width: calc(100% + 0.75rem);
+    margin-left: -0.5rem;
     margin-bottom: 0.5rem;
 }
 
@@ -364,7 +365,7 @@ textarea:focus {
     border-radius: 0.25rem;
     height: 1.75rem;
     -webkit-appearance: none;
-    padding: 0 0.75rem;
+    padding: 0 1.5rem 0 0.6rem;
     background: var(--gray-2);
     color: var(--text-p1);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 11l5-5M3 6l5 5' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
