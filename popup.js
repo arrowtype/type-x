@@ -206,7 +206,7 @@ function saveForm() {
                 newFont["selectors"] = input.value.split(",").map(i => i.trim());
             }
         }
-        newFonts.push(newFont);
+        newFonts.unshift(newFont);
     }
 
     // Clean up unused font files
