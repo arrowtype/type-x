@@ -127,12 +127,9 @@ function generateStyleSheet(updateExisting, callback) {
             stylesheets = [];
 
             for (const font of fonts) {
-                let universal;
                 const selectors = [];
 
                 for (const selector of font.selectors) {
-                    // Is this font using the `*` CSS selector? Put it last.
-                    universal = selector === "*" ? true : false;
                     selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklist}`);
                 }
 
@@ -146,11 +143,7 @@ function generateStyleSheet(updateExisting, callback) {
                     ${font.css}
                 }`
 
-                if (universal) {
-                    stylesheets.push(stylesheet);
-                } else {
-                    stylesheets.unshift(stylesheet)
-                }
+                stylesheets.push(stylesheet);
             }
 
             callback && callback();
