@@ -149,7 +149,7 @@ function addFormElement(font, files) {
         el.querySelector("fieldset").classList.add("show-font-details");
     }
 
-    usedFonts.appendChild(el);
+    usedFonts.prepend(el);
 }
 
 // Store changes made to fonts
