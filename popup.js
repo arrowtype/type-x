@@ -7,7 +7,7 @@ const fontFiles = {};
 const localFonts = {};
 
 chrome.fontSettings.getFontList((fonts) => {
-    for(const font of fonts) {
+    for (const font of fonts) {
         localFonts[font.displayName] = font.fontId;
     }
 });
@@ -111,7 +111,7 @@ function updateFontDropdowns(name) {
         for (const option of dropdown.options) {
             present = option.value === name ? true : present;
         }
-        if(present) {
+        if (present) {
             dropdown.value = name;
         } else {
             dropdown.options.add(new Option(name, name, false, selected));
@@ -154,6 +154,10 @@ function addFormElement(font, files) {
     }
     dropdown.append(localGroup);
 
+    dropdown.onchange = (e) => {
+        e.target.closest("fieldset").querySelector(".font-name-title").innerText = e.target.value;
+    };
+
     fontSelect.replaceWith(dropdown);
 
     el.querySelector("[name=newfile]").dataset.fontid = font.id;
@@ -168,7 +172,7 @@ function addFormElement(font, files) {
     };
 
     el.querySelector(".font-title button").onclick = (e) => {
-        e.target.closest("fieldset").classList.toggle("show-font-details")
+        e.target.closest("fieldset").classList.toggle("show-font-details");
     };
 
     if (font.new) {
@@ -207,7 +211,7 @@ function saveForm() {
         "files", ({ files }) => {
             // Keep only the new files
             const newFiles = {};
-            for(const usedFile of usedFiles) {
+            for (const usedFile of usedFiles) {
                 newFiles[usedFile] = files[usedFile];
             }
 
