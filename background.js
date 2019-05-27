@@ -29,18 +29,15 @@ chrome.runtime.onInstalled.addListener(() => {
 
     chrome.storage.local.set({
         "fontActivated": false,
-        "fonts": defaultFonts
+        "fonts": defaultFonts,
+        "files": defaultFiles
     }, () => {
         generateStyleSheet();
     });
 });
 
 chrome.runtime.onStartup.addListener(() => {
-    chrome.storage.local.get(
-        "fonts", ({ fonts }) => {
-            generateStyleSheet();
-        }
-    );
+    generateStyleSheet();
 });
 
 // Fires when an open tab updates (e.g. following a link)
@@ -126,7 +123,7 @@ function generateStyleSheet(updateExisting, callback) {
     const updateSelector = updateExisting ? `html[data-updatefont="${updateCount}"]` : "html:not([data-updatefont])";
 
     chrome.storage.local.get(
-        "fonts", ({ fonts }) => {
+        ["fonts", "files"], ({ fonts, files }) => {
             stylesheets = [];
 
             for (const font of fonts) {
@@ -135,18 +132,17 @@ function generateStyleSheet(updateExisting, callback) {
 
                 for (const selector of font.selectors) {
                     // Is this font using the `*` CSS selector? Put it last.
-                    // if (selector === "*") universal = true;
                     universal = selector === "*" ? true : false;
                     selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklist}`);
                 }
 
                 const stylesheet = `
                 @font-face {
-                    font-family: '${font.name}';
-                    src: url('${font.file}');
+                    font-family: '${font.file}';
+                    src: url('${files[font.file]}');
                 }
                 ${selectors.join(",")} {
-                    font-family: '${font.name}' !important;
+                    font-family: '${font.file}' !important;
                     ${font.css}
                 }`
 
