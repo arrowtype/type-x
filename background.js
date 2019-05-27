@@ -37,11 +37,7 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.runtime.onStartup.addListener(() => {
-    chrome.storage.local.get(
-        "fonts", ({ fonts }) => {
-            generateStyleSheet();
-        }
-    );
+    generateStyleSheet();
 });
 
 // Fires when an open tab updates (e.g. following a link)

@@ -31,16 +31,16 @@ showFonts.onclick = () => {
 // Add new font fieldset to form
 addFont.onclick = () => {
     const randomId = window.crypto.getRandomValues(new Uint32Array(2)).join("");
-    const newFont = {
-        "new": true,
-        "id": randomId,
-        "file": 20, // TODO: which file?
-        "selectors": [],
-        "css": ""
-    };
-
     chrome.storage.local.get(
         "files", ({ files }) => {
+            const newFont = {
+                "new": true,
+                "id": randomId,
+                "file": Object.keys(files)[0],
+                "selectors": [],
+                "css": ""
+            };
+
             addFormElement(newFont, files);
         }
     );
