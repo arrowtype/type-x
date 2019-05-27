@@ -148,27 +148,41 @@ function addFormElement(font, files) {
 function saveForm() {
     const newFonts = [];
     const fieldsets = document.querySelectorAll("#fontsForm fieldset");
+    const usedFiles = [];
 
     for (const fieldset of fieldsets) {
         const newFont = {}
         const inputs = fieldset.querySelectorAll("*[name]");
 
         for (const input of inputs) {
-            if (input.name === "id" || input.name === "file" || input.name === "css") {
+            if (input.name === "id" || input.name === "css") {
                 newFont[input.name] = input.value;
+            } else if (input.name === "file") {
+                newFont[input.name] = input.value;
+                usedFiles.push(input.value);
             } else if (input.name === "selectors") {
                 // Selectors should become an array
                 newFont["selectors"] = input.value.split(",").map(i => i.trim());
             }
         }
-
         newFonts.push(newFont);
     }
 
-    // Apply new fonts and activate extension
-    chrome.storage.local.set({ "fonts": newFonts }, () => {
-        updateStatus(true, true);
-    });
+    // Clean up unused font files
+    chrome.storage.local.get(
+        "files", ({ files }) => {
+            // Keep only the new files
+            const newFiles = {};
+            for(const usedFile of usedFiles) {
+                newFiles[usedFile] = files[usedFile];
+            }
+
+            // Apply new fonts and activate extension
+            chrome.storage.local.set({ "fonts": newFonts, "files": newFiles }, () => {
+                updateStatus(true, true);
+            });
+        }
+    );
 }
 
 // Keep track of file data, and hook up to rest
