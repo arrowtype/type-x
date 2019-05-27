@@ -100,13 +100,15 @@ function buildForm(fonts, files) {
 
 // Update dropdown when file gets added
 // TODO: pre-select active file for this font
-function updateFontDropdowns(files, selectedFile) {
+function updateFontDropdowns(files) {
     const fontSelects = document.querySelectorAll(".select-font select");
     for (const fontSelect of fontSelects) {
+        const previousSection = fontSelect[fontSelect.selectedIndex] ? fontSelect[fontSelect.selectedIndex].value : false;
+
         const dropdown = document.createElement("select");
         dropdown.setAttribute("name", "file");
         for (const id in files) {
-            const selected = selectedFile ? id == selectedFile : false;
+            const selected = previousSection === id;
             dropdown.options.add(new Option(files[id].name, id, false, selected));
         }
         fontSelect.replaceWith(dropdown);
