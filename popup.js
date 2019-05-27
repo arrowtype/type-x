@@ -34,15 +34,14 @@ addFont.onclick = () => {
     const newFont = {
         "new": true,
         "id": randomId,
-        "name": "",
-        "file": "",
+        "file": 20, // TODO: which file?
         "selectors": [],
         "css": ""
     };
 
     chrome.storage.local.get(
-        "fonts", ({ fonts }) => {
-            addFormElement(newFont, fonts);
+        "files", ({ files }) => {
+            addFormElement(newFont, files);
         }
     );
 };
@@ -94,24 +93,14 @@ function buildForm(fonts, files) {
     for (const font of fonts) {
         addFormElement(font, files);
     }
-
-    updateFontDropdowns(files);
 }
 
-// Update dropdown when file gets added
-// TODO: pre-select active file for this font
-function updateFontDropdowns(files) {
-    const fontSelects = document.querySelectorAll(".select-font select");
-    for (const fontSelect of fontSelects) {
-        const previousSection = fontSelect[fontSelect.selectedIndex] ? fontSelect[fontSelect.selectedIndex].value : false;
-
-        const dropdown = document.createElement("select");
-        dropdown.setAttribute("name", "file");
-        for (const id in files) {
-            const selected = previousSection === id;
-            dropdown.options.add(new Option(files[id].name, id, false, selected));
-        }
-        fontSelect.replaceWith(dropdown);
+// New file uploaded, append to all selects
+function updateFontDropdowns(id, name) {
+    const dropdowns = document.querySelectorAll(".select-font select");
+    for (const dropdown of dropdowns) {
+        const selected = false;
+        dropdown.options.add(new Option(name, id, false, selected));
     }
 }
 
@@ -122,7 +111,18 @@ function addFormElement(font, files) {
 
     el.querySelector(".font-name-title").innerText = `${files[font.file].name}`;
 
-    el.querySelector("[name=newfile]").setAttribute("id", font.id);
+    const fontSelect = el.querySelector(".select-font select");
+
+    const dropdown = document.createElement("select");
+    dropdown.setAttribute("name", "file");
+    dropdown.setAttribute("id", `file${font.id}`);
+    for (const id in files) {
+        const selected = font.file == id;
+        dropdown.options.add(new Option(files[id].name, id, false, selected));
+    }
+    fontSelect.replaceWith(dropdown);
+
+    el.querySelector("[name=newfile]").dataset.fontid = font.id;
     el.querySelector("[name=newfile]").onchange = grabFont;
 
     el.querySelector("[name=id]").value = font.id;
@@ -175,7 +175,8 @@ function saveForm() {
 // of form data on submit
 function grabFont(e) {
     const file = e.target.files[0];
-    const randomId = window.crypto.getRandomValues(new Uint32Array(2)).join("");
+    const fontId = e.target.dataset.fontid;
+    const fileId = window.crypto.getRandomValues(new Uint32Array(2)).join("");
 
     const reader = new FileReader();
     reader.onload = ({ target }) => {
@@ -184,12 +185,13 @@ function grabFont(e) {
         // Store new file in local font storage
         chrome.storage.local.get(
             "files", ({ files }) => {
-                files[randomId] = {
+                files[fileId] = {
                     "name": name,
                     "file": target.result
                 }
                 chrome.storage.local.set({ "files": files }, () => {
-                    updateFontDropdowns(files);
+                    updateFontDropdowns(fileId, name);
+                    document.querySelector(`#file${fontId}`).value = fileId;
                 });
             }
         );
