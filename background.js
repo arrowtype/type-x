@@ -10,10 +10,9 @@ const blacklistedSelectors = [
     ".fas",
     ".far",
     ".fal",
-    ".fab",
-    ".font-fontello",
-    ".glyphicon",
-    '[class*="ico-"]'
+    '.DPvwYc', // google hangouts
+    '.Mwv9k', // google hangouts
+    '.NtU4hc', // google hangouts
 ];
 const blacklist = (() => {
     let b = "";
