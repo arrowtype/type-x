@@ -241,7 +241,9 @@ function grabFont(e) {
                 files[name] = target.result;
                 chrome.storage.local.set({ "files": files }, () => {
                     updateFontDropdowns(name);
-                    document.querySelector(`#file${fontId}`).value = name;
+                    const dropdown = document.querySelector(`#file${fontId}`);
+                    dropdown.value = name;
+                    dropdown.dispatchEvent(new Event("change"));
                 });
             }
         );
