@@ -131,14 +131,29 @@ function addFormElement(font, files) {
     const dropdown = document.createElement("select");
     dropdown.setAttribute("name", "file");
     dropdown.setAttribute("id", `file${font.id}`);
+
+    const extensionGroup = document.createElement("optgroup");
+    extensionGroup.setAttribute("label", "Custom fonts:");
     for (const id in files) {
-        const selected = font.file == id;
-        dropdown.options.add(new Option(id, id, false, selected));
+        const option = document.createElement("option");
+        option.value = id;
+        option.text = id;
+        option.selected = font.file == id;
+        extensionGroup.append(option);
     }
+    dropdown.append(extensionGroup);
+
+    const localGroup = document.createElement("optgroup");
+    localGroup.setAttribute("label", "Local fonts:");
     for (const id in localFonts) {
-        const selected = font.file == id;
-        dropdown.options.add(new Option(id, id, false, selected));
+        const option = document.createElement("option");
+        option.value = id;
+        option.text = id;
+        option.selected = font.file == id;
+        localGroup.append(option);
     }
+    dropdown.append(localGroup);
+
     fontSelect.replaceWith(dropdown);
 
     el.querySelector("[name=newfile]").dataset.fontid = font.id;
