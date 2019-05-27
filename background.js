@@ -142,11 +142,11 @@ function generateStyleSheet(updateExisting, callback) {
 
                 const stylesheet = `
                 @font-face {
-                    font-family: '${font.name}';
-                    src: url('${files[font.id]}');
+                    font-family: '${files[font.file].name}';
+                    src: url('${files[font.file].file}');
                 }
                 ${selectors.join(",")} {
-                    font-family: '${font.name}' !important;
+                    font-family: '${files[font.file].name}' !important;
                     ${font.css}
                 }`
 
