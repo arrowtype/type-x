@@ -1,21 +1,39 @@
-# Type-X
+<p align="center">
+    <img alt="type-x icon" src="design/branding/toolbar-icons/typex-active@128.png" width="64" />
+</p>
+<h1 align="center">
+  Type-X
+</h1>
+<h2 align="center">
+  Test your fonts across the web!
+</h2>
 
-Test your fonts across the web!
 
-Features:
+Type-X is a Chrome Extension that enables seamless and effective to font testing on any website.
 
-- Blazing fast font injection
-- Use your local fonts, or add a custom font file
-- Allows full control over how to apply your fonts
-- Tries to not overwrite icon fonts
+- Browse comfortably, with blazing-fast font injection
+- Use your local fonts or add custom font files directly
+- Have full control over how you apply your fonts with custom CSS selectors and styles
+- Avoid "tofu" from icon fonts with preset and custom selectors to ignore icon elements
 
-## Install
+## Installation
 
 Find the Type-X extension in the [Chrome web store](https://chrome.google.com/webstore/category/extensions). (A direct link will be added once it's released.)
 
-Alternatively, you can check out this repo and use it in Chrome:
+Alternatively, you can clone this repo and use it in Chrome:
 
-1. Check out the repo
+1. Git Clone the repo
 2. Go to chrome://extensions/ in Chrome
-3. Click "Load unpacked"
-4. Navigate to where you checked out the repo
+3. Turn on "Developer Mode"
+4. Click "Load unpacked"
+5. Navigate to the folder of the repo you cloned
+
+## Contributing
+
+Have you found selectors of icon fonts that might be worth adding to the preset "ignore" list?  
+
+Did you get stuck on something?
+
+Have you found a bug?
+
+File an issue or make a pull request!
