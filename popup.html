@@ -20,16 +20,24 @@
                 <path fill="none" stroke="#FFF" stroke-linecap="round" stroke-width="2"
                     d="M1 8L15 8M1 1L15 1M.878583652 15L14.8785837 15" />
             </svg>
-
         </button>
     </header>
 
     <main class="main-fonts">
-        <div class="overrides-title all-caps">
-            Font Overrides
-            <button type="button" id="addFont">
+        <div class="overrides all-caps">
+            <span class="overrides-title">Font Overrides</span>
+            <button class="button apply-changes all-caps" type="button">
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                        <path fill="none" stroke-linecap="round" stroke-width="2"
+                            d="M13.1575099 5.48447816C12.2865499 3.46349282 10.5679475 2 8.03623474 2 4.56299055 2 1.74736981 4.6862915 1.74736981 8 1.74736981 11.3137085 4.56299055 14 8.03623474 14 10.5663953 14 12.856742 12.1534349 13.6992321 10.0015024M14 2L14 6M14 6L10 6" />
+                    </svg>
+                    Apply Changes
+                </span>
+            </button>
+            <button type="button" id="addFont" class="add-font">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                    <g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke="#b6c1ce" stroke-width="2">
+                    <g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-width="2">
                         <path d="M2,8 L14,8" />
                         <path d="M2,8 L14,8" transform="rotate(90 8 8)" />
                     </g>
@@ -55,9 +63,6 @@
                 <div class="blacklist-container">
                     <textarea rows="3" name="blacklist"></textarea>
                 </div>
-            </div>
-            <div class="temp-apply">
-                <button class="button temp-apply-button all-caps" type="submit">Apply Changes</button>
             </div>
         </form>
     </main>

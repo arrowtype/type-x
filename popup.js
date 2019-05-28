@@ -75,6 +75,7 @@ addFont.onclick = () => {
             };
 
             addFormElement(newFont, files);
+            showChange(true);
         }
     );
 };
@@ -106,14 +107,21 @@ const showStatus = (firstRun) => {
     );
 }
 
+// Show/hide button to apply changes
+function showChange(show) {
+    document.querySelector(".apply-changes").classList.toggle("show", show);
+}
+
 // Initialise form
 function initForm() {
-    const form = document.querySelector("#fontsForm");
-
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
+    document.querySelector(".apply-changes").onclick = () => {
         saveForm();
-    }, false);
+        showChange(false);
+    }
+
+    document.querySelector("#fontsForm").oninput = () => {
+        showChange(true);
+    }
 }
 
 // Generate form based on current settings
@@ -205,7 +213,8 @@ function addFormElement(font, files) {
     el.querySelector("[name=selectors]").value = font.selectors.join(", ");
 
     el.querySelector(".delete-button-container button").onclick = (e) => {
-        e.target.closest("fieldset").remove()
+        e.target.closest("fieldset").remove();
+        showChange(true);
     };
 
     el.querySelector(".font-title button").onclick = (e) => {
@@ -243,7 +252,7 @@ function saveForm() {
     }
 
     // Get blacklist
-    const blacklist = form.querySelector("[name=blacklist]").value.split(",");
+    const blacklist = form.querySelector("[name=blacklist]").value.split(",").map(i => i.trim());
 
     // Apply new fonts and activate extension
     chrome.storage.local.set({
