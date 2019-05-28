@@ -2,18 +2,25 @@
     <img alt="type-x icon" src="design/branding/toolbar-icons/typex-active@128.png" width="64" />
 </p>
 <h1 align="center">
-  Type-X
+  Type-X: Test your fonts across the web!
 </h1>
-<h2 align="center">
-  Test your fonts across the web!
-</h2>
 
-Type-X is a Chrome Extension that enables seamless and effective to font testing on any website.
+Type-X is a Chrome Extension that makes it easy and efficient to test local fonts on any website.
 
 - Browse comfortably, with blazing-fast font injection
 - Use your local fonts or add custom font files directly
-- Have full control over how you apply your fonts with custom CSS selectors and styles
+- Take full control over how you apply your fonts with custom CSS selectors and styles
 - Avoid "tofu" from icon fonts with preset and custom selectors to ignore icon elements
+
+![Type-X in use to apply font overrides to Wikipedia](design/typex.gif)
+
+## Why? 
+
+Type designers spend countless hours creating type proofs and fake designs to test their fonts. This is a vital part of the type design process, but sometimes the best way to understand how a font works (and what needs fixing) is to experience it as a reader, not as a designer.
+
+Meanwhile, web designers & developers spend a lot of time guessing what different fonts might look like in their apps, but testing actual fonts in context requires someone to either dig into the CSS or to mess with less-than-graceful CSS override extensions.
+
+Type-X makes both jobs easier and more fun. Hit a button to apply font overrides! Open a menu to try different fonts from your collection, just like in a design app. Need to tweak the styles to make it work just-so? Customize the selectors you target and the CSS styles you apply, all within the extension.
 
 ## Installation
 
