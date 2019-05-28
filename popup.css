@@ -26,7 +26,7 @@
     --XPRN: "XPRN" 0;
     --slnt: "slnt" 0;
     /* sizing */
-    --extension-width: 18rem;
+    --extension-width: 19rem;
     --header-height: 3rem;
     --footer-height: 1rem;
     --item-padding: 0.5rem 1rem;
@@ -331,7 +331,7 @@ textarea:focus {
     background: var(--bg-alt);
 }
 
-.overrides-title {
+.overrides {
     background: var(--bg-main);
     padding: var(--item-padding-tall);
     display: flex;
@@ -341,9 +341,12 @@ textarea:focus {
     font-size: var(--t2);
 }
 
-.overrides-title button {
+.overrides-title {
+    margin-right: auto;
+}
+
+.add-font {
     flex: none;
-    margin-left: auto;
     border-radius: 50%;
     width: 1.5rem;
     height: 1.5rem;
@@ -355,14 +358,46 @@ textarea:focus {
     margin-right: -.25rem;
 }
 
-.overrides-title button:hover {
+.add-font:hover {
     background: var(--bg-alt);
     color: var(--accent);
 }
 
-.overrides-title path {
-    width: 100%;
+.add-font:hover svg {
     stroke: currentColor;
+}
+
+.apply-changes {
+    flex: none;
+    margin-right: auto;
+    margin-left: 0.25rem;
+    background: var(--magic);
+    padding: var(--spacing-unit-half);
+    color: var(--text-p1);
+    opacity: 0;
+    transition: opacity 500ms;
+    pointer-events: none;
+}
+
+.apply-changes.show {
+    pointer-events: auto;
+    opacity: 1;
+}
+
+.apply-changes span {
+    display: flex;
+    align-items: center;
+}
+
+.apply-changes svg {
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-right: 0.25rem;
+    stroke: currentColor;
+}
+
+.apply-changes:hover {
+    background: var(--accent);
 }
 
 .select-font {
@@ -504,20 +539,6 @@ textarea:focus {
     transform: rotate(-15deg) translate(-15%, 5%);
 }
 
-.temp-apply {
-    padding: var(--spacing-unit-half) var(--spacing-unit-half);
-}
-
-.temp-apply-button {
-    width: 100%;
-    padding: var(--spacing-unit-half);
-    background: var(--bg-main);
-    transition: background var(--speed-1);
-}
-
-.temp-apply-button:hover {
-    background: var(--bg-alt);
-}
 
 /* Ignores */
 

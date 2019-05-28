@@ -75,6 +75,7 @@ addFont.onclick = () => {
             };
 
             addFormElement(newFont, files);
+            showChange(true);
         }
     );
 };
@@ -106,14 +107,23 @@ const showStatus = (firstRun) => {
     );
 }
 
+// Show/hide button to apply changes
+function showChange(show) {
+    document.querySelector(".apply-changes").classList.toggle("show", show);
+}
+
 // Initialise form
 function initForm() {
     const form = document.querySelector("#fontsForm");
 
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
+    document.querySelector(".apply-changes").onclick = () => {
         saveForm();
-    }, false);
+        showChange(false);
+    }
+
+    form.oninput = () => {
+        showChange(true);
+    }
 }
 
 // Generate form based on current settings
