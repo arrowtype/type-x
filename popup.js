@@ -114,14 +114,12 @@ function showChange(show) {
 
 // Initialise form
 function initForm() {
-    const form = document.querySelector("#fontsForm");
-
     document.querySelector(".apply-changes").onclick = () => {
         saveForm();
         showChange(false);
     }
 
-    form.oninput = () => {
+    document.querySelector("#fontsForm").oninput = () => {
         showChange(true);
     }
 }
@@ -215,7 +213,8 @@ function addFormElement(font, files) {
     el.querySelector("[name=selectors]").value = font.selectors.join(", ");
 
     el.querySelector(".delete-button-container button").onclick = (e) => {
-        e.target.closest("fieldset").remove()
+        e.target.closest("fieldset").remove();
+        showChange(true);
     };
 
     el.querySelector(".font-title button").onclick = (e) => {
@@ -253,7 +252,7 @@ function saveForm() {
     }
 
     // Get blacklist
-    const blacklist = form.querySelector("[name=blacklist]").value.split(",");
+    const blacklist = form.querySelector("[name=blacklist]").value.split(",").map(i => i.trim());
 
     // Apply new fonts and activate extension
     chrome.storage.local.set({
