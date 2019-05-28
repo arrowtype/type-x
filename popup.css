@@ -500,6 +500,42 @@ textarea:focus {
     background: var(--bg-alt);
 }
 
+/* Ignores */
+
+.ignores {
+    background: var(--bg-main);
+    padding: var(--item-padding-tall);
+    border-bottom: 1px solid var(--separator);
+    color: var(--text-p3);
+    font-size: var(--t2);
+}
+
+.blacklist-container {
+    display: none;
+}
+
+.show-blacklist .blacklist-container {
+    display: block
+}
+
+.show-blacklist span {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem 0;
+}
+
+.show-blacklist svg {
+    margin-right: 0.25rem;
+    stroke: currentColor;
+}
+
+.show-blacklist .show-blacklist span {
+    color: var(--text-p2);
+}
+
+.show-blacklist .show-blacklist svg {
+    stroke: var(--accent);
+}
 
 /* Footer */
 

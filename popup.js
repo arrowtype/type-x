@@ -3,6 +3,7 @@
 const activateFonts = document.querySelector("#activateFonts");
 const showFonts = document.querySelector("#showFonts");
 const addFont = document.querySelector("#addFont");
+const showBlacklist = document.querySelector("#showBlacklist");
 const fontFiles = {};
 const localFonts = {};
 
@@ -12,17 +13,22 @@ chrome.fontSettings.getFontList((fonts) => {
         localFonts[font.displayName] = font.fontId;
     }
     chrome.storage.local.get(
-        ["fonts", "files"], ({ fonts, files }) => {
-            buildForm(fonts, files);
+        ["fonts", "files", "blacklist"], ({
+            fonts,
+            files,
+            blacklist
+        }) => {
+            buildForm(fonts, files, blacklist);
         }
     );
 });
 
-
 // Toggle extension on/off using the button
 activateFonts.onclick = () => {
     chrome.storage.local.get(
-        "fontActivated", ({ fontActivated }) => {
+        "fontActivated", ({
+            fontActivated
+        }) => {
             updateStatus(!fontActivated);
         }
     );
@@ -35,11 +41,19 @@ showFonts.onclick = () => {
     showFonts.classList.toggle("active");
 }
 
+// Show/hide blacklist
+showBlacklist.onclick = () => {
+    // document.querySelector(".blacklist-container").classList.toggle("show");
+    document.querySelector(".ignores").classList.toggle("show-blacklist");
+}
+
 // Add new font fieldset to form
 addFont.onclick = () => {
     const randomId = window.crypto.getRandomValues(new Uint32Array(2)).join("");
     chrome.storage.local.get(
-        "files", ({ files }) => {
+        "files", ({
+            files
+        }) => {
             const newFont = {
                 "new": true,
                 "id": randomId,
@@ -68,7 +82,9 @@ function updateStatus(status, updateExisting) {
 // Show status of extension in the popup
 const showStatus = (firstRun) => {
     chrome.storage.local.get(
-        "fontActivated", ({ fontActivated }) => {
+        "fontActivated", ({
+            fontActivated
+        }) => {
             chrome.browserAction.setIcon({
                 path: `icons/typex-${fontActivated ? "active" : "off"}@128.png`
             });
@@ -89,17 +105,23 @@ function initForm() {
 }
 
 // Generate form based on current settings
-function buildForm(fonts, files) {
-    const usedFonts = document.querySelector("#usedFonts");
+function buildForm(fonts, files, blacklist) {
+    const form = document.querySelector("#fontsForm");
+    const usedFonts = form.querySelector("#usedFonts");
+    const blacklistEl = form.querySelector("[name=blacklist]");
 
     // Clear out previous form
     while (usedFonts.firstChild) {
         usedFonts.removeChild(usedFonts.firstChild);
     }
 
+    // Inject new fonts
     for (const font of fonts) {
         addFormElement(font, files);
     }
+
+    // Inject blacklist
+    blacklistEl.value = blacklist.join(", ");
 }
 
 // New file uploaded, append to all selects
@@ -188,9 +210,11 @@ function addFormElement(font, files) {
 // Store changes made to fonts
 function saveForm() {
     const newFonts = [];
-    const fieldsets = document.querySelectorAll("#fontsForm fieldset");
+    const form = document.querySelector("#fontsForm");
+    const fieldsets = form.querySelectorAll("fieldset");
     const usedFiles = [];
 
+    // Get new fonts
     for (const fieldset of fieldsets) {
         const newFont = {}
         const inputs = fieldset.querySelectorAll("*[name]");
@@ -209,9 +233,14 @@ function saveForm() {
         newFonts.unshift(newFont);
     }
 
-    // Clean up unused font files
+    // Get blacklist
+    const blacklist = form.querySelector("[name=blacklist]").value.split(",");
+
+    // Clean up unused font files before storage
     chrome.storage.local.get(
-        "files", ({ files }) => {
+        "files", ({
+            files
+        }) => {
             // Keep only the new files
             const newFiles = {};
             for (const usedFile of usedFiles) {
@@ -219,7 +248,11 @@ function saveForm() {
             }
 
             // Apply new fonts and activate extension
-            chrome.storage.local.set({ "fonts": newFonts, "files": newFiles }, () => {
+            chrome.storage.local.set({
+                "fonts": newFonts,
+                "files": newFiles,
+                "blacklist": blacklist
+            }, () => {
                 updateStatus(true, true);
             });
         }
@@ -234,12 +267,18 @@ function grabFont(e) {
     const fontId = e.target.dataset.fontid;
 
     const reader = new FileReader();
-    reader.onload = ({ target }) => {
+    reader.onload = ({
+        target
+    }) => {
         // Stick new file in storage
         chrome.storage.local.get(
-            "files", ({ files }) => {
+            "files", ({
+                files
+            }) => {
                 files[name] = target.result;
-                chrome.storage.local.set({ "files": files }, () => {
+                chrome.storage.local.set({
+                    "files": files
+                }, () => {
                     updateFontDropdowns(name);
                     const dropdown = document.querySelector(`#file${fontId}`);
                     dropdown.value = name;

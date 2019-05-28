@@ -38,7 +38,25 @@
         </div>
         <form id="fontsForm">
             <div id="usedFonts"></div>
-            <div class="temp-apply ">
+            <div class="ignores">
+                <div class="ignores-buttons">
+                    <button type="button" id="showBlacklist" class="show-blacklist">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                                <g fill="none" fill-rule="evenodd" stroke-linecap="round">
+                                    <path stroke-width="1.75" d="M6.5 2L4.5 14M11.5 2L9.5 14" />
+                                    <path stroke-width="2" d="M2 6L14 6M2 10L14 10" />
+                                </g>
+                            </svg>
+                            Selectors to ignore...
+                        </span>
+                    </button>
+                </div>
+                <div class="blacklist-container">
+                    <textarea rows="3" name="blacklist"></textarea>
+                </div>
+            </div>
+            <div class="temp-apply">
                 <button class="button temp-apply-button all-caps" type="submit">Apply Changes</button>
             </div>
         </form>
@@ -53,6 +71,7 @@
     </footer>
 
     <!-- Template:  -->
+
     <template id="newFont">
         <fieldset>
             <div class="font-title">
