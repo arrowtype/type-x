@@ -18,7 +18,7 @@ Type-X is a Chrome Extension that makes it easy and efficient to test local font
 
 Type designers spend countless hours creating type proofs and fake designs to test their fonts. This is a vital part of the type design process, but sometimes the best way to understand how a font works (and what needs fixing) is to experience it as a reader, not as a designer.
 
-Meanwhile, web designers & developers spend a lot of time guessing what different fonts might look like in their apps, but testing actual fonts in context requires someone to either dig into the CSS or to mess with less-than-graceful CSS override extensions.
+Likewise, web designers & developers spend a lot of time guessing what different fonts might look like in their apps, but testing actual fonts in context requires someone to either dig into the CSS or to mess with clunky CSS-override browser extensions.
 
 Type-X makes both jobs easier and more fun. Hit a button to apply font overrides! Open a menu to try different fonts from your collection, just like in a design app. Need to tweak the styles to make it work just-so? Customize the selectors you target and the CSS styles you apply, all within the extension.
 
