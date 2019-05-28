@@ -380,6 +380,7 @@ textarea:focus {
     outline: 0;
     border-radius: 0.25rem;
     height: 1.75rem;
+    width: inherit;
     -webkit-appearance: none;
     padding: 0 1.5rem 0 0.6rem;
     background: var(--gray-2);
@@ -428,6 +429,7 @@ textarea:focus {
     align-items: center;
     font-variation-settings: "XPRN" 1, "wght" 500;
     font-size: var(--t1);
+    word-break: break-word;
 }
 
 .font-title svg {
@@ -435,6 +437,7 @@ textarea:focus {
     height: 1em;
     margin-left: auto;
     stroke: currentColor;
+    flex: none;
 }
 
 .font-title:hover path {
