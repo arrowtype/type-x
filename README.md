@@ -8,7 +8,6 @@
   Test your fonts across the web!
 </h2>
 
-
 Type-X is a Chrome Extension that enables seamless and effective to font testing on any website.
 
 - Browse comfortably, with blazing-fast font injection
@@ -36,4 +35,4 @@ Did you get stuck on something?
 
 Have you found a bug?
 
-File an issue or make a pull request!
+Let us know! [File an issue](/issues) or make a pull request (see [Contributing guidelines](CONTRIBUTING.md))!
