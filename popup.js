@@ -149,7 +149,7 @@ function addFormElement(font, files) {
     const template = document.querySelector("#newFont");
     const el = document.importNode(template.content, true);
 
-    el.querySelector(".font-name-title").innerText = font.file;
+    el.querySelector(".font-name-title").innerText = font.file || "New font override";
 
     const fontSelect = el.querySelector(".select-font select");
 
