@@ -1,27 +1,31 @@
-// Recursive
+// Copyright 2019 Google LLC
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//     https://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 // Extension variables
 let stylesheets = [];
 let updateCount = 0;
-const blacklistedSelectors = [
+const defaultBlacklist = [
     ".icon",
     ".Icon",
     ".fa",
     ".fas",
     ".far",
     ".fal",
-    ".fab",
-    ".font-fontello",
-    ".glyphicon",
-    '[class*="ico-"]'
+    '.DPvwYc', // google hangouts
+    '.Mwv9k', // google hangouts
+    '.NtU4hc', // google hangouts
 ];
-const blacklist = (() => {
-    let b = "";
-    for (const blacklistedSelector of blacklistedSelectors) {
-        b += `:not(${blacklistedSelector})`;
-    }
-    return b;
-})();
 
 chrome.runtime.onInstalled.addListener(() => {
     if (chrome.runtime.lastError) {
@@ -30,30 +34,34 @@ chrome.runtime.onInstalled.addListener(() => {
 
     chrome.storage.local.set({
         "fontActivated": false,
-        "fonts": defaultFonts
+        "fonts": defaultFonts,
+        "files": defaultFiles,
+        "blacklist": defaultBlacklist
     }, () => {
         generateStyleSheet();
     });
 });
 
 chrome.runtime.onStartup.addListener(() => {
-    chrome.storage.local.get(
-        "fonts", ({ fonts }) => {
-            generateStyleSheet();
-        }
-    );
+    generateStyleSheet();
 });
 
 // Fires when an open tab updates (e.g. following a link)
 // and when a new tab is opened
-chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
+chrome.tabs.onUpdated.addListener((_tabId, {
+    status
+}, {
+    active
+}) => {
     if (chrome.runtime.lastError) {
         handleError(chrome.runtime.lastError);
     }
 
     if (active && status === "loading") {
         chrome.storage.local.get(
-            "fontActivated", ({ fontActivated }) => {
+            "fontActivated", ({
+                fontActivated
+            }) => {
                 updateFonts(fontActivated);
             }
         );
@@ -127,35 +135,39 @@ function generateStyleSheet(updateExisting, callback) {
     const updateSelector = updateExisting ? `html[data-updatefont="${updateCount}"]` : "html:not([data-updatefont])";
 
     chrome.storage.local.get(
-        "fonts", ({ fonts }) => {
+        ["fonts", "files", "blacklist"], ({
+            fonts,
+            files,
+            blacklist
+        }) => {
             stylesheets = [];
 
+            const blacklistSelectors = (() => {
+                let b = "";
+                for (const blacklistItem of blacklist) {
+                    b += `:not(${blacklistItem})`;
+                }
+                return b;
+            })();
+
             for (const font of fonts) {
-                let universal;
                 const selectors = [];
 
                 for (const selector of font.selectors) {
-                    // Is this font using the `*` CSS selector? Put it last.
-                    // if (selector === "*") universal = true;
-                    universal = selector === "*" ? true : false;
-                    selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklist}`);
+                    selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklistSelectors}`);
                 }
 
                 const stylesheet = `
                 @font-face {
-                    font-family: '${font.name}';
-                    src: url('${font.file}');
+                    font-family: '${font.file}';
+                    src: url('${files[font.file]}');
                 }
                 ${selectors.join(",")} {
-                    font-family: '${font.name}' !important;
+                    font-family: '${font.file}' !important;
                     ${font.css}
                 }`
 
-                if (universal) {
-                    stylesheets.push(stylesheet);
-                } else {
-                    stylesheets.unshift(stylesheet)
-                }
+                stylesheets.push(stylesheet);
             }
 
             callback && callback();

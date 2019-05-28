@@ -6,7 +6,9 @@
     "permissions": [
         "activeTab",
         "webNavigation",
+        "fontSettings",
         "storage",
+        "unlimitedStorage",
         "*://*/*"
     ],
     "background": {
