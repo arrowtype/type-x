@@ -38,8 +38,16 @@
         </div>
         <form id="fontsForm">
             <div id="usedFonts"></div>
-            <div class="temp-apply ">
+            <div class="temp-apply">
                 <button class="button temp-apply-button all-caps" type="submit">Apply Changes</button>
+            </div>
+            <div>
+                <button type="button" id="showBlacklist">
+                    Selectors to ignore...
+                </button>
+                <div class="blacklist-container">
+                    <textarea name="blacklist"></textarea>
+                </div>
             </div>
         </form>
     </main>
@@ -53,6 +61,7 @@
     </footer>
 
     <!-- Template:  -->
+
     <template id="newFont">
         <fieldset>
             <div class="font-title">

@@ -500,6 +500,15 @@ textarea:focus {
     background: var(--bg-alt);
 }
 
+/* Blacklist */
+
+.blacklist-container {
+    display: none;
+}
+
+.blacklist-container.show {
+    display: block
+}
 
 /* Footer */
 

@@ -3,7 +3,7 @@
 // Extension variables
 let stylesheets = [];
 let updateCount = 0;
-const blacklistedSelectors = [
+const defaultBlacklist = [
     ".icon",
     ".Icon",
     ".fa",
@@ -14,13 +14,6 @@ const blacklistedSelectors = [
     '.Mwv9k', // google hangouts
     '.NtU4hc', // google hangouts
 ];
-const blacklist = (() => {
-    let b = "";
-    for (const blacklistedSelector of blacklistedSelectors) {
-        b += `:not(${blacklistedSelector})`;
-    }
-    return b;
-})();
 
 chrome.runtime.onInstalled.addListener(() => {
     if (chrome.runtime.lastError) {
@@ -30,7 +23,8 @@ chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.local.set({
         "fontActivated": false,
         "fonts": defaultFonts,
-        "files": defaultFiles
+        "files": defaultFiles,
+        "blacklist": defaultBlacklist
     }, () => {
         generateStyleSheet();
     });
@@ -123,14 +117,22 @@ function generateStyleSheet(updateExisting, callback) {
     const updateSelector = updateExisting ? `html[data-updatefont="${updateCount}"]` : "html:not([data-updatefont])";
 
     chrome.storage.local.get(
-        ["fonts", "files"], ({ fonts, files }) => {
+        ["fonts", "files", "blacklist"], ({ fonts, files, blacklist }) => {
             stylesheets = [];
+
+            const blacklistSelectors = (() => {
+                let b = "";
+                for (const blacklistItem of blacklist) {
+                    b += `:not(${blacklistItem})`;
+                }
+                return b;
+            })();
 
             for (const font of fonts) {
                 const selectors = [];
 
                 for (const selector of font.selectors) {
-                    selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklist}`);
+                    selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklistSelectors}`);
                 }
 
                 const stylesheet = `
