@@ -36,14 +36,20 @@ chrome.runtime.onStartup.addListener(() => {
 
 // Fires when an open tab updates (e.g. following a link)
 // and when a new tab is opened
-chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
+chrome.tabs.onUpdated.addListener((_tabId, {
+    status
+}, {
+    active
+}) => {
     if (chrome.runtime.lastError) {
         handleError(chrome.runtime.lastError);
     }
 
     if (active && status === "loading") {
         chrome.storage.local.get(
-            "fontActivated", ({ fontActivated }) => {
+            "fontActivated", ({
+                fontActivated
+            }) => {
                 updateFonts(fontActivated);
             }
         );
@@ -117,7 +123,11 @@ function generateStyleSheet(updateExisting, callback) {
     const updateSelector = updateExisting ? `html[data-updatefont="${updateCount}"]` : "html:not([data-updatefont])";
 
     chrome.storage.local.get(
-        ["fonts", "files", "blacklist"], ({ fonts, files, blacklist }) => {
+        ["fonts", "files", "blacklist"], ({
+            fonts,
+            files,
+            blacklist
+        }) => {
             stylesheets = [];
 
             const blacklistSelectors = (() => {
