@@ -149,7 +149,7 @@ function addFormElement(font, files) {
     const template = document.querySelector("#newFont");
     const el = document.importNode(template.content, true);
 
-    el.querySelector(".font-name-title").innerText = font.file;
+    el.querySelector(".font-name-title").innerText = font.file || "New font override";
 
     const fontSelect = el.querySelector(".select-font select");
 
@@ -208,11 +208,11 @@ function addFormElement(font, files) {
 }
 
 // Store changes made to fonts
+// Note: files have already been stored at this point
 function saveForm() {
     const newFonts = [];
     const form = document.querySelector("#fontsForm");
     const fieldsets = form.querySelectorAll("fieldset");
-    const usedFiles = [];
 
     // Get new fonts
     for (const fieldset of fieldsets) {
@@ -220,11 +220,8 @@ function saveForm() {
         const inputs = fieldset.querySelectorAll("*[name]");
 
         for (const input of inputs) {
-            if (input.name === "id" || input.name === "css") {
+            if (input.name === "id" || input.name === "css" || input.name === "file") {
                 newFont[input.name] = input.value;
-            } else if (input.name === "file") {
-                newFont[input.name] = input.value;
-                usedFiles.push(input.value);
             } else if (input.name === "selectors") {
                 // Selectors should become an array
                 newFont["selectors"] = input.value.split(",").map(i => i.trim());
@@ -236,27 +233,13 @@ function saveForm() {
     // Get blacklist
     const blacklist = form.querySelector("[name=blacklist]").value.split(",");
 
-    // Clean up unused font files before storage
-    chrome.storage.local.get(
-        "files", ({
-            files
-        }) => {
-            // Keep only the new files
-            const newFiles = {};
-            for (const usedFile of usedFiles) {
-                newFiles[usedFile] = files[usedFile];
-            }
-
-            // Apply new fonts and activate extension
-            chrome.storage.local.set({
-                "fonts": newFonts,
-                "files": newFiles,
-                "blacklist": blacklist
-            }, () => {
-                updateStatus(true, true);
-            });
-        }
-    );
+    // Apply new fonts and activate extension
+    chrome.storage.local.set({
+        "fonts": newFonts,
+        "blacklist": blacklist
+    }, () => {
+        updateStatus(true, true);
+    });
 }
 
 // Keep track of file data, and hook up to rest
