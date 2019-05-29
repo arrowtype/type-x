@@ -372,7 +372,7 @@ textarea:focus {
     flex: none;
     margin-right: auto;
     color: var(--text-p1);
-    font-size: var(--t2);
+    /* font-size: var(--t2); */
     opacity: 0;
     transition: opacity 500ms; /* this causes massive delay when in header. weird.*/
     pointer-events: none;
