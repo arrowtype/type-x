@@ -372,9 +372,11 @@ textarea:focus {
     flex: none;
     margin-right: auto;
     color: var(--text-p1);
+    font-size: var(--t2);
     opacity: 0;
-    /* transition: opacity 500ms; */ /* this causes massive delay when in header. weird.*/
+    transition: opacity 500ms; /* this causes massive delay when in header. weird.*/
     pointer-events: none;
+    --wght: "wght" 600;
 }
 
 .apply-changes.show {
@@ -383,13 +385,48 @@ textarea:focus {
 }
 
 
-.apply-changes span {
+.apply-changes > span {
     display: flex;
     align-items: center;
-    background: var(--magic);
-    padding: var(--spacing-unit-half);
+    background: var(--accent);
+    padding: calc( var(--spacing-unit-half) + 2px );
     border-radius: 999px;
-    --wght: "wght" 600;
+    position: relative;
+}
+
+/* /* "inside space" on button */
+.apply-changes > span:before {
+    content: '';
+    background: var(--bg-alt);
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    display: flex;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    border-radius: 999px;
+    z-index: 1;
+}
+
+/* "border" on button */
+.apply-changes > span:after {
+    content: '';
+    background: var(--magic);
+    width: calc(100%);
+    height: calc(100%);
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 999px;
+    z-index: 0;
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+.apply-changes span span {
+    position: relative;
+    z-index: 2;
 }
 
 .apply-changes svg {
@@ -397,15 +434,22 @@ textarea:focus {
     height: 16px;
     margin-right: var(--spacing-unit-half);
     stroke: currentColor;
+    z-index: 1;
 }
 .apply-changes path {
     box-shadow: 0 0 2px var(--accent-shadow);
 }
 
-.apply-changes:hover span {
-    background: var(--bg-main);
+.apply-changes:hover > span {
     color: var(--accent);
+    
 }
+
+.apply-changes:hover > span:after {
+    opacity: 0;
+}
+
+
 
 .apply-changes.show:hover svg {
     animation: spin 0.4s forwards;
@@ -448,6 +492,12 @@ textarea:focus {
     background-position: calc(100% - 0.5rem) 50%;
     background-repeat: no-repeat;
     background-size: 0.75rem;
+}
+
+@media (prefers-color-scheme: light) { 
+    .select-font select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 11l5-5M3 6l5 5' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    }
 }
 
 .select-font-button {
