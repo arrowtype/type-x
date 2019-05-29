@@ -161,6 +161,8 @@ function generateStyleSheet(updateExisting, callback) {
                 @font-face {
                     font-family: '${font.file}';
                     src: url('${files[font.file]}');
+                    font-weight: 100 900;
+                    font-stretch: 50% 200%;
                 }
                 ${selectors.join(",")} {
                     font-family: '${font.file}' !important;
