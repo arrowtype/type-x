@@ -173,7 +173,7 @@ header {
     text-align: left;
     flex: auto;
     font-size: var(--t2);
-    padding: 0 var(--spacing-unit);
+    padding-left: var(--spacing-unit);
     color: var(--text-p2);
     font-variation-settings: "XPRN" 1, "wght" 600, "slnt" 1;
     text-transform: uppercase;
@@ -370,9 +370,8 @@ textarea:focus {
 
 .apply-changes {
     flex: none;
-    margin-right: auto;
+    margin-right: var(--spacing-unit-half);
     color: var(--text-p1);
-    /* font-size: var(--t2); */
     opacity: 0;
     transition: opacity 500ms; /* this causes massive delay when in header. weird.*/
     pointer-events: none;
@@ -388,7 +387,7 @@ textarea:focus {
 .apply-changes > span {
     display: flex;
     align-items: center;
-    background: var(--accent);
+    background: var(--bg-main);
     padding: calc( var(--spacing-unit-half) + 2px );
     border-radius: 999px;
     position: relative;
@@ -445,6 +444,10 @@ textarea:focus {
     
 }
 
+.apply-changes:hover > span:before {
+    background: var(--bg-main);
+}
+
 .apply-changes:hover > span:after {
     opacity: 0;
 }
@@ -456,17 +459,10 @@ textarea:focus {
 }
 
 @keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
     to {
         transform: rotate(360deg);
     }
 }
-/* 
-.apply-changes:hover {
-    background: var(--accent);
-} */
 
 .select-font {
     display: flex;
