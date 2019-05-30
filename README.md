@@ -7,10 +7,10 @@
 
 Type-X is a Chrome Extension that makes it easy and efficient to test local fonts on any website.
 
-- Browse comfortably, with blazing-fast font injection
-- Use your local fonts or add custom font files directly
-- Take full control over how you apply your fonts with custom CSS selectors and styles
-- Avoid "tofu" from icon fonts with preset and custom selectors to ignore icon elements
+- Browse comfortably to experience your own fonts in context, with blazing-fast font injection and a one-click override.
+- Use your local fonts or add custom font files directly to test real web font files – WOFF & WOFF2 included (all fonts stay on your computer).
+- Take full control over how you apply your fonts with custom CSS selectors and styles.
+- Avoid "tofu" from icon fonts with preset and custom selectors to ignore icon elements.
 
 ![Type-X in use to apply font overrides to Wikipedia](design/typex-demo.gif)
 
