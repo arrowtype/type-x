@@ -283,6 +283,10 @@ fieldset {
     border-bottom: 1px solid var(--separator);
 }
 
+fieldset:not(.show-font-details) {
+    height: 3rem;
+}
+
 input,
 textarea {
     border: 0;
@@ -333,8 +337,9 @@ textarea:focus {
 }
 
 .overrides {
+    height: 3rem;
     background: var(--bg-main);
-    padding: var(--item-padding-tall);
+    padding: 0 var(--spacing-unit);
     display: flex;
     align-items: center;
     border-bottom: 1px solid var(--separator);
@@ -349,14 +354,14 @@ textarea:focus {
 .add-font {
     flex: none;
     border-radius: 50%;
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 2rem;
+    height: 2rem;
     transition: color var(--speed-2), background var(--speed-2);
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: -.25rem;
+    margin: -0.25rem -0.5rem;
 }
 
 .add-font:hover {
@@ -527,6 +532,10 @@ textarea:focus {
 .font-title button {
     width: 100%;
     text-align: left;
+    width: calc( 100% + 2 * var(--spacing-unit) );
+    text-align: left;
+    padding: var(--spacing-unit);
+    margin:  calc( -1 * var(--spacing-unit));
 }
 
 .font-title span {
@@ -619,6 +628,12 @@ textarea:focus {
     color: var(--text-p3);
     font-size: var(--t2);
 }
+/* 
+.ignores:not(.show-blacklist) {
+    height: 3rem;
+    display: flex;
+    align-items: center;
+} */
 
 .blacklist-container {
     display: none;
