@@ -397,7 +397,7 @@ textarea:focus {
     position: relative;
 }
 
-/* /* "inside space" on button */
+/* "inside space" on button */
 .apply-changes > span:before {
     content: '';
     background: var(--bg-alt);
@@ -415,8 +415,8 @@ textarea:focus {
 .apply-changes > span:after {
     content: '';
     background: var(--magic);
-    width: calc(100%);
-    height: calc(100%);
+    width: 100%;
+    height: 100%;
     display: flex;
     position: absolute;
     top: 0;
