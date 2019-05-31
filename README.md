@@ -2,7 +2,7 @@
     <img alt="type-x icon" src="design/branding/toolbar-icons/typex-active@128.png" width="64" />
 </p>
 <h1 align="center">
-  Type-X: Test your fonts across the web!
+  Type-X: test your fonts across the web!
 </h1>
 
 Type-X is a Chrome Extension that makes it easy and efficient to test local fonts on any website.
