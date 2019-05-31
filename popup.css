@@ -378,7 +378,7 @@ textarea:focus {
     margin-right: var(--spacing-unit-half);
     color: var(--text-p1);
     opacity: 0;
-    transition: opacity 500ms; /* this causes massive delay when in header. weird.*/
+    transition: opacity 500ms;
     pointer-events: none;
     --wght: "wght" 600;
 }
@@ -387,7 +387,6 @@ textarea:focus {
     pointer-events: auto;
     opacity: 1;
 }
-
 
 .apply-changes > span {
     display: flex;
@@ -428,7 +427,7 @@ textarea:focus {
     transition: opacity 0.5s;
 }
 
-.apply-changes span span {
+.apply-changes .button-text {
     position: relative;
     z-index: 2;
 }
@@ -456,8 +455,6 @@ textarea:focus {
 .apply-changes:hover > span:after {
     opacity: 0;
 }
-
-
 
 .apply-changes.show:hover svg {
     animation: spin 0.4s forwards;
@@ -628,12 +625,6 @@ textarea:focus {
     color: var(--text-p3);
     font-size: var(--t2);
 }
-/* 
-.ignores:not(.show-blacklist) {
-    height: 3rem;
-    display: flex;
-    align-items: center;
-} */
 
 .blacklist-container {
     display: none;
