@@ -42,9 +42,9 @@ If you wish to develop or edit the extension itself, you can clone this repo and
 
 ### Basics
 
-Click the switch to activate font overrides!
+Click the switch to activate font overrides! Click it again to remove your overrides.
 
-Click the menu icon to control your font overrides.
+Click the menu icon (`☰`) to control your font overrides.
 
 ### Font Overrides
 
@@ -52,7 +52,7 @@ Type-X can have one or more font overrides at a given time, and these overrides 
 
 To add a new override, click the `+` button. 
 
-To customize an override, click the `〉` icon to expand it.
+To customize an override, click the `›` icon to expand it.
 
 To remove an override, expand one of the font overrides and click `Delete`. Note: deleting an override does not delete the font file, even if you have loaded the font file directly into the extension.
 
