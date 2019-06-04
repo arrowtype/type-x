@@ -173,7 +173,7 @@ header {
     text-align: left;
     flex: auto;
     font-size: var(--t2);
-    padding: 0 var(--spacing-unit);
+    padding-left: var(--spacing-unit);
     color: var(--text-p2);
     font-variation-settings: "XPRN" 1, "wght" 600, "slnt" 1;
     text-transform: uppercase;
@@ -254,7 +254,8 @@ header {
 
 .show-fonts svg {
     vertical-align: middle;
-    width: 1.25em;
+    width: 16px;
+    height: 16px;
 }
 
 .show-fonts path {
@@ -280,6 +281,10 @@ fieldset {
     width: 100%;
     background: var(--bg-main);
     border-bottom: 1px solid var(--separator);
+}
+
+fieldset:not(.show-font-details) {
+    height: 3rem;
 }
 
 input,
@@ -332,8 +337,9 @@ textarea:focus {
 }
 
 .overrides {
+    height: 3rem;
     background: var(--bg-main);
-    padding: var(--item-padding-tall);
+    padding: 0 var(--spacing-unit);
     display: flex;
     align-items: center;
     border-bottom: 1px solid var(--separator);
@@ -348,14 +354,14 @@ textarea:focus {
 .add-font {
     flex: none;
     border-radius: 50%;
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 2rem;
+    height: 2rem;
     transition: color var(--speed-2), background var(--speed-2);
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: -.25rem;
+    margin: -0.25rem -0.5rem;
 }
 
 .add-font:hover {
@@ -369,14 +375,12 @@ textarea:focus {
 
 .apply-changes {
     flex: none;
-    margin-right: auto;
-    margin-left: 0.25rem;
-    background: var(--magic);
-    padding: var(--spacing-unit-half);
+    margin-right: var(--spacing-unit-half);
     color: var(--text-p1);
     opacity: 0;
     transition: opacity 500ms;
     pointer-events: none;
+    --wght: "wght" 600;
 }
 
 .apply-changes.show {
@@ -384,20 +388,82 @@ textarea:focus {
     opacity: 1;
 }
 
-.apply-changes span {
+.apply-changes > span {
     display: flex;
     align-items: center;
+    background: var(--bg-main);
+    padding: calc( var(--spacing-unit-half) + 2px );
+    border-radius: 999px;
+    position: relative;
+}
+
+/* "inside space" on button */
+.apply-changes > span:before {
+    content: '';
+    background: var(--bg-alt);
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    display: flex;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    border-radius: 999px;
+    z-index: 1;
+}
+
+/* "border" on button */
+.apply-changes > span:after {
+    content: '';
+    background: var(--magic);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 999px;
+    z-index: 0;
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+.apply-changes .button-text {
+    position: relative;
+    z-index: 2;
 }
 
 .apply-changes svg {
-    width: 0.75rem;
-    height: 0.75rem;
-    margin-right: 0.25rem;
+    width: 16px; 
+    height: 16px;
+    margin-right: var(--spacing-unit-half);
     stroke: currentColor;
+    z-index: 1;
+}
+.apply-changes path {
+    box-shadow: 0 0 2px var(--accent-shadow);
 }
 
-.apply-changes:hover {
-    background: var(--accent);
+.apply-changes:hover > span {
+    color: var(--accent);
+    
+}
+
+.apply-changes:hover > span:before {
+    background: var(--bg-main);
+}
+
+.apply-changes:hover > span:after {
+    opacity: 0;
+}
+
+.apply-changes.show:hover svg {
+    animation: spin 0.4s forwards;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .select-font {
@@ -424,6 +490,12 @@ textarea:focus {
     background-position: calc(100% - 0.5rem) 50%;
     background-repeat: no-repeat;
     background-size: 0.75rem;
+}
+
+@media (prefers-color-scheme: light) { 
+    .select-font select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 11l5-5M3 6l5 5' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    }
 }
 
 .select-font-button {
@@ -457,6 +529,10 @@ textarea:focus {
 .font-title button {
     width: 100%;
     text-align: left;
+    width: calc( 100% + 2 * var(--spacing-unit) );
+    text-align: left;
+    padding: var(--spacing-unit);
+    margin:  calc( -1 * var(--spacing-unit));
 }
 
 .font-title span {
