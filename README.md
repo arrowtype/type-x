@@ -40,13 +40,25 @@ If you wish to develop or edit the extension itself, you can clone this repo and
 
 ## Usage
 
-### `Font Overrides`: control which fonts override what
+### Basics
+
+Click the switch to activate font overrides!
+
+Click the menu icon to control your font overrides.
+
+### Font Overrides
 
 Type-X can have one or more font overrides at a given time, and these overrides are applied to all web pages you visit with Type-X activated.
 
-To add a new override, click the `+` button. To remove an override, expand one of the font overrides and click `DELETE`. 
+To add a new override, click the `+` button. 
 
-Note: deleting an override does not delete the font file, even if you have loaded the font file directly into the extension.
+To customize an override, click the `〉` icon to expand it.
+
+To remove an override, expand one of the font overrides and click `Delete`. Note: deleting an override does not delete the font file, even if you have loaded the font file directly into the extension.
+
+#### Apply edits (visible after any change)
+
+If you have made a change to a font override, this button will appear in the top bar. Click it to apply your changes.
 
 #### Font menu
 
@@ -58,7 +70,7 @@ If you wish to load a specific font file (e.g. to test `coolfont-italic.woff2`),
 
 Note: if you have loaded *a lot* of fonts, it is possible you may eventually hit a slowdown. In this case, see Installation instructions above to install this in Developer Mode.
 
-#### `ELEMENTS`: Targeting specific items to style
+#### `Elements`: Targeting specific items to style
 
 If you are adding font overrides, you may want to override specific parts of the web in specific ways. By default, Type-X styles all "code" elements in a monospaced font, and everything else in a proportional (natural-width) font.
 
@@ -76,7 +88,7 @@ a, button
 
 Using CSS selectors requires some knowledge of HTML and CSS, but you can do a lot by knowing just a few basics. Mozilla writes excellent guides to web technology, and if you'd like to learn more about selectors, take a look at their article [Introduction to CSS: Simple Selectors](https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Simple_selectors). Often, you may need to inspect an element to know how to target it with a CSS Selector. For this, Chrome's _Inspect_ tool is very useful – [here's an introduction to inspecting elements in Chrome](https://developers.google.com/web/tools/chrome-devtools/dom/).
 
-#### `CSS STYLES`: Controlling styles of targeted items
+#### `CSS styles`: Controlling styles of targeted items
 
 You may want to control styles such as weight, size, or color in overridden text. If so, you can use CSS style properties to do so. For instance, if you want to make all text affected by a certain font override into bold, 20px, black text, you could use this style:
 
@@ -88,7 +100,7 @@ color: black;
 
 Of course, using fewer style overrides is often better, so that you see your chosen font while disrupting a web page's styles as little as possible.
 
-#### `Selectors to Ignore`
+#### `Selectors to ignore`
 
 This field is primarly here to help you avoid override elements which rely on icon fonts, as this can result in "tofu" – empty rectangles where a particular font doesn't support a certain glyph.
 
