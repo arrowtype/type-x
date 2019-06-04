@@ -28,13 +28,73 @@ Whatever reason you want to override fonts, Type-X makes it fast, easy, and fun.
 
 Find the Type-X extension in the [Chrome web store](https://chrome.google.com/webstore/category/extensions). (A direct link will be added once it's released.)
 
-Alternatively, you can clone this repo and use it in Chrome:
+### Install in Developer Mode
+
+If you wish to develop or edit the extension itself, you can clone this repo and use it in Chrome:
 
 1. Git Clone the repo
 2. Go to chrome://extensions/ in Chrome
 3. Turn on "Developer Mode"
 4. Click "Load unpacked"
 5. Navigate to the folder of the repo you cloned
+
+## Usage
+
+### `Font Overrides`: control which fonts override what
+
+Type-X can have one or more font overrides at a given time, and these overrides are applied to all web pages you visit with Type-X activated.
+
+To add a new override, click the `+` button. To remove an override, expand one of the font overrides and click `DELETE`. 
+
+Note: deleting an override does not delete the font file, even if you have loaded the font file directly into the extension.
+
+#### Font menu
+
+Select any font that is local to your computer, or any font that you have loaded into the extension.
+
+#### Loading fonts
+
+If you wish to load a specific font file (e.g. to test `coolfont-italic.woff2`), click the `load` icon next to the font menu.
+
+Note: if you have loaded *a lot* of fonts, it is possible you may eventually hit a slowdown. In this case, see Installation instructions above to install this in Developer Mode.
+
+#### `ELEMENTS`: Targeting specific items to style
+
+If you are adding font overrides, you may want to override specific parts of the web in specific ways. By default, Type-X styles all "code" elements in a monospaced font, and everything else in a proportional (natural-width) font.
+
+Maybe you want to style headings in a display font, like Papyrus. You could get pretty close by using something like the following:
+
+```
+h1, h1 *, h2, h2 *, h3, h3 *
+```
+
+Maybe you want to target all links on a page. You could probably get close with selectors like this:
+
+```
+a, button
+```
+
+Using CSS selectors requires some knowledge of HTML and CSS, but you can do a lot by knowing just a few basics. Mozilla writes excellent guides to web technology, and if you'd like to learn more about selectors, take a look at their article [Introduction to CSS: Simple Selectors](https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Simple_selectors). Often, you may need to inspect an element to know how to target it with a CSS Selector. For this, Chrome's _Inspect_ tool is very useful – [here's an introduction to inspecting elements in Chrome](https://developers.google.com/web/tools/chrome-devtools/dom/).
+
+#### `CSS STYLES`: Controlling styles of targeted items
+
+You may want to control styles such as weight, size, or color in overridden text. If so, you can use CSS style properties to do so. For instance, if you want to make all text affected by a certain font override into bold, 20px, black text, you could use this style:
+
+```
+font-weight: bold;
+font-size: 20px;
+color: black;
+```
+
+Of course, using fewer style overrides is often better, so that you see your chosen font while disrupting a web page's styles as little as possible.
+
+#### `Selectors to Ignore`
+
+This field is primarly here to help you avoid override elements which rely on icon fonts, as this can result in "tofu" – empty rectangles where a particular font doesn't support a certain glyph.
+
+Several common or notable situations are already ignored with the pre-supplied selector list. If you come across other icon tofu, you can use this field to ignore certain elements, so you can continue happily browsing with overrides intact.
+
+Currently, selectors in this list must be direct (not combined) selectors. That is, you can use `.icon` to ignore any element with the class of `icon`, but not `.icon a`, `#menu li > span`, `buttons *`, etc.
 
 ## Contributing
 
