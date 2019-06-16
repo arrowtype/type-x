@@ -5,7 +5,7 @@
   Type-X: test your fonts across the web!
 </h1>
 
-Type-X is a Chrome extension that makes it easy and efficient to test local fonts on any website.
+Type-X is a Google Chrome extension that makes it easy and efficient to test local fonts on any website.
 
 - Browse comfortably to experience your own fonts in context, with blazing-fast font injection and a one-click override.
 - Use your local fonts or add custom font files directly to test real web font files – WOFF & WOFF2 included (all fonts stay on your computer).
