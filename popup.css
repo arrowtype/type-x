@@ -63,16 +63,17 @@
         --bg-input: hsl(230, 3%, 94%);
         --separator: hsl(0, 0%, 80%);
         --shadow: #000000;
-        --accent-shadow: #4c00ff;
+        --accent-shadow: #0050FF;
         --text-p1: #333;
         --text-p2: #444;
         --text-p3: #555;
         --gray-0: hsla(230, 3%, 55%, 1);
         --gray-1: hsla(230, 3%, 76%, 1);
         --gray-2: hsla(230, 3%, 91%, 1);
-        --accent: #4c00ff;
-        --code: hsla(255, 40%, 45%, 1);
-        --destructive: hsla(355, 90%, 64%, 1);
+        --accent: #0050FF;
+        --code: #2f5bbb;
+        --destructive: hsla(230, 3%, 55%, 1); 
+        --magic:#0050FF;
     }
 }
 
