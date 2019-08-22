@@ -55,8 +55,7 @@ showFonts.onclick = () => {
 
 // Show/hide blacklist
 showBlacklist.onclick = () => {
-    // document.querySelector(".blacklist-container").classList.toggle("show");
-    document.querySelector(".ignores").classList.toggle("show-blacklist");
+    document.querySelector(".blacklist").classList.toggle("show");
 }
 
 // Add new font fieldset to form
