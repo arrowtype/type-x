@@ -70,6 +70,7 @@ addFont.onclick = () => {
                 "new": true,
                 "id": randomId,
                 "file": Object.keys(files)[0],
+                "fallback": ["monospace"],
                 "selectors": ["/* Add CSS selectors here */"],
                 "css": "/* Additional styles to apply */"
             };
@@ -210,6 +211,7 @@ function addFormElement(font, files) {
 
     el.querySelector("[name=id]").value = font.id;
     el.querySelector("[name=css]").value = font.css;
+    el.querySelector("[name=fallback]").value = font.fallback;
     el.querySelector("[name=selectors]").value = font.selectors.join(", ");
 
     el.querySelector(".delete-button-container button").onclick = (e) => {
@@ -240,8 +242,10 @@ function saveForm() {
         const newFont = {}
         const inputs = fieldset.querySelectorAll("*[name]");
 
+        const straightInputs = ["id", "css", "file", "fallback"];
+
         for (const input of inputs) {
-            if (input.name === "id" || input.name === "css" || input.name === "file") {
+            if (straightInputs.includes(input.name)) {
                 newFont[input.name] = input.value;
             } else if (input.name === "selectors") {
                 // Selectors should become an array
