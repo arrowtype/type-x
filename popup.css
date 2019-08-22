@@ -72,8 +72,7 @@
         --gray-2: hsla(230, 3%, 91%, 1);
         --accent: #0050FF;
         --code: #2f5bbb;
-        --destructive: hsla(230, 3%, 55%, 1); 
-        --magic:#0050FF;
+        --destructive: hsla(230, 3%, 55%, 1);
     }
 }
 
