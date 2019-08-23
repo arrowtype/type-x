@@ -178,6 +178,9 @@ function addFormElement(font, files) {
     const dropdown = document.createElement("select");
     dropdown.setAttribute("name", "file");
     dropdown.setAttribute("id", `file${font.id}`);
+    dropdown.onchange = (e) => {
+        e.target.closest("fieldset").querySelector(".font-name-title").innerText = e.target.value;
+    };
 
     const extensionGroup = document.createElement("optgroup");
     extensionGroup.setAttribute("label", "Custom fonts:");
@@ -200,10 +203,6 @@ function addFormElement(font, files) {
         localGroup.append(option);
     }
     dropdown.append(localGroup);
-
-    dropdown.onchange = (e) => {
-        e.target.closest("fieldset").querySelector(".font-name-title").innerText = e.target.value;
-    };
 
     fontSelect.replaceWith(dropdown);
 
@@ -296,6 +295,7 @@ function grabFont(e) {
                     dropdown.value = name;
                     dropdown.dispatchEvent(new Event("change"));
                     container.classList.remove("highlight");
+                    showChange(true);
                 });
             }
         );
