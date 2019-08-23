@@ -277,6 +277,15 @@ function grabFont(e) {
     const container = e.target.closest("fieldset");
     const fontId = container.dataset.fontid;
 
+    container.classList.remove("highlight");
+
+    // Check if filetype is allowed
+    const allowedExt = ["ttf","otf","eot","woff","woff2"];
+    const ext = name.split('.').pop().toLowerCase();
+    if(!allowedExt.includes(ext)) {
+        return false;
+    }
+
     const reader = new FileReader();
     reader.onload = ({
         target
@@ -290,12 +299,11 @@ function grabFont(e) {
                 chrome.storage.local.set({
                     "files": files
                 }, () => {
+                    showChange(true);
                     updateFontDropdowns(name);
                     const dropdown = document.querySelector(`#file${fontId}`);
                     dropdown.value = name;
                     dropdown.dispatchEvent(new Event("change"));
-                    container.classList.remove("highlight");
-                    showChange(true);
                 });
             }
         );
