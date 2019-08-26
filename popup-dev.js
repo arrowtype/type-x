@@ -207,7 +207,10 @@ function addFormElement(font, files) {
     fontSelect.replaceWith(dropdown);
 
     el.querySelector("[name=newfile]").dataset.fontid = font.id;
-    el.querySelector("[name=newfile]").onchange = grabFont;
+    el.querySelector("[name=newfile]").onchange = (e) => {
+        grabFont(e);
+        grabVariableData(e, e.target.closest("fieldset"));
+    };
 
     el.querySelector("[name=id]").value = font.id;
     el.querySelector("[name=css]").value = font.css;
@@ -226,6 +229,19 @@ function addFormElement(font, files) {
         el.querySelector("fieldset").classList.add("show-font-details");
     }
 
+    // Add variable sliders
+    for (const axisData in font.axes) {
+        const axis = {
+            id: font.axes[axisData].id,
+            name: font.axes[axisData].name,
+            min: font.axes[axisData].min,
+            max: font.axes[axisData].max,
+            value: font.axes[axisData].value
+        };
+
+        addSlider(axis, el);
+    }
+
     usedFonts.prepend(el);
 }
 
@@ -240,14 +256,28 @@ function saveForm() {
     for (const fieldset of fieldsets) {
         const newFont = {}
         const inputs = fieldset.querySelectorAll("*[name]");
+        const axes = [];
 
         for (const input of inputs) {
             if (input.name === "id" || input.name === "css" || input.name === "file") {
                 newFont[input.name] = input.value;
+            } else if (input.name.startsWith("var-")) {
+                const name = input.name.replace("var-", "");
+                const axis = {
+                    id: name,
+                    name: input.dataset.name,
+                    min: input.min,
+                    max: input.max,
+                    value: input.value
+                };
+                axes.push(axis);
             } else if (input.name === "selectors") {
                 // Selectors should become an array
                 newFont["selectors"] = input.value.split(",").map(i => i.trim());
             }
+        }
+        if(axes.len !== 0) {
+            newFont["axes"] = axes;
         }
         newFonts.unshift(newFont);
     }
@@ -270,8 +300,6 @@ function grabFont(e) {
     const file = e.target.files[0];
     const name = file.name;
     const fontId = e.target.dataset.fontid;
-
-    grabVariableData(file, fontId);
 
     const reader = new FileReader();
     reader.onload = ({
@@ -299,29 +327,50 @@ function grabFont(e) {
 
 // Analyse font for variable axes, add form inputs
 // for them
-function grabVariableData(file, fontId) {
+function grabVariableData(e, parent) {
+    const file = e.target.files[0];
     let font = false;
     blobToBuffer(file, (error, buffer) => {
         try {
             font = fontkit.create(buffer);
 
-            const axes = {};
-            for (const axis in font.variationAxes) {
-                axes[axis] = {
-                    name: font.variationAxes[axis].name,
-                    min: font.variationAxes[axis].min,
-                    max: font.variationAxes[axis].max,
-                    default: font.variationAxes[axis].default,
-                    value: font.variationAxes[axis].default
-                };
-            }
+            // Clean out previous sliders
+            document.querySelector(".variable-sliders").innerHTML = "";
 
-            console.log(axes);
-            return axes;
+            for (const axisData in font.variationAxes) {
+                const axis = {
+                    id: axisData,
+                    name: font.variationAxes[axisData].name,
+                    min: font.variationAxes[axisData].min,
+                    max: font.variationAxes[axisData].max,
+                    value: font.variationAxes[axisData].default
+                };
+
+                addSlider(axis, parent);
+            }
          } catch (e) {
             console.log("Failed to parse font.");
         }
     });
+}
+
+function addSlider(axis, parent) {
+    const variableSliders = parent.querySelector(".variable-sliders");
+    const template = document.querySelector("#variableSlider");
+    const el = document.importNode(template.content, true);
+
+    const input = el.querySelector("input");
+    const label = el.querySelector("label");
+
+    label.innerText = axis.name;
+
+    input.name = `var-${axis.id}`;
+    input.value = axis.value;
+    input.min = axis.min;
+    input.max = axis.max;
+    input.dataset.name = axis.name;
+
+    variableSliders.prepend(el);
 }
 
 // Initialise popup

@@ -287,7 +287,7 @@ fieldset:not(.show-font-details) {
     height: 3rem;
 }
 
-input,
+input[type=text],
 textarea {
     border: 0;
     outline: 0;
@@ -307,7 +307,7 @@ textarea:last-of-type {
     margin-bottom: 0;
 }
 
-input {
+input[type=text] {
     width: calc(100% + 0.5rem);
     background: var(--gray-2);
 }
@@ -334,6 +334,20 @@ textarea:focus {
 textarea:focus {
     border: 1px var(--separator) solid;
     background: var(--bg-alt);
+}
+
+.variable-slider {
+    display: flex;
+    margin-top: 0.125rem;
+}
+
+.variable-slider label {
+    min-width: 30%;
+    padding-right: var(--spacing-unit-half);
+}
+
+.variable-slider input {
+    flex: auto;
 }
 
 .overrides {
@@ -433,7 +447,7 @@ textarea:focus {
 }
 
 .apply-changes svg {
-    width: 16px; 
+    width: 16px;
     height: 16px;
     margin-right: var(--spacing-unit-half);
     stroke: currentColor;
@@ -445,7 +459,7 @@ textarea:focus {
 
 .apply-changes:hover > span {
     color: var(--accent);
-    
+
 }
 
 .apply-changes:hover > span:before {
@@ -492,7 +506,7 @@ textarea:focus {
     background-size: 0.75rem;
 }
 
-@media (prefers-color-scheme: light) { 
+@media (prefers-color-scheme: light) {
     .select-font select {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 11l5-5M3 6l5 5' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
     }
