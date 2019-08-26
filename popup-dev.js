@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import fontkit from "fontkit";
-
+import blobToBuffer from "blob-to-buffer";
 
 const activateFonts = document.querySelector("#activateFonts");
 const showFonts = document.querySelector("#showFonts");
 const addFont = document.querySelector("#addFont");
 const showBlacklist = document.querySelector("#showBlacklist");
-const fontFiles = {};
 const localFonts = {};
 
 // Get current fonts from storage and show them in the popup
@@ -272,6 +271,8 @@ function grabFont(e) {
     const name = file.name;
     const fontId = e.target.dataset.fontid;
 
+    grabVariableData(file, fontId);
+
     const reader = new FileReader();
     reader.onload = ({
         target
@@ -296,9 +297,33 @@ function grabFont(e) {
     reader.readAsDataURL(file);
 }
 
+// Analyse font for variable axes, add form inputs
+// for them
+function grabVariableData(file, fontId) {
+    let font = false;
+    blobToBuffer(file, (error, buffer) => {
+        try {
+            font = fontkit.create(buffer);
+
+            const axes = {};
+            for (const axis in font.variationAxes) {
+                axes[axis] = {
+                    name: font.variationAxes[axis].name,
+                    min: font.variationAxes[axis].min,
+                    max: font.variationAxes[axis].max,
+                    default: font.variationAxes[axis].default,
+                    value: font.variationAxes[axis].default
+                };
+            }
+
+            console.log(axes);
+            return axes;
+         } catch (e) {
+            console.log("Failed to parse font.");
+        }
+    });
+}
+
 // Initialise popup
 showStatus(true);
 initForm();
-
-console.log(fontkit);
-console.log("banaan");
