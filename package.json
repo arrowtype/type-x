@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "browserify -e index.js -o fk.js"
+    "dev": "browserify -e popup-dev.js -o popup.js"
   },
   "dependencies": {
     "blob-to-buffer": "^1.2.8",
