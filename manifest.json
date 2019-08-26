@@ -3,6 +3,7 @@
     "version": "1.1",
     "description": "Swap out fonts with Recursive",
     "manifest_version": 2,
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "permissions": [
         "activeTab",
         "webNavigation",
