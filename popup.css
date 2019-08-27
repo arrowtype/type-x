@@ -433,7 +433,7 @@ textarea:focus {
 }
 
 .apply-changes svg {
-    width: 16px; 
+    width: 16px;
     height: 16px;
     margin-right: var(--spacing-unit-half);
     stroke: currentColor;
@@ -445,7 +445,6 @@ textarea:focus {
 
 .apply-changes:hover > span {
     color: var(--accent);
-    
 }
 
 .apply-changes:hover > span:before {
@@ -464,6 +463,12 @@ textarea:focus {
     to {
         transform: rotate(360deg);
     }
+}
+
+/* Font */
+
+.font.highlight {
+    opacity: 0.5;
 }
 
 .select-font {
@@ -492,7 +497,7 @@ textarea:focus {
     background-size: 0.75rem;
 }
 
-@media (prefers-color-scheme: light) { 
+@media (prefers-color-scheme: light) {
     .select-font select {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 11l5-5M3 6l5 5' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
     }
@@ -501,7 +506,9 @@ textarea:focus {
 .select-font-button {
     flex: none;
     margin-left: 0.25em;
-    width: 1.5rem;
+    padding-left: var(--spacing-unit-half);
+    padding-right: var(--spacing-unit-half);
+    white-space: nowrap;
     height: 1.5rem;
     overflow: hidden;
     background: transparent;
@@ -517,6 +524,7 @@ textarea:focus {
 
 .select-font-button svg {
     width: 100%;
+    margin-right: var(--spacing-unit-half);
 }
 
 .select-font-button input {
