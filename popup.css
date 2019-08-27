@@ -612,7 +612,6 @@ textarea:focus {
     margin-right: 0.25em;
     transform: translateY(-1px);
     stroke: currentColor;
-    path: currentColor;
 }
 
 .additional-button-container .delete-font g.lid {
