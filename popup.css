@@ -465,6 +465,12 @@ textarea:focus {
     }
 }
 
+/* Font */
+
+.font.highlight {
+    opacity: 0.5;
+}
+
 .select-font {
     display: flex;
     align-items: center;
@@ -500,7 +506,9 @@ textarea:focus {
 .select-font-button {
     flex: none;
     margin-left: 0.25em;
-    width: 1.5rem;
+    padding-left: var(--spacing-unit-half);
+    padding-right: var(--spacing-unit-half);
+    white-space: nowrap;
     height: 1.5rem;
     overflow: hidden;
     background: transparent;
@@ -516,6 +524,7 @@ textarea:focus {
 
 .select-font-button svg {
     width: 100%;
+    margin-right: var(--spacing-unit-half);
 }
 
 .select-font-button input {
