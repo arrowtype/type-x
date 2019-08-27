@@ -56,7 +56,7 @@
     --speed-2: 0.4s;
 }
 
-@media (prefers-color-scheme: light) {
+@media not (prefers-color-scheme: no-preference) and (prefers-color-scheme: light) {
     :root {
         --bg-main: hsl(230, 3%, 98%);
         --bg-alt: hsl(230, 3%, 93%);
