@@ -14,7 +14,7 @@ Type-X is a Google Chrome extension that makes it easy and efficient to test loc
 
 ![Type-X in use to apply font overrides to Wikipedia](design/typex-demo.gif)
 
-## Why? 
+## Why?
 
 Type designers spend countless hours creating type proofs and fake designs to test their fonts. This is a vital part of the type design process, but sometimes the best way to understand how a font works (and what needs fixing) is to experience it as a reader, not as a designer.
 
@@ -31,14 +31,16 @@ Find the Type-X extension in the [Chrome web store](https://chrome.google.com/we
 Alternatively, you can clone this repo and use it in Chrome:
 
 1. Git Clone the repo
-2. Go to chrome://extensions/ in Chrome
-3. Turn on "Developer Mode"
-4. Click "Load unpacked"
-5. Navigate to the folder of the repo you cloned
+2. Run `yarn` to set up dependencies, then `yarn build` to build
+3. Extension will be saved in the `dist` folder
+4. Go to chrome://extensions/ in Chrome
+5. Turn on "Developer Mode"
+6. Click "Load unpacked"
+7. Navigate to the `dist` folder of the repo you cloned
 
 ## Contributing
 
-Have you found selectors of icon fonts that might be worth adding to the preset "ignore" list?  
+Have you found selectors of icon fonts that might be worth adding to the preset "ignore" list?
 
 Did you get stuck on something?
 
