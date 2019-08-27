@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "browserify -e popup-dev.js -o popup.js"
+    "build": "rm -rf dist/* && cp -a src/* dist && browserify -e src/popup.js -o dist/popup.js"
   },
   "dependencies": {
     "blob-to-buffer": "^1.2.8",
