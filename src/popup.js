@@ -232,17 +232,21 @@ function addFormElement(font, files) {
     }
 
     // Add variable sliders
-    for (const axisData in font.axes) {
-        const axis = {
-            id: font.axes[axisData].id,
-            name: font.axes[axisData].name,
-            min: font.axes[axisData].min,
-            max: font.axes[axisData].max,
-            value: font.axes[axisData].value
-        };
+    if (font.axes) {
+        const keys = Object.keys(font.axes);
+        keys.sort();
+        for (var i = 0; i < keys.length; ++i) {
+            const axis = {
+                id: keys[i],
+                name: font.axes[keys[i]].name,
+                min: font.axes[keys[i]].min,
+                max: font.axes[keys[i]].max,
+                value: font.axes[keys[i]].value
+            };
 
-        addSlider(axis, el);
-        el.querySelector(".variable-sliders-container").classList.add("show");
+            addSlider(axis, el);
+            el.querySelector(".variable-sliders-container").classList.add("show");
+        }
     }
 
     usedFonts.prepend(el);
@@ -259,7 +263,7 @@ function saveForm() {
     for (const fieldset of fieldsets) {
         const newFont = {}
         const inputs = fieldset.querySelectorAll("*[name]");
-        const axes = [];
+        const axes = {};
 
         for (const input of inputs) {
             if (input.name === "id" || input.name === "css" || input.name === "file") {
@@ -273,13 +277,13 @@ function saveForm() {
                     max: input.max,
                     value: input.value
                 };
-                axes.push(axis);
+                axes[name] = axis;
             } else if (input.name === "selectors") {
                 // Selectors should become an array
                 newFont["selectors"] = input.value.split(",").map(i => i.trim());
             }
         }
-        if(axes.len !== 0) {
+        if (axes.len !== 0) {
             newFont["axes"] = axes;
         }
         newFonts.unshift(newFont);
@@ -340,19 +344,21 @@ function grabVariableData(e, parent) {
             // Clean out previous sliders
             document.querySelector(".variable-sliders").innerHTML = "";
 
-            for (const axisData in font.variationAxes) {
+            const keys = Object.keys(font.variationAxes);
+            keys.sort();
+            for (var i = 0; i < keys.length; ++i) {
                 const axis = {
-                    id: axisData,
-                    name: font.variationAxes[axisData].name,
-                    min: font.variationAxes[axisData].min,
-                    max: font.variationAxes[axisData].max,
-                    value: font.variationAxes[axisData].default
+                    id: keys[i],
+                    name: font.variationAxes[keys[i]].name,
+                    min: font.variationAxes[keys[i]].min,
+                    max: font.variationAxes[keys[i]].max,
+                    value: font.variationAxes[keys[i]].default
                 };
 
                 addSlider(axis, parent);
                 parent.querySelector(".variable-sliders-container").classList.add("show");
             }
-         } catch (e) {
+        } catch (e) {
             console.log("Failed to parse font.");
         }
     });
@@ -380,7 +386,7 @@ function addSlider(axis, parent) {
         value.innerText = e.target.value;
     }
 
-    variableSliders.prepend(el);
+    variableSliders.append(el);
 }
 
 // Initialise popup
