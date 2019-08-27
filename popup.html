@@ -107,14 +107,13 @@
                         Drop font
                     </label>
                 </div>
-                <label class="all-caps">Fallback fonts</label>
-                <textarea rows="1" name="fallback"></textarea>
                 <label class="all-caps">Elements</label>
                 <textarea rows="1" name="selectors"></textarea>
                 <label class="all-caps">CSS Styles</label>
                 <textarea rows="3" name="css"></textarea>
-                <div class="delete-button-container">
-                    <button type="button" class="all-caps">
+                <div class="additional-button-container">
+                    <button type="button" class="all-caps show-fallbacks">Fallback fonts...</button>
+                    <button type="button" class="all-caps delete-font">
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
                                 stroke="#E57880">
@@ -131,6 +130,7 @@
                         </span>
                     </button>
                 </div>
+                <textarea rows="1" name="fallback" class="fallback-fonts"></textarea>
             </div>
         </fieldset>
     </template>

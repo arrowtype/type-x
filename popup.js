@@ -214,7 +214,11 @@ function addFormElement(font, files) {
     el.querySelector("[name=fallback]").value = font.fallback;
     el.querySelector("[name=selectors]").value = font.selectors.join(", ");
 
-    el.querySelector(".delete-button-container button").onclick = (e) => {
+    el.querySelector(".show-fallbacks").onclick = (e) => {
+        e.target.closest("fieldset").classList.toggle("show-font-fallbacks");
+    };
+
+    el.querySelector(".delete-font").onclick = (e) => {
         e.target.closest("fieldset").remove();
         showChange(true);
     };
