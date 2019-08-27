@@ -208,8 +208,10 @@ function addFormElement(font, files) {
 
     el.querySelector("[name=newfile]").dataset.fontid = font.id;
     el.querySelector("[name=newfile]").onchange = (e) => {
+        const parent = e.target.closest("fieldset");
+        parent.querySelector(".variable-sliders-container").classList.remove("show");
         grabFont(e);
-        grabVariableData(e, e.target.closest("fieldset"));
+        grabVariableData(e, parent);
     };
 
     el.querySelector("[name=id]").value = font.id;
@@ -240,6 +242,7 @@ function addFormElement(font, files) {
         };
 
         addSlider(axis, el);
+        el.querySelector(".variable-sliders-container").classList.add("show");
     }
 
     usedFonts.prepend(el);
@@ -347,6 +350,7 @@ function grabVariableData(e, parent) {
                 };
 
                 addSlider(axis, parent);
+                parent.querySelector(".variable-sliders-container").classList.add("show");
             }
          } catch (e) {
             console.log("Failed to parse font.");
@@ -361,6 +365,7 @@ function addSlider(axis, parent) {
 
     const input = el.querySelector("input");
     const label = el.querySelector("label");
+    const value = el.querySelector(".slider-value");
 
     label.innerText = axis.name;
 
@@ -369,6 +374,11 @@ function addSlider(axis, parent) {
     input.min = axis.min;
     input.max = axis.max;
     input.dataset.name = axis.name;
+    value.innerText = axis.value;
+
+    input.oninput = (e) => {
+        value.innerText = e.target.value;
+    }
 
     variableSliders.prepend(el);
 }

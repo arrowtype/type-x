@@ -106,7 +106,10 @@
                         <input type="file" name="newfile" value="" accept=".ttf,.otf,.eot,.woff,.woff2">
                     </label>
                 </div>
-                <div class="variable-sliders"></div>
+                <div class="variable-sliders-container">
+                    <label class="all-caps">Variable</label>
+                    <div class="variable-sliders"></div>
+                </div>
                 <label class="all-caps">Elements</label>
                 <textarea rows="1" name="selectors">/* Use CSS selectors to target HTML elements */</textarea>
                 <label class="all-caps">CSS Styles</label>
@@ -136,7 +139,8 @@
     <template id="variableSlider">
         <div class="variable-slider">
             <label for="slider-label"></label>
-            <input type="range" name="" min="" max="" value="" data-name="">
+            <input type="range" name="" min="" max="" value="" data-name="" step=".01">
+            <span class="slider-value"></span>
         </div>
     </template>
 

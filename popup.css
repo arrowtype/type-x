@@ -288,7 +288,8 @@ fieldset:not(.show-font-details) {
 }
 
 input[type=text],
-textarea {
+textarea,
+.variable-slider {
     border: 0;
     outline: 0;
     width: calc(100% + 1rem);
@@ -336,6 +337,14 @@ textarea:focus {
     background: var(--bg-alt);
 }
 
+.variable-sliders-container {
+    display: none;
+}
+
+.variable-sliders-container.show {
+    display: block;
+}
+
 .variable-slider {
     display: flex;
     margin-top: 0.125rem;
@@ -344,6 +353,12 @@ textarea:focus {
 .variable-slider label {
     min-width: 30%;
     padding-right: var(--spacing-unit-half);
+}
+
+.slider-value {
+    min-width: 20%;
+    padding-left: var(--spacing-unit-half);
+    text-align: right;
 }
 
 .variable-slider input {

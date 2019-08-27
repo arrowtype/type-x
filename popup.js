@@ -44304,8 +44304,6 @@ function addFormElement(font, files) {
     var template = document.querySelector("#newFont");
     var el = document.importNode(template.content, true);
 
-    console.log(font);
-
     el.querySelector(".font-name-title").innerText = font.file || "New font override";
 
     var fontSelect = el.querySelector(".select-font select");
@@ -44344,8 +44342,10 @@ function addFormElement(font, files) {
 
     el.querySelector("[name=newfile]").dataset.fontid = font.id;
     el.querySelector("[name=newfile]").onchange = function (e) {
+        var parent = e.target.closest("fieldset");
+        parent.querySelector(".variable-sliders-container").classList.remove("show");
         grabFont(e);
-        grabVariableData(e, e.target.closest("fieldset"));
+        grabVariableData(e, parent);
     };
 
     el.querySelector("[name=id]").value = font.id;
@@ -44376,6 +44376,7 @@ function addFormElement(font, files) {
         };
 
         addSlider(axis, el);
+        el.querySelector(".variable-sliders-container").classList.add("show");
     }
 
     usedFonts.prepend(el);
@@ -44529,9 +44530,9 @@ function grabVariableData(e, parent) {
                 };
 
                 addSlider(axis, parent);
+                parent.querySelector(".variable-sliders-container").classList.add("show");
             }
         } catch (e) {
-            console.log(e);
             console.log("Failed to parse font.");
         }
     });
@@ -44544,6 +44545,7 @@ function addSlider(axis, parent) {
 
     var input = el.querySelector("input");
     var label = el.querySelector("label");
+    var value = el.querySelector(".slider-value");
 
     label.innerText = axis.name;
 
@@ -44552,6 +44554,11 @@ function addSlider(axis, parent) {
     input.min = axis.min;
     input.max = axis.max;
     input.dataset.name = axis.name;
+    value.innerText = axis.value;
+
+    input.oninput = function (e) {
+        value.innerText = e.target.value;
+    };
 
     variableSliders.prepend(el);
 }

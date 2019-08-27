@@ -152,9 +152,14 @@ function generateStyleSheet(updateExisting, callback) {
 
             for (const font of fonts) {
                 const selectors = [];
+                const axes = [];
 
                 for (const selector of font.selectors) {
                     selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklistSelectors}`);
+                }
+
+                for (const axisData in font.axes) {
+                    axes.push(`'${font.axes[axisData].id}' ${font.axes[axisData].value}`);
                 }
 
                 const stylesheet = `
@@ -166,7 +171,9 @@ function generateStyleSheet(updateExisting, callback) {
                 }
                 ${selectors.join(",")} {
                     font-family: '${font.file}' !important;
+                    ${axes.length ? `font-variation-settings: ${axes.join(",")};` : ""}
                     ${font.css}
+                    ${font.axes}
                 }`
 
                 stylesheets.push(stylesheet);
