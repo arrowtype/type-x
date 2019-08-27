@@ -55,8 +55,7 @@ showFonts.onclick = () => {
 
 // Show/hide blacklist
 showBlacklist.onclick = () => {
-    // document.querySelector(".blacklist-container").classList.toggle("show");
-    document.querySelector(".ignores").classList.toggle("show-blacklist");
+    document.querySelector(".blacklist").classList.toggle("show");
 }
 
 // Add new font fieldset to form
@@ -70,6 +69,7 @@ addFont.onclick = () => {
                 "new": true,
                 "id": randomId,
                 "file": Object.keys(files)[0],
+                "fallback": ["monospace"],
                 "selectors": ["/* Add CSS selectors here */"],
                 "css": "/* Additional styles to apply */"
             };
@@ -211,9 +211,14 @@ function addFormElement(font, files) {
     parentEl.dataset.fontid = font.id;
     el.querySelector("[name=id]").value = font.id;
     el.querySelector("[name=css]").value = font.css;
+    el.querySelector("[name=fallback]").value = font.fallback;
     el.querySelector("[name=selectors]").value = font.selectors.join(", ");
 
-    el.querySelector(".delete-button-container button").onclick = (e) => {
+    el.querySelector(".show-fallbacks").onclick = (e) => {
+        e.target.closest("fieldset").classList.toggle("show-font-fallbacks");
+    };
+
+    el.querySelector(".delete-font").onclick = (e) => {
         e.target.closest("fieldset").remove();
         showChange(true);
     };
@@ -245,8 +250,10 @@ function saveForm() {
         const newFont = {}
         const inputs = fieldset.querySelectorAll("*[name]");
 
+        const straightInputs = ["id", "css", "file", "fallback"];
+
         for (const input of inputs) {
-            if (input.name === "id" || input.name === "css" || input.name === "file") {
+            if (straightInputs.includes(input.name)) {
                 newFont[input.name] = input.value;
             } else if (input.name === "selectors") {
                 // Selectors should become an array

@@ -49,8 +49,8 @@
         </div>
         <form id="fontsForm">
             <div id="usedFonts"></div>
-            <div class="ignores">
-                <div class="ignores-buttons">
+            <div class="blacklist">
+                <div class="blacklist-buttons">
                     <button type="button" id="showBlacklist" class="show-blacklist">
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
@@ -108,11 +108,12 @@
                     </label>
                 </div>
                 <label class="all-caps">Elements</label>
-                <textarea rows="1" name="selectors">/* Use CSS selectors to target HTML elements */</textarea>
+                <textarea rows="1" name="selectors"></textarea>
                 <label class="all-caps">CSS Styles</label>
-                <textarea rows="3" name="css">/* Additional styles to apply */</textarea>
-                <div class="delete-button-container">
-                    <button type="button" class="all-caps">
+                <textarea rows="3" name="css"></textarea>
+                <div class="additional-button-container">
+                    <button type="button" class="all-caps show-fallbacks">Fallback fonts...</button>
+                    <button type="button" class="all-caps delete-font">
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
                                 stroke="#E57880">
@@ -129,6 +130,7 @@
                         </span>
                     </button>
                 </div>
+                <textarea rows="1" name="fallback" class="fallback-fonts"></textarea>
             </div>
         </fieldset>
     </template>

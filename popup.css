@@ -580,17 +580,17 @@ textarea:focus {
     padding-top: var(--spacing-unit-half);
 }
 
-.delete-button-container {
+.additional-button-container {
     font-size: var(--t3);
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding-top: var(--spacing-unit-half);
 }
 
-.delete-button-container button {
+.additional-button-container .delete-font {
     padding: 0.25rem 0.5rem;
-    margin-right: -0.5rem;
     border-radius: 1rem;
+    margin-right: -0.5rem;
     color: var(--destructive);
     transition: background var(--speed-2), color var(--speed-2);
     font-size: var(--t2);
@@ -598,35 +598,34 @@ textarea:focus {
     --wght: "wght" 600;
 }
 
-.delete-button-container button:hover {
+.additional-button-container .delete-font:hover {
     background: var(--bg-alt);
     color: var(--text-p1);
 }
 
-.delete-button-container button span {
+.additional-button-container .delete-font span {
     display: flex;
     align-items: center;
 }
 
-.delete-button-container svg {
+.additional-button-container .delete-font svg {
     margin-right: 0.25em;
     transform: translateY(-1px);
     stroke: currentColor;
-    path: currentColor;
 }
 
-.delete-button-container button g.lid {
+.additional-button-container .delete-font g.lid {
     transition: transform var(--speed-2);
 }
 
-.delete-button-container button:hover g.lid {
+.additional-button-container .delete-font:hover g.lid {
     transform: rotate(-15deg) translate(-15%, 5%);
 }
 
 
-/* Ignores */
+/* Blacklist */
 
-.ignores {
+.blacklist {
     background: var(--bg-main);
     padding: var(--item-padding-tall);
     border-bottom: 1px solid var(--separator);
@@ -636,10 +635,6 @@ textarea:focus {
 
 .blacklist-container {
     display: none;
-}
-
-.show-blacklist .blacklist-container {
-    display: block
 }
 
 .show-blacklist span {
@@ -653,12 +648,25 @@ textarea:focus {
     stroke: currentColor;
 }
 
-.show-blacklist .show-blacklist span {
-    color: var(--text-p2);
+.blacklist.show .blacklist-container {
+    display: block
 }
 
-.show-blacklist .show-blacklist svg {
+.blacklist.show .show-blacklist svg {
+    color: var(--text-p2);
     stroke: var(--accent);
+}
+
+.fallback-fonts {
+    display: none;
+}
+
+.show-font-fallbacks .show-fallbacks {
+    color: var(--accent);
+}
+
+.show-font-fallbacks .fallback-fonts {
+    display: block;
 }
 
 /* Footer */

@@ -157,6 +157,8 @@ function generateStyleSheet(updateExisting, callback) {
                     selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklistSelectors}`);
                 }
 
+                const stack = `${font.file}, ${font.fallback}`;
+
                 const stylesheet = `
                 @font-face {
                     font-family: '${font.file}';
@@ -165,7 +167,7 @@ function generateStyleSheet(updateExisting, callback) {
                     font-stretch: 50% 200%;
                 }
                 ${selectors.join(",")} {
-                    font-family: '${font.file}' !important;
+                    font-family: ${stack} !important;
                     ${font.css}
                 }`
 
