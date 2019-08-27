@@ -474,10 +474,6 @@ textarea:focus {
 
 .apply-changes:hover > span {
     color: var(--accent);
-<<<<<<< HEAD:dist/popup.css
-
-=======
->>>>>>> master:popup.css
 }
 
 .apply-changes:hover > span:before {
