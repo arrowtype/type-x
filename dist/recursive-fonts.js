@@ -25,6 +25,29 @@ const defaultFonts = [{
             ".blob-code", // Github
             ".blob-code *" // Github
         ],
+        "axes": {
+            "wght": {
+                id: "wght",
+                name: "Weight",
+                min: 218,
+                max: 1100,
+                value: 218
+            },
+            "XPRN": {
+                id: "XPRN",
+                name: "Expression",
+                min: 0,
+                max: 1,
+                value: 0
+            },
+            "slnt": {
+                id: "slnt",
+                name: "Slant",
+                min: 0,
+                max: 14,
+                value: 0
+            }
+        },
         "css": "line-height: normal; font-feature-settings: normal;"
     },
     {
@@ -33,6 +56,29 @@ const defaultFonts = [{
         "selectors": [
             "*"
         ],
+        "axes": {
+            "wght": {
+                id: "wght",
+                name: "Weight",
+                min: 218,
+                max: 1100,
+                value: 218
+            },
+            "XPRN": {
+                id: "XPRN",
+                name: "Expression",
+                min: 0,
+                max: 1,
+                value: 0
+            },
+            "slnt": {
+                id: "slnt",
+                name: "Slant",
+                min: 0,
+                max: 14,
+                value: 0
+            }
+        },
         "css": ""
     }
 ];
