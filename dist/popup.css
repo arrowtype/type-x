@@ -587,6 +587,7 @@ textarea:focus {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding-right: var(--spacing-unit-half);
 }
 
 .font-title svg {

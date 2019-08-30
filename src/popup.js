@@ -75,6 +75,8 @@ addFont.onclick = () => {
                 "css": "/* Additional styles to apply */"
             };
 
+            // TODO: add axes here
+
             addFormElement(newFont, files);
             showChange(true);
         }
@@ -180,7 +182,8 @@ function addFormElement(font, files) {
     dropdown.setAttribute("name", "file");
     dropdown.setAttribute("id", `file${font.id}`);
     dropdown.onchange = (e) => {
-        e.target.closest("fieldset").querySelector(".font-name-title").innerText = e.target.value;
+        const parent = e.target.closest("fieldset");
+        parent.querySelector(".font-name-title").innerText = e.target.value;
     };
 
     const extensionGroup = document.createElement("optgroup");
@@ -208,12 +211,7 @@ function addFormElement(font, files) {
     fontSelect.replaceWith(dropdown);
 
     el.querySelector("[name=newfile]").dataset.fontid = font.id;
-    el.querySelector("[name=newfile]").onchange = (e) => {
-        const parent = e.target.closest("fieldset");
-        parent.querySelector(".variable-sliders-container").classList.remove("show");
-        grabFont(e);
-        grabVariableData(e, parent);
-    };
+    el.querySelector("[name=newfile]").onchange = processNewFile;
 
     parentEl.dataset.fontid = font.id;
     el.querySelector("[name=id]").value = font.id;
@@ -234,28 +232,44 @@ function addFormElement(font, files) {
     }
 
     // Add variable sliders
-    if (font.axes) {
-        const keys = Object.keys(font.axes);
+    const axes = font.file in files ? files[font.file].axes : false;
+    addVariableSliders(axes, el);
+
+    parentEl.addEventListener("dragover", highlight, false);
+    parentEl.addEventListener("dragleave", unhighlight, false);
+    parentEl.addEventListener("drop", processNewFile, false);
+
+    usedFonts.prepend(el);
+}
+
+function processNewFile(e) {
+    const parent = e.target.closest("fieldset");
+    grabFont(e);
+    const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
+    const file = files[0]; // Only use first file if multiple are dropped
+    grabVariableData(file, parent);
+}
+
+function addVariableSliders(axes, el) {
+    if (!axes) {
+        el.querySelector(".variable-sliders").innerHTML = "";
+        el.querySelector(".variable-sliders-container").classList.remove("show");
+    } else {
+        const keys = Object.keys(axes);
         keys.sort();
         for (var i = 0; i < keys.length; ++i) {
             const axis = {
                 id: keys[i],
-                name: font.axes[keys[i]].name,
-                min: font.axes[keys[i]].min,
-                max: font.axes[keys[i]].max,
-                value: font.axes[keys[i]].value
+                name: axes[keys[i]].name,
+                min: axes[keys[i]].min,
+                max: axes[keys[i]].max,
+                value: axes[keys[i]].value
             };
 
             addSlider(axis, el);
             el.querySelector(".variable-sliders-container").classList.add("show");
         }
     }
-
-    parentEl.addEventListener("dragover", highlight, false);
-    parentEl.addEventListener("dragleave", unhighlight, false);
-    parentEl.addEventListener("drop", grabFont, false);
-
-    usedFonts.prepend(el);
 }
 
 // Store changes made to fonts
@@ -265,45 +279,56 @@ function saveForm() {
     const form = document.querySelector("#fontsForm");
     const fieldsets = form.querySelectorAll("fieldset");
 
-    // Get new fonts
-    for (const fieldset of fieldsets) {
-        const newFont = {}
-        const inputs = fieldset.querySelectorAll("*[name]");
-        const axes = {};
+    chrome.storage.local.get("files", ({ files }) => {
+        // Get new fonts
+        for (const fieldset of fieldsets) {
+            const newFont = {};
+            const inputs = fieldset.querySelectorAll("*[name]");
+            const axes = {};
+            let name = "";
 
-        for (const input of inputs) {
-            if (input.name === "id" || input.name === "css" || input.name === "file") {
-                newFont[input.name] = input.value;
-            } else if (input.name.startsWith("var-")) {
-                const name = input.name.replace("var-", "");
-                const axis = {
-                    id: name,
-                    name: input.dataset.name,
-                    min: input.min,
-                    max: input.max,
-                    value: input.value
-                };
-                axes[name] = axis;
-            } else if (input.name === "selectors") {
-                // Selectors should become an array
-                newFont["selectors"] = input.value.split(",").map(i => i.trim());
+            for (const input of inputs) {
+                if (input.name === "file") {
+                    newFont[input.name] = input.value;
+                    name = input.value;
+                } else if (input.name === "id" || input.name === "css") {
+                    newFont[input.name] = input.value;
+                } else if (input.name.startsWith("var-")) {
+                    const name = input.name.replace("var-", "");
+                    const axis = {
+                        id: name,
+                        name: input.dataset.name,
+                        min: input.min,
+                        max: input.max,
+                        value: input.value
+                    };
+                    axes[name] = axis;
+                } else if (input.name === "selectors") {
+                    // Selectors should become an array
+                    newFont["selectors"] = input.value.split(",").map(i => i.trim());
+                }
             }
-        }
-        if (axes.len !== 0) {
-            newFont["axes"] = axes;
-        }
-        newFonts.unshift(newFont);
-    }
 
-    // Get blacklist
-    const blacklist = form.querySelector("[name=blacklist]").value.split(",").map(i => i.trim());
+            for (const file in files) {
+                if (file == name) {
+                    files[file].axes = axes;
+                }
+            }
 
-    // Apply new fonts and activate extension
-    chrome.storage.local.set({
-        "fonts": newFonts,
-        "blacklist": blacklist
-    }, () => {
-        updateStatus(true, true);
+            newFonts.unshift(newFont);
+        }
+
+        // Get blacklist
+        const blacklist = form.querySelector("[name=blacklist]").value.split(",").map(i => i.trim());
+
+        // Apply new fonts and activate extension
+        chrome.storage.local.set({
+            "fonts": newFonts,
+            "files": files,
+            "blacklist": blacklist
+        }, () => {
+            updateStatus(true, true);
+        });
     });
 }
 
@@ -319,9 +344,9 @@ function grabFont(e) {
     container.classList.remove("highlight");
 
     // Check if filetype is allowed
-    const allowedExt = ["ttf","otf","eot","woff","woff2"];
+    const allowedExt = ["ttf", "otf", "eot", "woff", "woff2"];
     const ext = name.split('.').pop().toLowerCase();
-    if(!allowedExt.includes(ext)) {
+    if (!allowedExt.includes(ext)) {
         return false;
     }
 
@@ -334,7 +359,9 @@ function grabFont(e) {
             "files", ({
                 files
             }) => {
-                files[name] = target.result;
+                files[name] = {};
+                files[name].file = target.result;
+                files[name].axes = {};
                 chrome.storage.local.set({
                     "files": files
                 }, () => {
@@ -352,9 +379,11 @@ function grabFont(e) {
 
 // Analyse font for variable axes, add form inputs
 // for them
-function grabVariableData(e, parent) {
-    const file = e.target.files[0];
+function grabVariableData(file, parent) {
     let font = false;
+
+    parent.querySelector(".variable-sliders-container").classList.remove("show");
+
     blobToBuffer(file, (error, buffer) => {
         try {
             font = fontkit.create(buffer);
@@ -417,13 +446,6 @@ function unhighlight(e) {
     this.classList.remove("highlight");
     e.preventDefault();
     e.stopPropagation();
-}
-
-function handleDrop(e) {
-    const files = e.dataTransfer.files;
-    // When dropping multiple files, only use the first one
-    const file = files[0];
-    console.log(files);
 }
 
 // Initialise popup

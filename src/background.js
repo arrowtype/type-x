@@ -158,14 +158,14 @@ function generateStyleSheet(updateExisting, callback) {
                     selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklistSelectors}`);
                 }
 
-                for (const axisData in font.axes) {
-                    axes.push(`'${font.axes[axisData].id}' ${font.axes[axisData].value}`);
+                for (const axisData in files[font.file].axes) {
+                    axes.push(`'${files[font.file].axes[axisData].id}' ${files[font.file].axes[axisData].value}`);
                 }
 
                 const stylesheet = `
                 @font-face {
                     font-family: '${font.file}';
-                    src: url('${files[font.file]}');
+                    src: url('${files[font.file].file}');
                     font-weight: 100 900;
                     font-stretch: 50% 200%;
                 }
