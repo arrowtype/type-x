@@ -563,21 +563,30 @@ textarea:focus {
     display: none;
 }
 
+.font-title {
+    width: calc( var(--extension-width) - 2 * var(--spacing-unit) );
+}
+
 .font-title button {
     width: 100%;
     text-align: left;
     width: calc( 100% + 2 * var(--spacing-unit) );
     text-align: left;
     padding: var(--spacing-unit);
-    margin:  calc( -1 * var(--spacing-unit));
+    margin: calc( -1 * var(--spacing-unit));
 }
 
-.font-title span {
+.font-name-title-container{
     display: flex;
     align-items: center;
+}
+
+.font-name-title {
     font-variation-settings: "XPRN" 1, "wght" 500;
     font-size: var(--t1);
-    word-break: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .font-title svg {
