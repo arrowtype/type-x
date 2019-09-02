@@ -423,9 +423,9 @@ function addSlider(axis, parent) {
     label.innerText = axis.name;
 
     input.name = `var-${axis.id}`;
-    input.value = axis.value;
     input.min = axis.min;
     input.max = axis.max;
+    input.value = axis.value;
     input.dataset.name = axis.name;
     value.innerText = axis.value;
 
