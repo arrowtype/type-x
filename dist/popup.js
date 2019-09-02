@@ -44317,7 +44317,19 @@ function addFormElement(font, files) {
     dropdown.setAttribute("id", "file" + font.id);
     dropdown.onchange = function (e) {
         var parent = e.target.closest("fieldset");
-        parent.querySelector(".font-name-title").innerText = e.target.value;
+        var name = e.target.value;
+        parent.querySelector(".font-name-title").innerText = name;
+
+        addVariableSliders(false, parent);
+        chrome.storage.local.get("files", function (_ref5) {
+            var files = _ref5.files;
+
+            for (var file in files) {
+                if (file == name) {
+                    addVariableSliders(files[file].axes, parent);
+                }
+            }
+        });
     };
 
     var extensionGroup = document.createElement("optgroup");
@@ -44385,8 +44397,8 @@ function processNewFile(e) {
 }
 
 function addVariableSliders(axes, el) {
+    el.querySelector(".variable-sliders").innerHTML = "";
     if (!axes) {
-        el.querySelector(".variable-sliders").innerHTML = "";
         el.querySelector(".variable-sliders-container").classList.remove("show");
     } else {
         var keys = Object.keys(axes);
@@ -44413,8 +44425,8 @@ function saveForm() {
     var form = document.querySelector("#fontsForm");
     var fieldsets = form.querySelectorAll("fieldset");
 
-    chrome.storage.local.get("files", function (_ref5) {
-        var files = _ref5.files;
+    chrome.storage.local.get("files", function (_ref6) {
+        var files = _ref6.files;
 
         // Get new fonts
         var _iteratorNormalCompletion5 = true;
@@ -44534,12 +44546,12 @@ function grabFont(e) {
     }
 
     var reader = new FileReader();
-    reader.onload = function (_ref6) {
-        var target = _ref6.target;
+    reader.onload = function (_ref7) {
+        var target = _ref7.target;
 
         // Stick new file in storage
-        chrome.storage.local.get("files", function (_ref7) {
-            var files = _ref7.files;
+        chrome.storage.local.get("files", function (_ref8) {
+            var files = _ref8.files;
 
             files[name] = {};
             files[name].file = target.result;
@@ -44551,7 +44563,7 @@ function grabFont(e) {
                 updateFontDropdowns(name);
                 var dropdown = document.querySelector("#file" + fontId);
                 dropdown.value = name;
-                dropdown.dispatchEvent(new Event("change"));
+                // dropdown.dispatchEvent(new Event("change")); /////////////////////////////
             });
         });
     };

@@ -153,27 +153,30 @@ function generateStyleSheet(updateExisting, callback) {
             for (const font of fonts) {
                 const selectors = [];
                 const axes = [];
+                let stylesheet = "";
 
                 for (const selector of font.selectors) {
                     selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklistSelectors}`);
                 }
 
-                for (const axisData in files[font.file].axes) {
-                    axes.push(`'${files[font.file].axes[axisData].id}' ${files[font.file].axes[axisData].value}`);
+                if(font.file in files) {
+                    for (const axisData in files[font.file].axes) {
+                        axes.push(`'${files[font.file].axes[axisData].id}' ${files[font.file].axes[axisData].value}`);
+                    }
+                    stylesheet += `
+                    @font-face {
+                        font-family: '${font.file}';
+                        src: url('${files[font.file].file}');
+                        font-weight: 100 900;
+                        font-stretch: 50% 200%;
+                    }`;
                 }
 
-                const stylesheet = `
-                @font-face {
-                    font-family: '${font.file}';
-                    src: url('${files[font.file].file}');
-                    font-weight: 100 900;
-                    font-stretch: 50% 200%;
-                }
+                stylesheet += `
                 ${selectors.join(",")} {
                     font-family: '${font.file}' !important;
                     ${axes.length ? `font-variation-settings: ${axes.join(",")};` : ""}
                     ${font.css}
-                    ${font.axes}
                 }`
 
                 stylesheets.push(stylesheet);

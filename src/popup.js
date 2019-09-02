@@ -183,7 +183,17 @@ function addFormElement(font, files) {
     dropdown.setAttribute("id", `file${font.id}`);
     dropdown.onchange = (e) => {
         const parent = e.target.closest("fieldset");
-        parent.querySelector(".font-name-title").innerText = e.target.value;
+        const name = e.target.value;
+        parent.querySelector(".font-name-title").innerText = name;
+
+        addVariableSliders(false, parent);
+        chrome.storage.local.get("files", ({ files }) => {
+            for (const file in files) {
+                if (file == name) {
+                    addVariableSliders(files[file].axes, parent);
+                }
+            }
+        });
     };
 
     const extensionGroup = document.createElement("optgroup");
@@ -251,8 +261,8 @@ function processNewFile(e) {
 }
 
 function addVariableSliders(axes, el) {
+    el.querySelector(".variable-sliders").innerHTML = "";
     if (!axes) {
-        el.querySelector(".variable-sliders").innerHTML = "";
         el.querySelector(".variable-sliders-container").classList.remove("show");
     } else {
         const keys = Object.keys(axes);
@@ -369,7 +379,6 @@ function grabFont(e) {
                     updateFontDropdowns(name);
                     const dropdown = document.querySelector(`#file${fontId}`);
                     dropdown.value = name;
-                    dropdown.dispatchEvent(new Event("change"));
                 });
             }
         );
