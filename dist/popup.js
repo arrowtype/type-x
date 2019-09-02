@@ -44239,7 +44239,7 @@ function buildForm(fonts, files, blacklist) {
 }
 
 // New file uploaded, append to all selects
-function updateFontDropdowns(id) {
+function updateFontDropdowns(id, name) {
     var optgroups = document.querySelectorAll(".select-font select optgroup:first-child");
     var _iteratorNormalCompletion3 = true;
     var _didIteratorError3 = false;
@@ -44259,7 +44259,7 @@ function updateFontDropdowns(id) {
                 for (var _iterator4 = options[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
                     var _option = _step4.value;
 
-                    present = _option.value === id ? true : present;
+                    present = _option.value === name ? true : present;
                 }
             } catch (err) {
                 _didIteratorError4 = true;
@@ -44277,11 +44277,11 @@ function updateFontDropdowns(id) {
             }
 
             if (present) {
-                optgroup.value = id;
+                optgroup.value = name;
             } else {
                 var option = document.createElement("option");
                 option.value = id;
-                option.text = id;
+                option.text = name;
                 optgroup.append(option);
             }
         }
@@ -44308,7 +44308,7 @@ function addFormElement(font, files) {
     var el = document.importNode(template.content, true);
     var parentEl = el.querySelector(".font");
 
-    el.querySelector(".font-name-title").innerText = font.file || "New font override";
+    el.querySelector(".font-name-title").innerText = font.name || "New font override";
 
     var fontSelect = el.querySelector(".select-font select");
 
@@ -44317,7 +44317,8 @@ function addFormElement(font, files) {
     dropdown.setAttribute("id", "file" + font.id);
     dropdown.onchange = function (e) {
         var parent = e.target.closest("fieldset");
-        var name = e.target.value;
+        var name = e.target.options[e.target.selectedIndex].text;
+        var fileId = e.target.options[e.target.selectedIndex].value;
         parent.querySelector(".font-name-title").innerText = name;
 
         addVariableSliders(false, parent);
@@ -44325,7 +44326,7 @@ function addFormElement(font, files) {
             var files = _ref5.files;
 
             for (var file in files) {
-                if (file == name) {
+                if (file == fileId) {
                     addVariableSliders(files[file].axes, parent);
                 }
             }
@@ -44337,7 +44338,7 @@ function addFormElement(font, files) {
     for (var id in files) {
         var option = document.createElement("option");
         option.value = id;
-        option.text = id;
+        option.text = files[id].name;
         option.selected = font.file == id;
         extensionGroup.append(option);
     }
@@ -44390,9 +44391,9 @@ function addFormElement(font, files) {
 
 function processNewFile(e) {
     var parent = e.target.closest("fieldset");
-    grabFont(e);
     var files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
     var file = files[0]; // Only use first file if multiple are dropped
+    grabFont(e);
     grabVariableData(file, parent);
 }
 
@@ -44440,7 +44441,7 @@ function saveForm() {
                 var newFont = {};
                 var inputs = fieldset.querySelectorAll("*[name]");
                 var axes = {};
-                var name = "";
+                var fontId = "";
 
                 var _iteratorNormalCompletion6 = true;
                 var _didIteratorError6 = false;
@@ -44451,20 +44452,21 @@ function saveForm() {
                         var input = _step6.value;
 
                         if (input.name === "file") {
-                            newFont[input.name] = input.value;
-                            name = input.value;
+                            newFont["name"] = input.options[input.selectedIndex].text;
+                            newFont["file"] = input.options[input.selectedIndex].value;
+                            fontId = input.options[input.selectedIndex].value;
                         } else if (input.name === "id" || input.name === "css") {
                             newFont[input.name] = input.value;
                         } else if (input.name.startsWith("var-")) {
-                            var _name = input.name.replace("var-", "");
+                            var name = input.name.replace("var-", "");
                             var axis = {
-                                id: _name,
+                                id: name,
                                 name: input.dataset.name,
                                 min: input.min,
                                 max: input.max,
                                 value: input.value
                             };
-                            axes[_name] = axis;
+                            axes[name] = axis;
                         } else if (input.name === "selectors") {
                             // Selectors should become an array
                             newFont["selectors"] = input.value.split(",").map(function (i) {
@@ -44488,7 +44490,7 @@ function saveForm() {
                 }
 
                 for (var file in files) {
-                    if (file == name) {
+                    if (file == fontId) {
                         files[file].axes = axes;
                     }
                 }
@@ -44533,10 +44535,10 @@ function grabFont(e) {
     var files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
     var file = files[0]; // Only use first file if multiple are dropped
     var name = file.name;
-    var container = e.target.closest("fieldset");
-    var fontId = container.dataset.fontid;
+    var parent = e.target.closest("fieldset");
+    var fontId = parent.dataset.fontid;
 
-    container.classList.remove("highlight");
+    parent.classList.remove("highlight");
 
     // Check if filetype is allowed
     var allowedExt = ["ttf", "otf", "eot", "woff", "woff2"];
@@ -44553,17 +44555,20 @@ function grabFont(e) {
         chrome.storage.local.get("files", function (_ref8) {
             var files = _ref8.files;
 
-            files[name] = {};
-            files[name].file = target.result;
-            files[name].axes = {};
+            files[fontId] = {};
+            files[fontId].file = target.result;
+            files[fontId].name = name;
+            files[fontId].axes = {};
+
             chrome.storage.local.set({
                 "files": files
             }, function () {
                 showChange(true);
-                updateFontDropdowns(name);
+                parent.querySelector(".font-name-title").innerText = name;
+                // Update dropdown
+                updateFontDropdowns(fontId, name);
                 var dropdown = document.querySelector("#file" + fontId);
-                dropdown.value = name;
-                // dropdown.dispatchEvent(new Event("change")); /////////////////////////////
+                dropdown.value = fontId;
             });
         });
     };

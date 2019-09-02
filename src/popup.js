@@ -148,20 +148,20 @@ function buildForm(fonts, files, blacklist) {
 }
 
 // New file uploaded, append to all selects
-function updateFontDropdowns(id) {
+function updateFontDropdowns(id, name) {
     const optgroups = document.querySelectorAll(".select-font select optgroup:first-child");
     for (const optgroup of optgroups) {
         const options = optgroup.querySelectorAll("option");
         let present = false;
         for (const option of options) {
-            present = option.value === id ? true : present;
+            present = option.value === name ? true : present;
         }
         if (present) {
-            optgroup.value = id;
+            optgroup.value = name;
         } else {
             const option = document.createElement("option");
             option.value = id;
-            option.text = id;
+            option.text = name;
             optgroup.append(option);
         }
     }
@@ -174,7 +174,7 @@ function addFormElement(font, files) {
     const el = document.importNode(template.content, true);
     const parentEl = el.querySelector(".font");
 
-    el.querySelector(".font-name-title").innerText = font.file || "New font override";
+    el.querySelector(".font-name-title").innerText = font.name || "New font override";
 
     const fontSelect = el.querySelector(".select-font select");
 
@@ -183,13 +183,14 @@ function addFormElement(font, files) {
     dropdown.setAttribute("id", `file${font.id}`);
     dropdown.onchange = (e) => {
         const parent = e.target.closest("fieldset");
-        const name = e.target.value;
+        const name = e.target.options[e.target.selectedIndex].text;
+        const fileId = e.target.options[e.target.selectedIndex].value;
         parent.querySelector(".font-name-title").innerText = name;
 
         addVariableSliders(false, parent);
         chrome.storage.local.get("files", ({ files }) => {
             for (const file in files) {
-                if (file == name) {
+                if (file == fileId) {
                     addVariableSliders(files[file].axes, parent);
                 }
             }
@@ -201,7 +202,7 @@ function addFormElement(font, files) {
     for (const id in files) {
         const option = document.createElement("option");
         option.value = id;
-        option.text = id;
+        option.text = files[id].name;
         option.selected = font.file == id;
         extensionGroup.append(option);
     }
@@ -254,9 +255,9 @@ function addFormElement(font, files) {
 
 function processNewFile(e) {
     const parent = e.target.closest("fieldset");
-    grabFont(e);
     const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
     const file = files[0]; // Only use first file if multiple are dropped
+    grabFont(e);
     grabVariableData(file, parent);
 }
 
@@ -295,12 +296,13 @@ function saveForm() {
             const newFont = {};
             const inputs = fieldset.querySelectorAll("*[name]");
             const axes = {};
-            let name = "";
+            let fontId = "";
 
             for (const input of inputs) {
                 if (input.name === "file") {
-                    newFont[input.name] = input.value;
-                    name = input.value;
+                    newFont["name"] = input.options[input.selectedIndex].text;
+                    newFont["file"] = input.options[input.selectedIndex].value;
+                    fontId = input.options[input.selectedIndex].value;
                 } else if (input.name === "id" || input.name === "css") {
                     newFont[input.name] = input.value;
                 } else if (input.name.startsWith("var-")) {
@@ -320,7 +322,7 @@ function saveForm() {
             }
 
             for (const file in files) {
-                if (file == name) {
+                if (file == fontId) {
                     files[file].axes = axes;
                 }
             }
@@ -348,10 +350,10 @@ function grabFont(e) {
     const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
     const file = files[0]; // Only use first file if multiple are dropped
     const name = file.name;
-    const container = e.target.closest("fieldset");
-    const fontId = container.dataset.fontid;
+    const parent = e.target.closest("fieldset");
+    const fontId = parent.dataset.fontid;
 
-    container.classList.remove("highlight");
+    parent.classList.remove("highlight");
 
     // Check if filetype is allowed
     const allowedExt = ["ttf", "otf", "eot", "woff", "woff2"];
@@ -369,16 +371,20 @@ function grabFont(e) {
             "files", ({
                 files
             }) => {
-                files[name] = {};
-                files[name].file = target.result;
-                files[name].axes = {};
+                files[fontId] = {};
+                files[fontId].file = target.result;
+                files[fontId].name = name;
+                files[fontId].axes = {};
+
                 chrome.storage.local.set({
                     "files": files
                 }, () => {
                     showChange(true);
-                    updateFontDropdowns(name);
+                    parent.querySelector(".font-name-title").innerText = name;
+                    // Update dropdown
+                    updateFontDropdowns(fontId, name);
                     const dropdown = document.querySelector(`#file${fontId}`);
-                    dropdown.value = name;
+                    dropdown.value = fontId;
                 });
             }
         );
