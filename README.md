@@ -72,7 +72,7 @@ Note: if you have loaded *a lot* of fonts, it is possible you may eventually hit
 
 #### Using variable fonts
 
-To use use a variable font and have Type-X automatically detect axes to provide sliders, you must load the font file as specified above. (This is because the JS library used to parse variable font files cannot be run on local files from inside a Chrome Extension.)
+Type-X can't parse local variable fonts. To use use a variable font and have Type-X automatically detect axes to provide sliders, you must load the font file as specified above.
 
 Note: the sliders are shown to assist you in selecting your preferred axis location. For performance reasons, Type-X doesn't currently have a live-reloading form, meaning that you must click "Apply Edits" to make your axis-slider changes take effect.
 
