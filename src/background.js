@@ -165,14 +165,14 @@ function generateStyleSheet(updateExisting, callback) {
                     }
                     stylesheet += `
                     @font-face {
-                        font-family: '${font.file}';
+                        font-family: '${font.name}';
                         src: url('${files[font.file].file}');
                         font-weight: 100 900;
                         font-stretch: 50% 200%;
                     }`;
                 }
 
-                const stack = `${font.file}, ${font.fallback}`;
+                const stack = `'${font.name}', ${font.fallback}`;
                 stylesheet += `
                 ${selectors.join(",")} {
                     font-family: ${stack} !important;
