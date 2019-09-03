@@ -72,6 +72,18 @@ If you wish to load a specific font file (e.g. to test `coolfont-italic.woff2`),
 
 Note: if you have loaded *a lot* of fonts, it is possible you may eventually hit a slowdown. In this case, see Installation instructions above to install this in Developer Mode.
 
+#### Using variable fonts
+
+Type-X can't parse local variable fonts. To use use a variable font and have Type-X automatically detect axes to provide sliders, you must load the font file as specified above.
+
+Note: the sliders are shown to assist you in selecting your preferred axis location. For performance reasons, Type-X doesn't currently have a live-reloading form, meaning that you must click "Apply Edits" to make your axis-slider changes take effect.
+
+If you prefer writing CSS to using the axis sliders (for instance, in order to specify exact axis values), you can alternatively do this with `font-variation-settings`, like so:
+
+```
+font-variation-settings: "wght" 550, "slnt" -9;
+```
+
 #### `Elements`: Targeting specific items to style
 
 If you are adding font overrides, you may want to override specific parts of the web in specific ways. By default, Type-X styles all "code" elements in a monospaced font, and everything else in a proportional (natural-width) font.
