@@ -172,9 +172,10 @@ function generateStyleSheet(updateExisting, callback) {
                     }`;
                 }
 
+                const stack = `${font.file}, ${font.fallback}`;
                 stylesheet += `
                 ${selectors.join(",")} {
-                    font-family: '${font.file}' !important;
+                    font-family: ${stack} !important;
                     ${axes.length ? `font-variation-settings: ${axes.join(",")};` : ""}
                     ${font.css}
                 }`

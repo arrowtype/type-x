@@ -16,6 +16,7 @@ const defaultFonts = [{
         "id": 1,
         "name": "Recursive Mono",
         "file": "rm0001",
+        "fallback": "monospace",
         "selectors": [
             "code",
             "code *", // Code blocks with syntax highlighting
@@ -32,6 +33,7 @@ const defaultFonts = [{
         "id": 2,
         "name": "Recursive Sans",
         "file": "rs0001",
+        "fallback": "monospace",
         "selectors": [
             "*"
         ],

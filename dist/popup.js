@@ -44129,8 +44129,7 @@ showFonts.onclick = function () {
 
 // Show/hide blacklist
 showBlacklist.onclick = function () {
-    // document.querySelector(".blacklist-container").classList.toggle("show");
-    document.querySelector(".ignores").classList.toggle("show-blacklist");
+    document.querySelector(".blacklist").classList.toggle("show");
 };
 
 // Add new font fieldset to form
@@ -44143,6 +44142,7 @@ addFont.onclick = function () {
             "new": true,
             "id": randomId,
             "file": Object.keys(files)[0],
+            "fallback": ["monospace"],
             "selectors": ["/* Add CSS selectors here */"],
             "css": "/* Additional styles to apply */"
         };
@@ -44363,9 +44363,14 @@ function addFormElement(font, files) {
     parentEl.dataset.fontid = font.id;
     el.querySelector("[name=id]").value = font.id;
     el.querySelector("[name=css]").value = font.css;
+    el.querySelector("[name=fallback]").value = font.fallback;
     el.querySelector("[name=selectors]").value = font.selectors.join(", ");
 
-    el.querySelector(".delete-button-container button").onclick = function (e) {
+    el.querySelector(".show-fallbacks").onclick = function (e) {
+        e.target.closest("fieldset").classList.toggle("show-font-fallbacks");
+    };
+
+    el.querySelector(".delete-font").onclick = function (e) {
         e.target.closest("fieldset").remove();
         showChange(true);
     };
@@ -44441,6 +44446,7 @@ function saveForm() {
                 var newFont = {};
                 var inputs = fieldset.querySelectorAll("*[name]");
                 var axes = {};
+                var straightInputs = ["id", "css", "fallback"];
                 var fontId = "";
 
                 var _iteratorNormalCompletion6 = true;
@@ -44455,7 +44461,7 @@ function saveForm() {
                             newFont["name"] = input.options[input.selectedIndex].text;
                             newFont["file"] = input.options[input.selectedIndex].value;
                             fontId = input.options[input.selectedIndex].value;
-                        } else if (input.name === "id" || input.name === "css") {
+                        } else if (straightInputs.includes(input.name)) {
                             newFont[input.name] = input.value;
                         } else if (input.name.startsWith("var-")) {
                             var name = input.name.replace("var-", "");
