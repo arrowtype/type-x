@@ -268,7 +268,6 @@ function processNewFile(e) {
     const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
     const file = files[0]; // Only use first file if multiple are dropped
     grabFont(e);
-    grabVariableData(file, parent);
 }
 
 function addVariableSliders(axes, el) {
@@ -386,6 +385,9 @@ function grabFont(e) {
                     updateFontDropdowns(fontId, name);
                     const dropdown = document.querySelector(`#file${fontId}`);
                     dropdown.value = fontId;
+
+                    // Font is saved, add variable axes, if any
+                    grabVariableData(file, parent);
                 });
             }
         );
@@ -396,12 +398,14 @@ function grabFont(e) {
 // Analyse font for variable axes, add form inputs
 // for them
 function grabVariableData(file, parent) {
+    const fontId = parent.dataset.fontid;
     let font = false;
 
     parent.querySelector(".variable-sliders-container").classList.remove("show");
 
     blobToBuffer(file, (error, buffer) => {
         try {
+            const axes = {};
             font = fontkit.create(buffer);
 
             // Clean out previous sliders
@@ -417,10 +421,24 @@ function grabVariableData(file, parent) {
                     max: font.variationAxes[keys[i]].max,
                     value: font.variationAxes[keys[i]].default
                 };
+                axes[font.variationAxes[keys[i]].name] = axis;
 
                 addSlider(axis, parent);
                 parent.querySelector(".variable-sliders-container").classList.add("show");
             }
+
+            chrome.storage.local.get(
+                "files", ({
+                    files
+                }) => {
+                    files[fontId].axes = axes;
+
+                    chrome.storage.local.set({
+                        "files": files
+                    });
+                }
+            );
+
         } catch (e) {
             console.log("Failed to parse font.");
         }
