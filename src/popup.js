@@ -248,7 +248,12 @@ function addFormElement(font, files) {
     }
 
     // Add variable sliders
-    const axes = font.file in files ? files[font.file].axes : false;
+    let axes = false;
+    if (font.axes) {
+        axes = font.axes;
+    } else if (font.file in files) {
+        axes = files[font.file].axes;
+    }
     addVariableSliders(axes, el);
 
     parentEl.addEventListener("dragover", highlight, false);
@@ -295,58 +300,48 @@ function saveForm() {
     const form = document.querySelector("#fontsForm");
     const fieldsets = form.querySelectorAll("fieldset");
 
-    chrome.storage.local.get("files", ({ files }) => {
-        // Get new fonts
-        for (const fieldset of fieldsets) {
-            const newFont = {};
-            const inputs = fieldset.querySelectorAll("*[name]");
-            const axes = {};
-            const straightInputs = ["id", "css", "fallback"];
-            let fontId = "";
+    // Get new fonts
+    for (const fieldset of fieldsets) {
+        const newFont = {};
+        const inputs = fieldset.querySelectorAll("*[name]");
+        const axes = {};
+        const straightInputs = ["id", "css", "fallback"];
 
-            for (const input of inputs) {
-                if (input.name === "file") {
-                    newFont["name"] = input.options[input.selectedIndex].text;
-                    newFont["file"] = input.options[input.selectedIndex].value;
-                    fontId = input.options[input.selectedIndex].value;
-                } else if (straightInputs.includes(input.name)) {
-                    newFont[input.name] = input.value;
-                } else if (input.name.startsWith("var-")) {
-                    const name = input.name.replace("var-", "");
-                    const axis = {
-                        id: name,
-                        name: input.dataset.name,
-                        min: input.min,
-                        max: input.max,
-                        value: input.value
-                    };
-                    axes[name] = axis;
-                } else if (input.name === "selectors") {
-                    // Selectors should become an array
-                    newFont["selectors"] = input.value.split(",").map(i => i.trim());
-                }
+        for (const input of inputs) {
+            if (input.name === "file") {
+                newFont["name"] = input.options[input.selectedIndex].text;
+                newFont["file"] = input.options[input.selectedIndex].value;
+            } else if (straightInputs.includes(input.name)) {
+                newFont[input.name] = input.value;
+            } else if (input.name.startsWith("var-")) {
+                const name = input.name.replace("var-", "");
+                const axis = {
+                    id: name,
+                    name: input.dataset.name,
+                    min: input.min,
+                    max: input.max,
+                    value: input.value
+                };
+                axes[name] = axis;
+            } else if (input.name === "selectors") {
+                // Selectors should become an array
+                newFont["selectors"] = input.value.split(",").map(i => i.trim());
             }
-
-            for (const file in files) {
-                if (file == fontId) {
-                    files[file].axes = axes;
-                }
-            }
-
-            newFonts.unshift(newFont);
         }
 
-        // Get blacklist
-        const blacklist = form.querySelector("[name=blacklist]").value.split(",").map(i => i.trim());
+        newFont.axes = axes;
+        newFonts.unshift(newFont);
+    }
 
-        // Apply new fonts and activate extension
-        chrome.storage.local.set({
-            "fonts": newFonts,
-            "files": files,
-            "blacklist": blacklist
-        }, () => {
-            updateStatus(true, true);
-        });
+    // Get blacklist
+    const blacklist = form.querySelector("[name=blacklist]").value.split(",").map(i => i.trim());
+
+    // Apply new fonts and activate extension
+    chrome.storage.local.set({
+        "fonts": newFonts,
+        "blacklist": blacklist
+    }, () => {
+        updateStatus(true, true);
     });
 }
 

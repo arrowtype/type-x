@@ -44384,7 +44384,12 @@ function addFormElement(font, files) {
     }
 
     // Add variable sliders
-    var axes = font.file in files ? files[font.file].axes : false;
+    var axes = false;
+    if (font.axes) {
+        axes = font.axes;
+    } else if (font.file in files) {
+        axes = files[font.file].axes;
+    }
     addVariableSliders(axes, el);
 
     parentEl.addEventListener("dragover", highlight, false);
@@ -44431,107 +44436,95 @@ function saveForm() {
     var form = document.querySelector("#fontsForm");
     var fieldsets = form.querySelectorAll("fieldset");
 
-    chrome.storage.local.get("files", function (_ref6) {
-        var files = _ref6.files;
+    // Get new fonts
+    var _iteratorNormalCompletion5 = true;
+    var _didIteratorError5 = false;
+    var _iteratorError5 = undefined;
 
-        // Get new fonts
-        var _iteratorNormalCompletion5 = true;
-        var _didIteratorError5 = false;
-        var _iteratorError5 = undefined;
+    try {
+        for (var _iterator5 = fieldsets[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+            var fieldset = _step5.value;
 
-        try {
-            for (var _iterator5 = fieldsets[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-                var fieldset = _step5.value;
+            var newFont = {};
+            var inputs = fieldset.querySelectorAll("*[name]");
+            var axes = {};
+            var straightInputs = ["id", "css", "fallback"];
 
-                var newFont = {};
-                var inputs = fieldset.querySelectorAll("*[name]");
-                var axes = {};
-                var straightInputs = ["id", "css", "fallback"];
-                var fontId = "";
+            var _iteratorNormalCompletion6 = true;
+            var _didIteratorError6 = false;
+            var _iteratorError6 = undefined;
 
-                var _iteratorNormalCompletion6 = true;
-                var _didIteratorError6 = false;
-                var _iteratorError6 = undefined;
-
-                try {
-                    for (var _iterator6 = inputs[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-                        var input = _step6.value;
-
-                        if (input.name === "file") {
-                            newFont["name"] = input.options[input.selectedIndex].text;
-                            newFont["file"] = input.options[input.selectedIndex].value;
-                            fontId = input.options[input.selectedIndex].value;
-                        } else if (straightInputs.includes(input.name)) {
-                            newFont[input.name] = input.value;
-                        } else if (input.name.startsWith("var-")) {
-                            var name = input.name.replace("var-", "");
-                            var axis = {
-                                id: name,
-                                name: input.dataset.name,
-                                min: input.min,
-                                max: input.max,
-                                value: input.value
-                            };
-                            axes[name] = axis;
-                        } else if (input.name === "selectors") {
-                            // Selectors should become an array
-                            newFont["selectors"] = input.value.split(",").map(function (i) {
-                                return i.trim();
-                            });
-                        }
-                    }
-                } catch (err) {
-                    _didIteratorError6 = true;
-                    _iteratorError6 = err;
-                } finally {
-                    try {
-                        if (!_iteratorNormalCompletion6 && _iterator6.return) {
-                            _iterator6.return();
-                        }
-                    } finally {
-                        if (_didIteratorError6) {
-                            throw _iteratorError6;
-                        }
-                    }
-                }
-
-                for (var file in files) {
-                    if (file == fontId) {
-                        files[file].axes = axes;
-                    }
-                }
-
-                newFonts.unshift(newFont);
-            }
-
-            // Get blacklist
-        } catch (err) {
-            _didIteratorError5 = true;
-            _iteratorError5 = err;
-        } finally {
             try {
-                if (!_iteratorNormalCompletion5 && _iterator5.return) {
-                    _iterator5.return();
+                for (var _iterator6 = inputs[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                    var input = _step6.value;
+
+                    if (input.name === "file") {
+                        newFont["name"] = input.options[input.selectedIndex].text;
+                        newFont["file"] = input.options[input.selectedIndex].value;
+                    } else if (straightInputs.includes(input.name)) {
+                        newFont[input.name] = input.value;
+                    } else if (input.name.startsWith("var-")) {
+                        var name = input.name.replace("var-", "");
+                        var axis = {
+                            id: name,
+                            name: input.dataset.name,
+                            min: input.min,
+                            max: input.max,
+                            value: input.value
+                        };
+                        axes[name] = axis;
+                    } else if (input.name === "selectors") {
+                        // Selectors should become an array
+                        newFont["selectors"] = input.value.split(",").map(function (i) {
+                            return i.trim();
+                        });
+                    }
                 }
+            } catch (err) {
+                _didIteratorError6 = true;
+                _iteratorError6 = err;
             } finally {
-                if (_didIteratorError5) {
-                    throw _iteratorError5;
+                try {
+                    if (!_iteratorNormalCompletion6 && _iterator6.return) {
+                        _iterator6.return();
+                    }
+                } finally {
+                    if (_didIteratorError6) {
+                        throw _iteratorError6;
+                    }
                 }
             }
+
+            newFont.axes = axes;
+            newFonts.unshift(newFont);
         }
 
-        var blacklist = form.querySelector("[name=blacklist]").value.split(",").map(function (i) {
-            return i.trim();
-        });
+        // Get blacklist
+    } catch (err) {
+        _didIteratorError5 = true;
+        _iteratorError5 = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                _iterator5.return();
+            }
+        } finally {
+            if (_didIteratorError5) {
+                throw _iteratorError5;
+            }
+        }
+    }
 
-        // Apply new fonts and activate extension
-        chrome.storage.local.set({
-            "fonts": newFonts,
-            "files": files,
-            "blacklist": blacklist
-        }, function () {
-            updateStatus(true, true);
-        });
+    var blacklist = form.querySelector("[name=blacklist]").value.split(",").map(function (i) {
+        return i.trim();
+    });
+
+    // Apply new fonts and activate extension
+    chrome.storage.local.set({
+        "fonts": newFonts,
+        "blacklist": blacklist
+    }, function () {
+        updateStatus(true, true);
     });
 }
 
@@ -44554,12 +44547,12 @@ function grabFont(e) {
     }
 
     var reader = new FileReader();
-    reader.onload = function (_ref7) {
-        var target = _ref7.target;
+    reader.onload = function (_ref6) {
+        var target = _ref6.target;
 
         // Stick new file in storage
-        chrome.storage.local.get("files", function (_ref8) {
-            var files = _ref8.files;
+        chrome.storage.local.get("files", function (_ref7) {
+            var files = _ref7.files;
 
             files[fontId] = {};
             files[fontId].file = target.result;
