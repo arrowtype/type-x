@@ -153,16 +153,15 @@ function generateStyleSheet(updateExisting, callback) {
                 for (const font of fonts) {
                     const selectors = [];
                     const axesStyles = [];
-                    const fontName = font.name + font.id;
+                    let fontName = font.name;
                     let stylesheet = "";
-
 
                     for (const selector of font.selectors) {
                         selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklistSelectors}`);
                     }
 
                     let axes = false;
-                    if (font.axes) {
+                    if (font.axes && Object.entries(font.axes).length) {
                         axes = font.axes;
                     } else if (font.file in files) {
                         axes = files[font.file].axes;
@@ -172,6 +171,7 @@ function generateStyleSheet(updateExisting, callback) {
                         for (const axisData in axes) {
                             axesStyles.push(`'${axes[axisData].id}' ${axes[axisData].value}`);
                         }
+                        fontName = font.name + font.id;
                         stylesheet += `
                     @font-face {
                         font-family: '${fontName}';
