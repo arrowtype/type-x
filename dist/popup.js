@@ -44594,7 +44594,7 @@ function grabVariableData(file, parent) {
                     max: font.variationAxes[keys[i]].max,
                     value: font.variationAxes[keys[i]].default
                 };
-                axes[font.variationAxes[keys[i]].name] = axis;
+                axes[keys[i]] = axis;
 
                 addSlider(axis, parent);
                 parent.querySelector(".variable-sliders-container").classList.add("show");
