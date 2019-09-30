@@ -364,10 +364,10 @@ function grabFont(e) {
             "files", ({
                 files
             }) => {
-                files[fontId] = {};
-                files[fontId].file = target.result;
-                files[fontId].name = name;
-                files[fontId].axes = {};
+                files[name] = {};
+                files[name].file = target.result;
+                files[name].name = name;
+                files[name].axes = {};
 
                 chrome.storage.local.set({
                     "files": files
@@ -375,9 +375,9 @@ function grabFont(e) {
                     showChange(true);
                     parent.querySelector(".font-name-title").innerText = name;
                     // Update dropdown
-                    updateFontDropdowns(fontId, name);
+                    updateFontDropdowns(name, name);
                     const dropdown = document.querySelector(`#file${fontId}`);
-                    dropdown.value = fontId;
+                    dropdown.value = name;
 
                     // Font is saved, add variable axes, if any
                     grabVariableData(file, parent);
@@ -391,7 +391,6 @@ function grabFont(e) {
 // Analyse font for variable axes, add form inputs
 // for them
 function grabVariableData(file, parent) {
-    const fontId = parent.dataset.fontid;
     let font = false;
 
     parent.querySelector(".variable-sliders-container").classList.remove("show");
@@ -424,7 +423,7 @@ function grabVariableData(file, parent) {
                 "files", ({
                     files
                 }) => {
-                    files[fontId].axes = axes;
+                    files[file.name].axes = axes;
 
                     chrome.storage.local.set({
                         "files": files
