@@ -222,7 +222,7 @@ function addFormElement(font, files) {
     fontSelect.replaceWith(dropdown);
 
     el.querySelector("[name=newfile]").dataset.fontid = font.id;
-    el.querySelector("[name=newfile]").onchange = processNewFile;
+    el.querySelector("[name=newfile]").onchange = grabFont;
 
     parentEl.dataset.fontid = font.id;
     el.querySelector("[name=id]").value = font.id;
@@ -258,16 +258,9 @@ function addFormElement(font, files) {
 
     parentEl.addEventListener("dragover", highlight, false);
     parentEl.addEventListener("dragleave", unhighlight, false);
-    parentEl.addEventListener("drop", processNewFile, false);
+    parentEl.addEventListener("drop", grabFont, false);
 
     usedFonts.prepend(el);
-}
-
-function processNewFile(e) {
-    const parent = e.target.closest("fieldset");
-    const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
-    const file = files[0]; // Only use first file if multiple are dropped
-    grabFont(e);
 }
 
 function addVariableSliders(axes, el) {
