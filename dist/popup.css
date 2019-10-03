@@ -22,9 +22,6 @@
     --t1: 1rem;
     --t2: 0.75rem;
     --t3: 0.625rem;
-    --wght: "wght" 400;
-    --XPRN: "XPRN" 0;
-    --slnt: "slnt" 0;
     /* sizing */
     --extension-width: 19rem;
     --header-height: 3rem;
@@ -79,7 +76,7 @@
         --gray-2: hsla(230, 3%, 91%, 1);
         --accent: #0050FF;
         --code: #2f5bbb;
-        --destructive: hsla(230, 3%, 55%, 1);
+        --destructive: rgb(126, 14, 14);
     }
 }
 
@@ -176,16 +173,19 @@ header {
     padding-left: var(--spacing-unit);
     color: var(--text-p2);
     --xprn: 1;
-    --wght: 600;
-    --slnt: -15;
+    --wght: 400;
+    --slnt: 0;
     text-transform: uppercase;
     letter-spacing: 0.1em;
+    /* font-variation-settings: "XPRN" 0, "wght" 500, "slnt" 0; */
+    /* font-variation-settings: "XPRN" var(--xprn), "wght" var(--wght), "slnt" var(--slnt); */
     transition: color var(--speed-1), font-variation-settings var(--speed-1);
 }
 
 .activate-fonts:hover,
 .activate-fonts.active {
     color: var(--text-p1);
+    /* font-variation-settings: "XPRN" 1, "wght" 800, "slnt" -15; */
     --xprn: 1;
     --wght: 800;
     --slnt: -15;
@@ -195,6 +195,7 @@ header {
     display: flex;
     align-items: center;
     font-size: 1rem;
+    font-variation-settings: inherit;
 }
 
 .toggle-switch {
@@ -306,6 +307,7 @@ textarea,
     color: var(--text-p2);
     border: 1px transparent solid;
     margin-bottom: 0.25rem;
+    font-variation-settings: "MONO" 1;
 }
 
 textarea:last-of-type {
@@ -414,7 +416,7 @@ textarea:focus {
     opacity: 0;
     transition: opacity 500ms;
     pointer-events: none;
-    --wght: "wght" 600;
+    font-weight: 600;
 }
 
 .apply-changes.show {
@@ -639,14 +641,21 @@ textarea:focus {
     color: var(--destructive);
     transition: background var(--speed-2), color var(--speed-2);
     font-size: var(--t2);
-    --XPRN: "XPRN" 0;
-    --wght: "wght" 600;
+    font-weight: 600;
 }
 
 .additional-button-container .delete-font:hover {
-    background: var(--bg-alt);
+    background: var(--destructive);
     color: var(--text-p1);
 }
+
+
+@media (prefers-color-scheme: light) {
+    .additional-button-container .delete-font:hover {
+        color: var(--bg-main);
+    }
+}
+
 
 .additional-button-container .delete-font span {
     display: flex;
