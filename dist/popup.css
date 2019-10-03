@@ -54,6 +54,13 @@
     /* transitions */
     --speed-1: 0.25s;
     --speed-2: 0.4s;
+
+    /* default font axis values */
+    --mono: 0;
+    --xprn: 0;
+    --wght: 400;
+    --slnt: 0;
+    --ital: 0.5;
 }
 
 @media (prefers-color-scheme: light) {
@@ -79,20 +86,14 @@
 @font-face {
     /* TODO: load this from JavaScript through FontFaceSet
     so we can re-use recursive-fonts.js */
-    font-family: "Recursive Sans";
-    src: url("./fonts/recursive-sans-var.woff2");
-}
-
-@font-face {
-    /* TODO: load this from JavaScript through FontFaceSet
-    so we can re-use recursive-fonts.js */
-    font-family: "Recursive Mono";
-    src: url("./fonts/recursive-mono-var.woff2");
+    font-family: "Recursive";
+    src: url("./fonts/rec-mono_xprn_wght_slnt_ital--2019_09_30.woff2");
 }
 
 * {
-    font-family: "Recursive Sans";
+    font-family: "Recursive";
     box-sizing: border-box;
+    font-variation-settings: "MONO" var(--mono), "XPRN" var(--xprn), "wght" var(--wght), "slnt" var(--slnt), "ital" var(--ital);
 }
 
 body {
@@ -129,9 +130,8 @@ button {
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-size: var(--t3);
-    font-variation-settings: var(--wght), var(--XPRN), var(--slnt);
-    --XPRN: "XPRN" 1;
-    --wght: "wght" 500;
+    --xprn: 1;
+    --wght: 500;
 }
 
 
@@ -175,7 +175,9 @@ header {
     font-size: var(--t2);
     padding-left: var(--spacing-unit);
     color: var(--text-p2);
-    font-variation-settings: "XPRN" 1, "wght" 600, "slnt" 1;
+    --xprn: 1;
+    --wght: 600;
+    --slnt: -15;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     transition: color var(--speed-1), font-variation-settings var(--speed-1);
@@ -184,7 +186,9 @@ header {
 .activate-fonts:hover,
 .activate-fonts.active {
     color: var(--text-p1);
-    font-variation-settings: "XPRN" 1, "wght" 800, "slnt" 14;
+    --xprn: 1;
+    --wght: 800;
+    --slnt: -15;
 }
 
 .activate-fonts>span {
@@ -317,12 +321,13 @@ label.all-caps {
     font-size: var(--t3);
     color: var(--text-p3);
     margin-bottom: 0.125rem;
-    --XPRN: "XPRN" 0;
+    --xprn: 0;
 }
 
 textarea {
     resize: vertical;
-    font-family: "Recursive Mono", monospace;
+    font-family: "Recursive", monospace;
+    --mono: 1;
     color: var(--code);
     margin-top: 0.125rem;
 }
@@ -582,7 +587,8 @@ textarea:focus {
 }
 
 .font-name-title {
-    font-variation-settings: "XPRN" 1, "wght" 500;
+    --xprn: 1;
+    --wght: 500;
     font-size: var(--t1);
     white-space: nowrap;
     overflow: hidden;
