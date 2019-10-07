@@ -75,10 +75,8 @@ addFont.onclick = () => {
                 "css": "/* Additional styles to apply */"
             };
 
-            // TODO: add axes here
-
             addFormElement(newFont, files);
-            showChange(true);
+            saveForm();
         }
     );
 };
@@ -110,20 +108,30 @@ const showStatus = (firstRun) => {
     );
 }
 
-// Show/hide button to apply changes
-function showChange(show) {
-    document.querySelector(".apply-changes").classList.toggle("show", show);
-}
+// Throttle updates
+// Source: https://gist.github.com/beaucharman/e46b8e4d03ef30480d7f4db5a78498ca
+const throttle = (fn, wait) => {
+    let previouslyRun, queuedToRun;
+
+    return function invokeFn(...args) {
+        const now = Date.now();
+
+        queuedToRun = clearTimeout(queuedToRun);
+
+        if (!previouslyRun || (now - previouslyRun >= wait)) {
+            fn.apply(null, args);
+            previouslyRun = now;
+        } else {
+            queuedToRun = setTimeout(invokeFn.bind(null, ...args), wait - (now - previouslyRun));
+        }
+    }
+};
 
 // Initialise form
 function initForm() {
-    document.querySelector(".apply-changes").onclick = () => {
-        saveForm();
-        showChange(false);
-    }
-
+    const throttledSaveForm = throttle(() => { saveForm() }, 3000);
     document.querySelector("#fontsForm").oninput = () => {
-        showChange(true);
+        throttledSaveForm();
     }
 }
 
@@ -236,7 +244,7 @@ function addFormElement(font, files) {
 
     el.querySelector(".delete-font").onclick = (e) => {
         e.target.closest("fieldset").remove();
-        showChange(true);
+        saveForm();
     };
 
     el.querySelector(".font-title button").onclick = (e) => {
@@ -372,7 +380,6 @@ function grabFont(e) {
                 chrome.storage.local.set({
                     "files": files
                 }, () => {
-                    showChange(true);
                     parent.querySelector(".font-name-title").innerText = name;
                     // Update dropdown
                     updateFontDropdowns(name, name);
@@ -381,6 +388,8 @@ function grabFont(e) {
 
                     // Font is saved, add variable axes, if any
                     grabVariableData(file, parent);
+
+                    saveForm();
                 });
             }
         );
