@@ -44201,11 +44201,12 @@ var throttle = function throttle(fn, wait) {
     };
 };
 
+var throttledSaveForm = throttle(function () {
+    saveForm();console.log("update!");
+}, 1000);
+
 // Initialise form
 function initForm() {
-    var throttledSaveForm = throttle(function () {
-        saveForm();
-    }, 1000);
     document.querySelector("#fontsForm").oninput = function () {
         throttledSaveForm();
     };
@@ -44335,7 +44336,6 @@ function addFormElement(font, files) {
         var name = e.target.options[e.target.selectedIndex].text;
         var fileId = e.target.options[e.target.selectedIndex].value;
         parent.querySelector(".font-name-title").innerText = name;
-
         addVariableSliders(false, parent);
         chrome.storage.local.get("files", function (_ref5) {
             var files = _ref5.files;
@@ -44346,6 +44346,7 @@ function addFormElement(font, files) {
                 }
             }
         });
+        saveForm();
     };
 
     var extensionGroup = document.createElement("optgroup");

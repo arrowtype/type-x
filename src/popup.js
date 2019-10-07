@@ -127,9 +127,10 @@ const throttle = (fn, wait) => {
     }
 };
 
+const throttledSaveForm = throttle(() => { saveForm(); console.log("update!") }, 1000);
+
 // Initialise form
 function initForm() {
-    const throttledSaveForm = throttle(() => { saveForm() }, 1000);
     document.querySelector("#fontsForm").oninput = () => {
         throttledSaveForm();
     }
@@ -194,7 +195,6 @@ function addFormElement(font, files) {
         const name = e.target.options[e.target.selectedIndex].text;
         const fileId = e.target.options[e.target.selectedIndex].value;
         parent.querySelector(".font-name-title").innerText = name;
-
         addVariableSliders(false, parent);
         chrome.storage.local.get("files", ({ files }) => {
             for (const file in files) {
@@ -203,6 +203,7 @@ function addFormElement(font, files) {
                 }
             }
         });
+        saveForm();
     };
 
     const extensionGroup = document.createElement("optgroup");
