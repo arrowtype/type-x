@@ -129,7 +129,7 @@ const throttle = (fn, wait) => {
 
 // Initialise form
 function initForm() {
-    const throttledSaveForm = throttle(() => { saveForm() }, 3000);
+    const throttledSaveForm = throttle(() => { saveForm() }, 1000);
     document.querySelector("#fontsForm").oninput = () => {
         throttledSaveForm();
     }

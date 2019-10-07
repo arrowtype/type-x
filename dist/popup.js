@@ -44205,7 +44205,7 @@ var throttle = function throttle(fn, wait) {
 function initForm() {
     var throttledSaveForm = throttle(function () {
         saveForm();
-    }, 3000);
+    }, 1000);
     document.querySelector("#fontsForm").oninput = function () {
         throttledSaveForm();
     };
