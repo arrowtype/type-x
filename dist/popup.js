@@ -44202,8 +44202,8 @@ var throttle = function throttle(fn, wait) {
 };
 
 var throttledSaveForm = throttle(function () {
-    saveForm();console.log("update!");
-}, 1000);
+    saveForm();
+}, 100);
 
 // Initialise form
 function initForm() {

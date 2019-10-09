@@ -72,6 +72,21 @@ chrome.tabs.onUpdated.addListener((_tabId, {
 function updateFonts(fontActivated, updateExisting) {
     updateCount++;
 
+    if(fontActivated) {
+        chrome.tabs.query({}, tabs => {
+            for (const tab of tabs) {
+                chrome.tabs.insertCSS(tab.id, {
+                    code: "html{opacity:0.5!important}",
+                    runAt: "document_start"
+                }, () => {
+                    if (chrome.runtime.lastError) {
+                        handleError(chrome.runtime.lastError);
+                    }
+                });
+            }
+        });
+    }
+
     generateStyleSheet(updateExisting, () => {
         chrome.tabs.query({}, tabs => {
             for (const tab of tabs) {
@@ -191,6 +206,8 @@ function generateStyleSheet(updateExisting, callback) {
                             ${axesStyles.length ? `font-variation-settings: ${axesStyles.join(",")};` : ""}
                             ${font.css}
                         }`
+
+                    stylesheet += '\nhtml{opacity:1!important}';
 
                 stylesheets.push(stylesheet);
             }

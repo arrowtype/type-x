@@ -127,7 +127,7 @@ const throttle = (fn, wait) => {
     }
 };
 
-const throttledSaveForm = throttle(() => { saveForm(); console.log("update!") }, 1000);
+const throttledSaveForm = throttle(() => { saveForm(); }, 100);
 
 // Initialise form
 function initForm() {
