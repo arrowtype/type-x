@@ -76,7 +76,7 @@ function updateFonts(fontActivated, updateExisting) {
         chrome.tabs.query({}, tabs => {
             for (const tab of tabs) {
                 chrome.tabs.insertCSS(tab.id, {
-                    code: "html{opacity:0.5!important}",
+                    code: "html{opacity:0.75!important}",
                     runAt: "document_start"
                 }, () => {
                     if (chrome.runtime.lastError) {
