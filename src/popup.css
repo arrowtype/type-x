@@ -169,21 +169,24 @@ header {
 }
 
 .activate-fonts {
-    --xprn: 1;
-    --wght: 400;
-    --slnt: 0;
     text-align: left;
     flex: auto;
     font-size: var(--t2);
     padding-left: var(--spacing-unit);
-    color: var(--text-p2);
     text-transform: uppercase;
     letter-spacing: 0.1em;
+}
+
+.toggle-switch-container {
+    --xprn: 1;
+    --wght: 400;
+    --slnt: 0;
+    color: var(--text-p2);
     transition: color var(--speed-1), font-variation-settings var(--speed-1);
 }
 
-.activate-fonts:hover,
-.activate-fonts.active {
+.activate-fonts:hover .toggle-switch-container,
+.activate-fonts.active .toggle-switch-container {
     --xprn: 1;
     --wght: 800;
     --slnt: -15;
