@@ -44841,6 +44841,7 @@ function updateFontDropdowns(id, name) {
 
 // Add new font to the form
 function addFormElement(font, files) {
+    console.log(files); ////////////////////////////////////////////////////////////////
     var usedFonts = document.querySelector("#usedFonts");
     var template = document.querySelector("#newFont");
     var el = document.importNode(template.content, true);
@@ -44930,11 +44931,41 @@ function addFormElement(font, files) {
     }
     addVariableSliders(axes, el);
 
+    var instances = false;
+    if (font.instances) {
+        instances = font.instances;
+    } else if (font.file in files) {
+        instances = files[font.file].instances;
+    }
+    addNamedInstances(instances, el);
+
     parentEl.addEventListener("dragover", highlight, false);
     parentEl.addEventListener("dragleave", unhighlight, false);
     parentEl.addEventListener("drop", grabFont, false);
 
     usedFonts.prepend(el);
+}
+
+function addNamedInstances(instances, el) {
+    var container = el.querySelector(".variable-instances");
+    container.innerHTML = "";
+
+    var instanceDropdown = document.createElement("select");
+    for (var instance in instances) {
+        var option = document.createElement("option");
+        option.text = instance;
+        option.value = instance;
+        option.dataset.instance = JSON.stringify(instances[instance]);
+        instanceDropdown.append(option);
+    }
+
+    instanceDropdown.onchange = applyNamedInstance;
+    container.append(instanceDropdown);
+}
+
+function applyNamedInstance(e) {
+    var sel = e.target;
+    var data = JSON.parse(sel.options[sel.selectedIndex].dataset.instance);
 }
 
 function addVariableSliders(axes, el) {
@@ -45115,7 +45146,7 @@ function grabVariableData(file, parent) {
 
     parent.querySelector(".variable-sliders-container").classList.remove("show");
 
-    (0, _blobToBuffer2.default)(file, function (error, buffer) {
+    (0, _blobToBuffer2.default)(file, function (_error, buffer) {
         try {
             var axes = {};
             font = _fontkit2.default.create(buffer);
@@ -45143,6 +45174,7 @@ function grabVariableData(file, parent) {
                 var files = _ref8.files;
 
                 files[file.name].axes = axes;
+                files[file.name].instances = font.namedVariations;
 
                 chrome.storage.local.set({
                     "files": files
