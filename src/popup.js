@@ -202,8 +202,8 @@ function addFormElement(font, files) {
                     addVariableSliders(files[file].axes, parent);
                 }
             }
+            saveForm();
         });
-        saveForm();
     };
 
     const extensionGroup = document.createElement("optgroup");

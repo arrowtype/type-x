@@ -44867,8 +44867,8 @@ function addFormElement(font, files) {
                     addVariableSliders(files[file].axes, parent);
                 }
             }
+            saveForm();
         });
-        saveForm();
     };
 
     var extensionGroup = document.createElement("optgroup");
