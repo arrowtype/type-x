@@ -45101,6 +45101,8 @@ function grabFont(e) {
                 // Font is saved, add variable axes, if any
                 grabVariableData(file, parent);
 
+                // Note that we might save with the wrong axes here,
+                // as the grabVariableData function might save
                 saveForm();
             });
         });
@@ -45138,6 +45140,9 @@ function grabVariableData(file, parent) {
                 addSlider(axis, parent);
                 parent.querySelector(".variable-sliders-container").classList.add("show");
             }
+
+            // Save form again, now with proper axes
+            saveForm();
 
             chrome.storage.local.get("files", function (_ref8) {
                 var files = _ref8.files;
