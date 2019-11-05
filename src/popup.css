@@ -506,7 +506,8 @@ textarea:focus {
     opacity: 0.5;
 }
 
-.select-font {
+.select-font,
+.variable-instances {
     display: flex;
     align-items: center;
     width: calc(100% + 0.75rem);
@@ -514,7 +515,8 @@ textarea:focus {
     margin-bottom: 0.5rem;
 }
 
-.select-font select {
+.select-font select,
+.variable-instances select {
     flex: auto;
     font-size: inherit;
     border: 0;
@@ -533,7 +535,8 @@ textarea:focus {
 }
 
 @media (prefers-color-scheme: light) {
-    .select-font select {
+    .select-font select,
+    .variable-instances select {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 11l5-5M3 6l5 5' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
     }
 }

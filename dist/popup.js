@@ -44841,7 +44841,6 @@ function updateFontDropdowns(id, name) {
 
 // Add new font to the form
 function addFormElement(font, files) {
-    console.log(files); ////////////////////////////////////////////////////////////////
     var usedFonts = document.querySelector("#usedFonts");
     var template = document.querySelector("#newFont");
     var el = document.importNode(template.content, true);
@@ -44931,6 +44930,7 @@ function addFormElement(font, files) {
     }
     addVariableSliders(axes, el);
 
+    // Add named variable instances
     var instances = false;
     if (font.instances) {
         instances = font.instances;
@@ -44951,6 +44951,7 @@ function addNamedInstances(instances, el) {
     container.innerHTML = "";
 
     var instanceDropdown = document.createElement("select");
+    instanceDropdown.classList.add("select-instance");
     for (var instance in instances) {
         var option = document.createElement("option");
         option.text = instance;
@@ -44959,16 +44960,23 @@ function addNamedInstances(instances, el) {
         instanceDropdown.append(option);
     }
 
-    instanceDropdown.onchange = applyNamedInstance;
+    instanceDropdown.oninput = applyNamedInstance;
     container.append(instanceDropdown);
 }
 
 function applyNamedInstance(e) {
     var sel = e.target;
-    var data = JSON.parse(sel.options[sel.selectedIndex].dataset.instance);
+    var axes = JSON.parse(sel.options[sel.selectedIndex].dataset.instance);
+    var parent = e.target.closest(".variable-sliders-container");
+
+    for (var axis in axes) {
+        var slider = parent.querySelector("[name=var-" + axis + "]");
+        slider.value = axes[axis];
+    }
 }
 
 function addVariableSliders(axes, el) {
+    var newAxes = {};
     el.querySelector(".variable-sliders").innerHTML = "";
     if (!axes) {
         el.querySelector(".variable-sliders-container").classList.remove("show");
@@ -44976,18 +44984,23 @@ function addVariableSliders(axes, el) {
         var keys = Object.keys(axes);
         keys.sort();
         for (var i = 0; i < keys.length; ++i) {
+            var value = axes[keys[i]].value || axes[keys[i]].default || 0;
             var axis = {
                 id: keys[i],
                 name: axes[keys[i]].name,
                 min: axes[keys[i]].min,
                 max: axes[keys[i]].max,
-                value: axes[keys[i]].value
+                value: value
             };
+            newAxes[keys[i]] = axis;
 
             addSlider(axis, el);
             el.querySelector(".variable-sliders-container").classList.add("show");
         }
     }
+    // Return new object of axes. TODO: we could just use
+    // the object Fontkit returns.
+    return newAxes;
 }
 
 // Store changes made to fonts
@@ -45141,8 +45154,7 @@ function grabFont(e) {
     reader.readAsDataURL(file);
 }
 
-// Analyse font for variable axes, add form inputs
-// for them
+// Analyse a *new* font for variable axes, create form inputs
 function grabVariableData(file, parent) {
     var font = false;
 
@@ -45150,27 +45162,10 @@ function grabVariableData(file, parent) {
 
     (0, _blobToBuffer2.default)(file, function (_error, buffer) {
         try {
-            var axes = {};
             font = _fontkit2.default.create(buffer);
 
-            // Clean out previous sliders
-            document.querySelector(".variable-sliders").innerHTML = "";
-
-            var keys = Object.keys(font.variationAxes);
-            keys.sort();
-            for (var i = 0; i < keys.length; ++i) {
-                var axis = {
-                    id: keys[i],
-                    name: font.variationAxes[keys[i]].name,
-                    min: font.variationAxes[keys[i]].min,
-                    max: font.variationAxes[keys[i]].max,
-                    value: font.variationAxes[keys[i]].default
-                };
-                axes[keys[i]] = axis;
-
-                addSlider(axis, parent);
-                parent.querySelector(".variable-sliders-container").classList.add("show");
-            }
+            var axes = addVariableSliders(font.variationAxes, parent);
+            addNamedInstances(font.namedVariations, parent);
 
             // Save form again, now with proper axes
             saveForm();
