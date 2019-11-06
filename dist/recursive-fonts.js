@@ -44,12 +44,12 @@ const defaultFonts = [
 				max: 1,
 				value: 0
 			},
-			wght: {
-				id: "wght",
-				name: "Weight",
-				min: 300,
-				max: 900,
-				value: 400
+			ital: {
+				id: "ital",
+				name: "Italic",
+				min: 0,
+				max: 1,
+				value: 0.5
 			},
 			slnt: {
 				id: "slnt",
@@ -58,12 +58,12 @@ const defaultFonts = [
 				max: 0,
 				value: 0
 			},
-			ital: {
-				id: "ital",
-				name: "Italic",
-				min: 0,
-				max: 1,
-				value: 0.5
+			wght: {
+				id: "wght",
+				name: "Weight",
+				min: 300,
+				max: 900,
+				value: 400
 			}
 		}
 	},
@@ -89,12 +89,12 @@ const defaultFonts = [
 				max: 1,
 				value: 0
 			},
-			wght: {
-				id: "wght",
-				name: "Weight",
-				min: 300,
-				max: 900,
-				value: 400
+			ital: {
+				id: "ital",
+				name: "Italic",
+				min: 0,
+				max: 1,
+				value: 0.5
 			},
 			slnt: {
 				id: "slnt",
@@ -103,12 +103,12 @@ const defaultFonts = [
 				max: 0,
 				value: 0
 			},
-			ital: {
-				id: "ital",
-				name: "Italic",
-				min: 0,
-				max: 1,
-				value: 0.5
+			wght: {
+				id: "wght",
+				name: "Weight",
+				min: 300,
+				max: 900,
+				value: 400
 			}
 		}
 	}

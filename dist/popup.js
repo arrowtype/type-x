@@ -45056,12 +45056,22 @@ function addNamedInstances(instances, el) {
 		option.value = 0;
 		instanceDropdown.append(option);
 
+		var _loop = function _loop(instance) {
+			var option = document.createElement("option");
+			option.text = instance;
+			option.value = instance;
+
+			var axes = instances[instance];
+			var orderedAxes = {};
+			Object.keys(axes).sort().forEach(function (key) {
+				orderedAxes[key] = axes[key];
+			});
+			option.dataset.instance = JSON.stringify(orderedAxes);
+			instanceDropdown.append(option);
+		};
+
 		for (var instance in instances) {
-			var _option3 = document.createElement("option");
-			_option3.text = instance;
-			_option3.value = instance;
-			_option3.dataset.instance = JSON.stringify(instances[instance]);
-			instanceDropdown.append(_option3);
+			_loop(instance);
 		}
 
 		instanceDropdown.oninput = applyNamedInstance;
@@ -45087,8 +45097,7 @@ function addVariableSliders(axes, el) {
 	if (!axes) {
 		el.querySelector(".variable-sliders-container").classList.remove("show");
 	} else {
-		var keys = Object.keys(axes);
-		keys.sort();
+		var keys = Object.keys(axes).sort();
 		for (var i = 0; i < keys.length; ++i) {
 			var value = axes[keys[i]].value || axes[keys[i]].default || 0;
 			var axis = {
@@ -45127,7 +45136,7 @@ function saveForm() {
 
 			var newFont = {};
 			var inputs = fieldset.querySelectorAll("*[name]");
-			var axes = {};
+			var _axes = {};
 			var straightInputs = ["id", "css", "fallback"];
 
 			var _iteratorNormalCompletion9 = true;
@@ -45152,7 +45161,7 @@ function saveForm() {
 							max: input.max,
 							value: input.value
 						};
-						axes[name] = axis;
+						_axes[name] = axis;
 					} else if (input.name === "selectors") {
 						// Selectors should become an array
 						newFont["selectors"] = input.value.split(",").map(function (i) {
@@ -45175,7 +45184,7 @@ function saveForm() {
 				}
 			}
 
-			newFont.axes = axes;
+			newFont.axes = _axes;
 			newFonts.unshift(newFont);
 		}
 
@@ -45272,7 +45281,7 @@ function grabVariableData(file, parent) {
 		try {
 			font = _fontkit2.default.create(buffer);
 
-			var axes = addVariableSliders(font.variationAxes, parent);
+			var _axes2 = addVariableSliders(font.variationAxes, parent);
 			addNamedInstances(font.namedVariations, parent);
 
 			// Save form again, now with proper axes
@@ -45281,7 +45290,7 @@ function grabVariableData(file, parent) {
 			chrome.storage.local.get("files", function (_ref8) {
 				var files = _ref8.files;
 
-				files[file.name].axes = axes;
+				files[file.name].axes = _axes2;
 				files[file.name].instances = font.namedVariations;
 
 				chrome.storage.local.set({

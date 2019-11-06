@@ -317,7 +317,15 @@ function addNamedInstances(instances, el) {
 			const option = document.createElement("option");
 			option.text = instance;
 			option.value = instance;
-			option.dataset.instance = JSON.stringify(instances[instance]);
+
+			const axes = instances[instance];
+			const orderedAxes = {};
+			Object.keys(axes)
+				.sort()
+				.forEach(function(key) {
+					orderedAxes[key] = axes[key];
+				});
+			option.dataset.instance = JSON.stringify(orderedAxes);
 			instanceDropdown.append(option);
 		}
 
@@ -344,9 +352,8 @@ function addVariableSliders(axes, el) {
 	if (!axes) {
 		el.querySelector(".variable-sliders-container").classList.remove("show");
 	} else {
-		const keys = Object.keys(axes);
-		keys.sort();
-		for (var i = 0; i < keys.length; ++i) {
+		const keys = Object.keys(axes).sort();
+		for (let i = 0; i < keys.length; ++i) {
 			const value = axes[keys[i]].value || axes[keys[i]].default || 0;
 			const axis = {
 				id: keys[i],
