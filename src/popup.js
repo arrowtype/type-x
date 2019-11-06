@@ -202,6 +202,7 @@ function addFormElement(font, files) {
             for (const file in files) {
                 if (file == fileId) {
                     addVariableSliders(files[file].axes, parent);
+                    addNamedInstances(files[file].instances, parent);
                 }
             }
             saveForm();
@@ -274,7 +275,7 @@ function addFormElement(font, files) {
     } else if (font.file in files) {
         instances = files[font.file].instances;
     }
-    addNamedInstances(instances, el)
+    addNamedInstances(instances, el);
 
     parentEl.addEventListener("dragover", highlight, false);
     parentEl.addEventListener("dragleave", unhighlight, false);

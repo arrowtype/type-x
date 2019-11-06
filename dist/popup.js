@@ -44867,6 +44867,7 @@ function addFormElement(font, files) {
             for (var file in files) {
                 if (file == fileId) {
                     addVariableSliders(files[file].axes, parent);
+                    addNamedInstances(files[file].instances, parent);
                 }
             }
             saveForm();
