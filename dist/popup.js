@@ -44780,7 +44780,7 @@ function buildForm(fonts, files, blacklist) {
 
 // New file uploaded, append to all selects
 function updateFontDropdowns(id, name) {
-    var optgroups = document.querySelectorAll(".select-font select optgroup:first-child");
+    var optgroups = document.querySelectorAll(".font-file-select optgroup:first-child");
     var _iteratorNormalCompletion3 = true;
     var _didIteratorError3 = false;
     var _iteratorError3 = undefined;
@@ -44850,17 +44850,19 @@ function addFormElement(font, files) {
 
     el.querySelector(".font-name-title").innerText = font.name || "New font override";
 
-    var fontSelect = el.querySelector(".select-font select");
+    var fontSelect = el.querySelector(".font-file-select");
 
     var dropdown = document.createElement("select");
     dropdown.setAttribute("name", "file");
     dropdown.setAttribute("id", "file" + font.id);
+    dropdown.classList.add("font-file-select");
     dropdown.onchange = function (e) {
-        var parent = e.target.closest("fieldset");
+        var parent = e.target.closest(".font");
         var name = e.target.options[e.target.selectedIndex].text;
         var fileId = e.target.options[e.target.selectedIndex].value;
         parent.querySelector(".font-name-title").innerText = name;
         addVariableSliders(false, parent);
+        addNamedInstances(false, parent);
         chrome.storage.local.get("files", function (_ref5) {
             var files = _ref5.files;
 
@@ -44940,7 +44942,7 @@ function addFormElement(font, files) {
     } else if (font.file in files) {
         instances = files[font.file].instances;
     }
-    addNamedInstances(instances, el);
+    addNamedInstances(instances, parentEl);
 
     parentEl.addEventListener("dragover", highlight, false);
     parentEl.addEventListener("dragleave", unhighlight, false);
@@ -44951,7 +44953,7 @@ function addFormElement(font, files) {
 
 // Select named instance based on slider values
 function syncVariableValues() {
-    var containers = document.querySelectorAll(".variable-sliders-container");
+    var containers = document.querySelectorAll(".font");
     var _iteratorNormalCompletion5 = true;
     var _didIteratorError5 = false;
     var _iteratorError5 = undefined;
@@ -45043,29 +45045,31 @@ function addNamedInstances(instances, el) {
     var container = el.querySelector(".variable-instances");
     container.innerHTML = "";
 
-    var instanceDropdown = document.createElement("select");
-    instanceDropdown.classList.add("select-instance");
-    var option = document.createElement("option");
-    option.text = "— Custom Instance —";
-    option.value = 0;
-    instanceDropdown.append(option);
+    if (instances) {
+        var instanceDropdown = document.createElement("select");
+        instanceDropdown.classList.add("select-instance");
+        var option = document.createElement("option");
+        option.text = "— Custom Instance —";
+        option.value = 0;
+        instanceDropdown.append(option);
 
-    for (var instance in instances) {
-        var _option3 = document.createElement("option");
-        _option3.text = instance;
-        _option3.value = instance;
-        _option3.dataset.instance = JSON.stringify(instances[instance]);
-        instanceDropdown.append(_option3);
+        for (var instance in instances) {
+            var _option3 = document.createElement("option");
+            _option3.text = instance;
+            _option3.value = instance;
+            _option3.dataset.instance = JSON.stringify(instances[instance]);
+            instanceDropdown.append(_option3);
+        }
+
+        instanceDropdown.oninput = applyNamedInstance;
+        container.append(instanceDropdown);
     }
-
-    instanceDropdown.oninput = applyNamedInstance;
-    container.append(instanceDropdown);
 }
 
 function applyNamedInstance(e) {
     var sel = e.target;
     var axes = JSON.parse(sel.options[sel.selectedIndex].dataset.instance);
-    var parent = e.target.closest(".variable-sliders-container");
+    var parent = e.target.closest(".font");
 
     for (var axis in axes) {
         var slider = parent.querySelector("[name=var-" + axis + "]");

@@ -160,7 +160,7 @@ function buildForm(fonts, files, blacklist) {
 
 // New file uploaded, append to all selects
 function updateFontDropdowns(id, name) {
-    const optgroups = document.querySelectorAll(".select-font select optgroup:first-child");
+    const optgroups = document.querySelectorAll(".font-file-select optgroup:first-child");
     for (const optgroup of optgroups) {
         const options = optgroup.querySelectorAll("option");
         let present = false;
@@ -187,17 +187,19 @@ function addFormElement(font, files) {
 
     el.querySelector(".font-name-title").innerText = font.name || "New font override";
 
-    const fontSelect = el.querySelector(".select-font select");
+    const fontSelect = el.querySelector(".font-file-select");
 
     const dropdown = document.createElement("select");
     dropdown.setAttribute("name", "file");
     dropdown.setAttribute("id", `file${font.id}`);
+    dropdown.classList.add("font-file-select");
     dropdown.onchange = (e) => {
-        const parent = e.target.closest("fieldset");
+        const parent = e.target.closest(".font");
         const name = e.target.options[e.target.selectedIndex].text;
         const fileId = e.target.options[e.target.selectedIndex].value;
         parent.querySelector(".font-name-title").innerText = name;
         addVariableSliders(false, parent);
+        addNamedInstances(false, parent);
         chrome.storage.local.get("files", ({ files }) => {
             for (const file in files) {
                 if (file == fileId) {
@@ -275,7 +277,7 @@ function addFormElement(font, files) {
     } else if (font.file in files) {
         instances = files[font.file].instances;
     }
-    addNamedInstances(instances, el);
+    addNamedInstances(instances, parentEl);
 
     parentEl.addEventListener("dragover", highlight, false);
     parentEl.addEventListener("dragleave", unhighlight, false);
@@ -286,7 +288,7 @@ function addFormElement(font, files) {
 
 // Select named instance based on slider values
 function syncVariableValues() {
-    const containers = document.querySelectorAll(".variable-sliders-container");
+    const containers = document.querySelectorAll(".font");
     for(const container of containers) {
         const sliders = container.querySelectorAll("[type=range]");
         const customInstance = {};
@@ -313,29 +315,31 @@ function addNamedInstances(instances, el) {
     const container = el.querySelector(".variable-instances");
     container.innerHTML = "";
 
-    const instanceDropdown = document.createElement("select");
-    instanceDropdown.classList.add("select-instance");
-    const option = document.createElement("option");
-    option.text = "— Custom Instance —";
-    option.value = 0;
-    instanceDropdown.append(option);
-
-    for(const instance in instances) {
+    if(instances) {
+        const instanceDropdown = document.createElement("select");
+        instanceDropdown.classList.add("select-instance");
         const option = document.createElement("option");
-        option.text = instance;
-        option.value = instance;
-        option.dataset.instance = JSON.stringify(instances[instance]);
+        option.text = "— Custom Instance —";
+        option.value = 0;
         instanceDropdown.append(option);
-    }
 
-    instanceDropdown.oninput = applyNamedInstance;
-    container.append(instanceDropdown);
+        for(const instance in instances) {
+            const option = document.createElement("option");
+            option.text = instance;
+            option.value = instance;
+            option.dataset.instance = JSON.stringify(instances[instance]);
+            instanceDropdown.append(option);
+        }
+
+        instanceDropdown.oninput = applyNamedInstance;
+        container.append(instanceDropdown);
+    }
 }
 
 function applyNamedInstance(e) {
     const sel = e.target;
     const axes = JSON.parse(sel.options[sel.selectedIndex].dataset.instance);
-    const parent = e.target.closest(".variable-sliders-container");
+    const parent = e.target.closest(".font");
 
     for(const axis in axes) {
         const slider = parent.querySelector(`[name=var-${axis}]`);

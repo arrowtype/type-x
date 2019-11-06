@@ -94,8 +94,12 @@
             <div class="font-details">
                 <input type="hidden" name="id" value="">
                 <div class="select-font">
-                    <select name="file"></select>
-                    <label class="select-font-button label-button">
+                    <div class="select-font-dropdowns">
+                        <select name="file" class="font-file-select"></select>
+                        <div class="variable-instances"></div>
+                    </div>
+
+                    <label class="select-font-button">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-width="2">
                                 <path d="M3,14 L13,14" />
@@ -104,11 +108,10 @@
                             </g>
                         </svg>
                         <input type="file" name="newfile" value="" accept=".ttf,.otf,.eot,.woff,.woff2">
-                        Drop font
+                        Load<br>font
                     </label>
                 </div>
                 <div class="variable-sliders-container">
-                    <div class="variable-instances"></div>
                     <label class="all-caps">Variable</label>
                     <div class="variable-sliders"></div>
                 </div>

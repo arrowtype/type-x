@@ -106,7 +106,7 @@ body {
     min-height: var(--header-height);
 }
 
-.label-button,
+.select-font-button,
 button {
     font-size: inherit;
     font-family: inherit;
@@ -120,7 +120,6 @@ button {
     color: inherit;
 }
 
-.label-button,
 .button {
     border-radius: 1rem;
 }
@@ -506,24 +505,22 @@ textarea:focus {
     opacity: 0.5;
 }
 
-.select-font,
-.variable-instances {
+.select-font {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     width: calc(100% + 0.75rem);
     margin-left: -0.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--spacing-unit-half);
 }
 
-.select-font select,
-.variable-instances select {
+.select-font select {
     flex: auto;
     font-size: inherit;
     border: 0;
     outline: 0;
     border-radius: 0.25rem;
     height: 1.75rem;
-    width: inherit;
+    width: 100%;
     -webkit-appearance: none;
     padding: 0 1.5rem 0 0.6rem;
     background: var(--gray-2);
@@ -535,25 +532,37 @@ textarea:focus {
 }
 
 @media (prefers-color-scheme: light) {
-    .select-font select,
-    .variable-instances select {
+    .select-font select {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 11l5-5M3 6l5 5' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
     }
 }
 
+.variable-instances {
+    margin-top: 0.25rem;
+}
+
+.select-font-dropdowns {
+    flex: auto;
+}
+
 .select-font-button {
     flex: none;
-    margin-left: 0.25em;
+    margin-left: 0.25rem;
+    margin-left: var(--spacing-unit-half);
     padding-left: var(--spacing-unit-half);
     padding-right: var(--spacing-unit-half);
     white-space: nowrap;
-    height: 1.5rem;
     overflow: hidden;
     background: transparent;
-    transition: 0.35s;
+    transition: background 0.35s;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    border: 2px dashed var(--gray-0);
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    font-size: var(--t3);
 }
 
 .select-font-button:hover {
@@ -562,7 +571,7 @@ textarea:focus {
 
 .select-font-button svg {
     width: 100%;
-    margin-right: var(--spacing-unit-half);
+    margin-bottom: var(--spacing-unit-half);
 }
 
 .select-font-button input {
