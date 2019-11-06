@@ -44962,7 +44962,10 @@ function syncVariableValues() {
 		for (var _iterator5 = containers[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
 			var container = _step5.value;
 
-			var sliders = container.querySelectorAll("[type=range]");
+			var sliders = container.querySelectorAll(".variable-sliders [type=range]");
+
+			if (!sliders.length) break;
+
 			var customInstance = {};
 			var _iteratorNormalCompletion6 = true;
 			var _didIteratorError6 = false;

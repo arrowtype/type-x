@@ -277,7 +277,10 @@ function addFormElement(font, files) {
 function syncVariableValues() {
 	const containers = document.querySelectorAll(".font");
 	for (const container of containers) {
-		const sliders = container.querySelectorAll("[type=range]");
+		const sliders = container.querySelectorAll(".variable-sliders [type=range]");
+
+		if (!sliders.length) break;
+
 		const customInstance = {};
 		for (const slider of sliders) {
 			const name = slider.name.replace("var-", "");
