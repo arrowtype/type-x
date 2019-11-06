@@ -44774,6 +44774,8 @@ function buildForm(fonts, files, blacklist) {
     }
 
     blacklistEl.value = blacklist.join(", ");
+
+    syncVariableValues();
 }
 
 // New file uploaded, append to all selects
@@ -44946,6 +44948,7 @@ function addFormElement(font, files) {
     usedFonts.prepend(el);
 }
 
+// Select named instance based on slider values
 function syncVariableValues() {
     var containers = document.querySelectorAll(".variable-sliders-container");
     var _iteratorNormalCompletion5 = true;
@@ -45042,7 +45045,7 @@ function addNamedInstances(instances, el) {
     var instanceDropdown = document.createElement("select");
     instanceDropdown.classList.add("select-instance");
     var option = document.createElement("option");
-    option.text = "Custom instance:";
+    option.text = "— Custom Instance —";
     option.value = 0;
     instanceDropdown.append(option);
 
@@ -45066,6 +45069,7 @@ function applyNamedInstance(e) {
     for (var axis in axes) {
         var slider = parent.querySelector("[name=var-" + axis + "]");
         slider.value = axes[axis];
+        slider.dispatchEvent(new Event("input"));
     }
 }
 

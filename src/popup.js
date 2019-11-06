@@ -154,6 +154,8 @@ function buildForm(fonts, files, blacklist) {
 
     // Inject blacklist
     blacklistEl.value = blacklist.join(", ");
+
+    syncVariableValues();
 }
 
 // New file uploaded, append to all selects
@@ -281,6 +283,7 @@ function addFormElement(font, files) {
     usedFonts.prepend(el);
 }
 
+// Select named instance based on slider values
 function syncVariableValues() {
     const containers = document.querySelectorAll(".variable-sliders-container");
     for(const container of containers) {
@@ -290,7 +293,6 @@ function syncVariableValues() {
             const name = slider.name.replace("var-", "");
             customInstance[name] = parseFloat(slider.value);
         }
-
         const ci = JSON.stringify(customInstance);
 
         const dropdown = container.querySelector(".select-instance");
@@ -313,7 +315,7 @@ function addNamedInstances(instances, el) {
     const instanceDropdown = document.createElement("select");
     instanceDropdown.classList.add("select-instance");
     const option = document.createElement("option");
-    option.text = "Custom instance:";
+    option.text = "— Custom Instance —";
     option.value = 0;
     instanceDropdown.append(option);
 
@@ -337,6 +339,7 @@ function applyNamedInstance(e) {
     for(const axis in axes) {
         const slider = parent.querySelector(`[name=var-${axis}]`);
         slider.value = axes[axis];
+        slider.dispatchEvent(new Event("input"));
     }
 }
 

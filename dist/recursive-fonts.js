@@ -54,8 +54,8 @@ const defaultFonts = [
 			slnt: {
 				id: "slnt",
 				name: "Slant",
-				min: 0,
-				max: 14,
+				min: -15,
+				max: 0,
 				value: 0
 			},
 			ital: {
@@ -99,8 +99,8 @@ const defaultFonts = [
 			slnt: {
 				id: "slnt",
 				name: "Slant",
-				min: 0,
-				max: 14,
+				min: -15,
+				max: 0,
 				value: 0
 			},
 			ital: {
@@ -144,8 +144,8 @@ const defaultFiles = {
 			slnt: {
 				id: "slnt",
 				name: "Slant",
-				min: 0,
-				max: 14,
+				min: -15,
+				max: 0,
 				value: 0
 			},
 			ital: {
