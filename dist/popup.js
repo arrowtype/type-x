@@ -44946,18 +44946,112 @@ function addFormElement(font, files) {
     usedFonts.prepend(el);
 }
 
+function syncVariableValues() {
+    var containers = document.querySelectorAll(".variable-sliders-container");
+    var _iteratorNormalCompletion5 = true;
+    var _didIteratorError5 = false;
+    var _iteratorError5 = undefined;
+
+    try {
+        for (var _iterator5 = containers[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+            var container = _step5.value;
+
+            var sliders = container.querySelectorAll("[type=range]");
+            var customInstance = {};
+            var _iteratorNormalCompletion6 = true;
+            var _didIteratorError6 = false;
+            var _iteratorError6 = undefined;
+
+            try {
+                for (var _iterator6 = sliders[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                    var slider = _step6.value;
+
+                    var name = slider.name.replace("var-", "");
+                    customInstance[name] = parseFloat(slider.value);
+                }
+            } catch (err) {
+                _didIteratorError6 = true;
+                _iteratorError6 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion6 && _iterator6.return) {
+                        _iterator6.return();
+                    }
+                } finally {
+                    if (_didIteratorError6) {
+                        throw _iteratorError6;
+                    }
+                }
+            }
+
+            var ci = JSON.stringify(customInstance);
+
+            var dropdown = container.querySelector(".select-instance");
+            var options = dropdown.querySelectorAll("option");
+            var sel = null;
+            var _iteratorNormalCompletion7 = true;
+            var _didIteratorError7 = false;
+            var _iteratorError7 = undefined;
+
+            try {
+                for (var _iterator7 = options[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+                    var option = _step7.value;
+
+                    if (option.dataset.instance == ci) {
+                        sel = option.index;
+                        break;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError7 = true;
+                _iteratorError7 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion7 && _iterator7.return) {
+                        _iterator7.return();
+                    }
+                } finally {
+                    if (_didIteratorError7) {
+                        throw _iteratorError7;
+                    }
+                }
+            }
+
+            dropdown.selectedIndex = sel;
+        }
+    } catch (err) {
+        _didIteratorError5 = true;
+        _iteratorError5 = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                _iterator5.return();
+            }
+        } finally {
+            if (_didIteratorError5) {
+                throw _iteratorError5;
+            }
+        }
+    }
+}
+
 function addNamedInstances(instances, el) {
     var container = el.querySelector(".variable-instances");
     container.innerHTML = "";
 
     var instanceDropdown = document.createElement("select");
     instanceDropdown.classList.add("select-instance");
+    var option = document.createElement("option");
+    option.text = "Custom instance:";
+    option.value = 0;
+    instanceDropdown.append(option);
+
     for (var instance in instances) {
-        var option = document.createElement("option");
-        option.text = instance;
-        option.value = instance;
-        option.dataset.instance = JSON.stringify(instances[instance]);
-        instanceDropdown.append(option);
+        var _option3 = document.createElement("option");
+        _option3.text = instance;
+        _option3.value = instance;
+        _option3.dataset.instance = JSON.stringify(instances[instance]);
+        instanceDropdown.append(_option3);
     }
 
     instanceDropdown.oninput = applyNamedInstance;
@@ -45011,26 +45105,26 @@ function saveForm() {
     var fieldsets = form.querySelectorAll("fieldset");
 
     // Get new fonts
-    var _iteratorNormalCompletion5 = true;
-    var _didIteratorError5 = false;
-    var _iteratorError5 = undefined;
+    var _iteratorNormalCompletion8 = true;
+    var _didIteratorError8 = false;
+    var _iteratorError8 = undefined;
 
     try {
-        for (var _iterator5 = fieldsets[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-            var fieldset = _step5.value;
+        for (var _iterator8 = fieldsets[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+            var fieldset = _step8.value;
 
             var newFont = {};
             var inputs = fieldset.querySelectorAll("*[name]");
             var axes = {};
             var straightInputs = ["id", "css", "fallback"];
 
-            var _iteratorNormalCompletion6 = true;
-            var _didIteratorError6 = false;
-            var _iteratorError6 = undefined;
+            var _iteratorNormalCompletion9 = true;
+            var _didIteratorError9 = false;
+            var _iteratorError9 = undefined;
 
             try {
-                for (var _iterator6 = inputs[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-                    var input = _step6.value;
+                for (var _iterator9 = inputs[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+                    var input = _step9.value;
 
                     if (input.name === "file") {
                         newFont["name"] = input.options[input.selectedIndex].text;
@@ -45055,16 +45149,16 @@ function saveForm() {
                     }
                 }
             } catch (err) {
-                _didIteratorError6 = true;
-                _iteratorError6 = err;
+                _didIteratorError9 = true;
+                _iteratorError9 = err;
             } finally {
                 try {
-                    if (!_iteratorNormalCompletion6 && _iterator6.return) {
-                        _iterator6.return();
+                    if (!_iteratorNormalCompletion9 && _iterator9.return) {
+                        _iterator9.return();
                     }
                 } finally {
-                    if (_didIteratorError6) {
-                        throw _iteratorError6;
+                    if (_didIteratorError9) {
+                        throw _iteratorError9;
                     }
                 }
             }
@@ -45075,16 +45169,16 @@ function saveForm() {
 
         // Get blacklist
     } catch (err) {
-        _didIteratorError5 = true;
-        _iteratorError5 = err;
+        _didIteratorError8 = true;
+        _iteratorError8 = err;
     } finally {
         try {
-            if (!_iteratorNormalCompletion5 && _iterator5.return) {
-                _iterator5.return();
+            if (!_iteratorNormalCompletion8 && _iterator8.return) {
+                _iterator8.return();
             }
         } finally {
-            if (_didIteratorError5) {
-                throw _iteratorError5;
+            if (_didIteratorError8) {
+                throw _iteratorError8;
             }
         }
     }
@@ -45100,6 +45194,8 @@ function saveForm() {
     }, function () {
         updateStatus(true, true);
     });
+
+    syncVariableValues();
 }
 
 // Keep track of file data, and hook up to rest

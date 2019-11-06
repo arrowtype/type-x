@@ -281,12 +281,42 @@ function addFormElement(font, files) {
     usedFonts.prepend(el);
 }
 
+function syncVariableValues() {
+    const containers = document.querySelectorAll(".variable-sliders-container");
+    for(const container of containers) {
+        const sliders = container.querySelectorAll("[type=range]");
+        const customInstance = {};
+        for(const slider of sliders) {
+            const name = slider.name.replace("var-", "");
+            customInstance[name] = parseFloat(slider.value);
+        }
+
+        const ci = JSON.stringify(customInstance);
+
+        const dropdown = container.querySelector(".select-instance");
+        const options = dropdown.querySelectorAll("option");
+        let sel = null;
+        for(const option of options) {
+            if(option.dataset.instance == ci) {
+                sel = option.index;
+                break;
+            }
+        }
+        dropdown.selectedIndex = sel;
+    }
+}
+
 function addNamedInstances(instances, el) {
     const container = el.querySelector(".variable-instances");
     container.innerHTML = "";
 
     const instanceDropdown = document.createElement("select");
     instanceDropdown.classList.add("select-instance");
+    const option = document.createElement("option");
+    option.text = "Custom instance:";
+    option.value = 0;
+    instanceDropdown.append(option);
+
     for(const instance in instances) {
         const option = document.createElement("option");
         option.text = instance;
@@ -388,6 +418,8 @@ function saveForm() {
     }, () => {
         updateStatus(true, true);
     });
+
+    syncVariableValues();
 }
 
 // Keep track of file data, and hook up to rest
