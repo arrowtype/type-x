@@ -75,12 +75,12 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
 function updateFonts(fontActivated, updateExisting) {
 	updateCount++;
 
-    // Update only the active tab
+	// Update only the active tab
 	let tabsSettings = {
-        active: true,
-        windowType: "normal",
-        currentWindow: true
-    };
+		active: true,
+		windowType: "normal",
+		currentWindow: true
+	};
 
 	if (fontActivated) {
 		chrome.tabs.query(tabsSettings, tabs => {
