@@ -115,10 +115,13 @@ function injectStyleSheet(tabId, fontActivated) {
         handleError(chrome.runtime.lastError);
     }
 
+    let stylesheetsCode = stylesheets.join('\n');
+    stylesheetsCode += '\nhtml{opacity:1!important}';
+
     if (fontActivated) {
         // Inject CSS to activate font
         chrome.tabs.insertCSS(tabId, {
-            code: stylesheets.join('\n'),
+            code: stylesheetsCode,
             runAt: "document_start"
         }, () => {
             if (chrome.runtime.lastError) {
@@ -206,8 +209,6 @@ function generateStyleSheet(updateExisting, callback) {
                             ${axesStyles.length ? `font-variation-settings: ${axesStyles.join(",")};` : ""}
                             ${font.css}
                         }`
-
-                    stylesheet += '\nhtml{opacity:1!important}';
 
                 stylesheets.push(stylesheet);
             }
