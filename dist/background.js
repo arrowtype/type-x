@@ -15,208 +15,243 @@
 // Extension variables
 let stylesheets = [];
 let updateCount = 0;
+let extensionActive = false;
 const defaultBlacklist = [
-    ".icon",
-    ".Icon",
-    ".fa",
-    ".fas",
-    ".far",
-    ".fal",
-    '.DPvwYc', // google hangouts
-    '.Mwv9k', // google hangouts
-    '.NtU4hc', // google hangouts
+	".icon",
+	".Icon",
+	".fa",
+	".fas",
+	".far",
+	".fal",
+	".DPvwYc", // google hangouts
+	".Mwv9k", // google hangouts
+	".NtU4hc" // google hangouts
 ];
 
 chrome.runtime.onInstalled.addListener(() => {
-    if (chrome.runtime.lastError) {
-        handleError(chrome.runtime.lastError);
-    }
+	if (chrome.runtime.lastError) {
+		handleError(chrome.runtime.lastError);
+	}
 
-    chrome.storage.local.set({
-        "fontActivated": false,
-        "fonts": defaultFonts,
-        "files": defaultFiles,
-        "blacklist": defaultBlacklist
-    }, () => {
-        generateStyleSheet();
-    });
+	chrome.storage.local.set(
+		{
+			fontActivated: false,
+			fonts: defaultFonts,
+			files: defaultFiles,
+			blacklist: defaultBlacklist
+		},
+		() => {
+			generateStyleSheet();
+		}
+	);
 });
 
 chrome.runtime.onStartup.addListener(() => {
-    generateStyleSheet();
+	generateStyleSheet();
+});
+
+// Update font when tab becomes active
+chrome.tabs.onActivated.addListener(() => {
+	chrome.storage.local.get("fontActivated", ({ fontActivated }) => {
+		updateFonts(fontActivated, false);
+	});
 });
 
 // Fires when an open tab updates (e.g. following a link)
 // and when a new tab is opened
-chrome.tabs.onUpdated.addListener((_tabId, {
-    status
-}, {
-    active
-}) => {
-    if (chrome.runtime.lastError) {
-        handleError(chrome.runtime.lastError);
-    }
+chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
+	if (chrome.runtime.lastError) {
+		handleError(chrome.runtime.lastError);
+	}
 
-    if (active && status === "loading") {
-        chrome.storage.local.get(
-            "fontActivated", ({
-                fontActivated
-            }) => {
-                updateFonts(fontActivated);
-            }
-        );
-    }
+	if (active && status === "loading") {
+		chrome.storage.local.get("fontActivated", ({ fontActivated }) => {
+			updateFonts(fontActivated, false);
+		});
+	}
 });
 
 // Update fonts across all tabs
 function updateFonts(fontActivated, updateExisting) {
-    updateCount++;
+	updateCount++;
 
-    if(fontActivated) {
-        chrome.tabs.query({}, tabs => {
-            for (const tab of tabs) {
-                chrome.tabs.insertCSS(tab.id, {
-                    code: "html{opacity:0.75!important}",
-                    runAt: "document_start"
-                }, () => {
-                    if (chrome.runtime.lastError) {
-                        handleError(chrome.runtime.lastError);
-                    }
-                });
-            }
-        });
-    }
+    // Update only the active tab
+	let tabsSettings = {
+        active: true,
+        windowType: "normal",
+        currentWindow: true
+    };
 
-    generateStyleSheet(updateExisting, () => {
-        chrome.tabs.query({}, tabs => {
-            for (const tab of tabs) {
-                injectStyleSheet(tab.id, fontActivated);
+	if (fontActivated) {
+		chrome.tabs.query(tabsSettings, tabs => {
+			for (const tab of tabs) {
+				chrome.tabs.insertCSS(
+					tab.id,
+					{
+						code: "html{opacity:0.75!important}",
+						runAt: "document_start"
+					},
+					() => {
+						if (chrome.runtime.lastError) {
+							handleError(chrome.runtime.lastError);
+						}
+					}
+				);
+			}
+		});
+	}
 
-                if (updateExisting) {
-                    chrome.tabs.executeScript(tab.id, {
-                        code: `document.documentElement.dataset.updatefont = "${updateCount}";`
-                    }, () => {
-                        if (chrome.runtime.lastError) {
-                            handleError(chrome.runtime.lastError);
-                        }
-                    });
-                }
-            }
-        });
-    });
+	generateStyleSheet(updateExisting, () => {
+		chrome.tabs.query(tabsSettings, tabs => {
+			for (const tab of tabs) {
+				injectStyleSheet(tab.id, fontActivated);
+
+				if (updateExisting) {
+					chrome.tabs.executeScript(
+						tab.id,
+						{
+							code: `document.documentElement.dataset.updatefont = "${updateCount}";`
+						},
+						() => {
+							if (chrome.runtime.lastError) {
+								handleError(chrome.runtime.lastError);
+							}
+						}
+					);
+				}
+			}
+		});
+	});
 }
 
 // Injecting the stylesheet is fast, adding a class to
 // the body isn't. We don't want a delay, so the CSS will
 // enable the fonts immediately, and we only add a class
 // when we want to *remove* the custom fonts.
+//
+// DEBUG DATA: called once per tab, injected once per tab
 function injectStyleSheet(tabId, fontActivated) {
-    if (chrome.runtime.lastError) {
-        handleError(chrome.runtime.lastError);
-    }
+	if (chrome.runtime.lastError) {
+		handleError(chrome.runtime.lastError);
+	}
 
-    let stylesheetsCode = stylesheets.join('\n');
-    stylesheetsCode += '\nhtml{opacity:1!important}';
+	let stylesheetsCode = stylesheets.join("\n");
+	stylesheetsCode += "\nhtml{opacity:1!important}";
 
-    if (fontActivated) {
-        // Inject CSS to activate font
-        chrome.tabs.insertCSS(tabId, {
-            code: stylesheetsCode,
-            runAt: "document_start"
-        }, () => {
-            if (chrome.runtime.lastError) {
-                handleError(chrome.runtime.lastError);
-            }
-        });
+	if (fontActivated) {
+		// Inject CSS to activate font
+		chrome.tabs.insertCSS(
+			tabId,
+			{
+				code: stylesheetsCode,
+				runAt: "document_start"
+			},
+			() => {
+				if (chrome.runtime.lastError) {
+					handleError(chrome.runtime.lastError);
+				}
+			}
+		);
 
-        // Remove force-disable class
-        chrome.tabs.executeScript(tabId, {
-            code: `delete document.documentElement.dataset.disablefont;`
-        }, () => {
-            if (chrome.runtime.lastError) {
-                handleError(chrome.runtime.lastError);
-            }
-        });
-    } else {
-        // Add force-disable class
-        chrome.tabs.executeScript(tabId, {
-            code: `document.documentElement.dataset.disablefont = "";`
-        }, () => {
-            if (chrome.runtime.lastError) {
-                handleError(chrome.runtime.lastError);
-            }
-        });
-    }
+		// Remove force-disable class
+		chrome.tabs.executeScript(
+			tabId,
+			{
+				code: `delete document.documentElement.dataset.disablefont;`
+			},
+			() => {
+				if (chrome.runtime.lastError) {
+					handleError(chrome.runtime.lastError);
+				}
+			}
+		);
+	} else {
+		// Add force-disable class
+		chrome.tabs.executeScript(
+			tabId,
+			{
+				code: `document.documentElement.dataset.disablefont = "";`
+			},
+			() => {
+				if (chrome.runtime.lastError) {
+					handleError(chrome.runtime.lastError);
+				}
+			}
+		);
+	}
 }
 
 function generateStyleSheet(updateExisting, callback) {
-    const updateSelector = updateExisting ? `html[data-updatefont="${updateCount}"]` : "html:not([data-updatefont])";
+	const updateSelector = updateExisting
+		? `html[data-updatefont="${updateCount}"]`
+		: "html:not([data-updatefont])";
 
-    chrome.storage.local.get(
-            ["fonts", "files", "blacklist"], ({
-                fonts,
-                files,
-                blacklist
-            }) => {
-                stylesheets = [];
+	chrome.storage.local.get(["fonts", "files", "blacklist"], ({ fonts, files, blacklist }) => {
+		stylesheets = [];
 
-                const blacklistSelectors = (() => {
-                    let b = "";
-                    for (const blacklistItem of blacklist) {
-                        b += `:not(${blacklistItem})`;
-                    }
-                    return b;
-                })();
+		const blacklistSelectors = (() => {
+			let b = "";
+			for (const blacklistItem of blacklist) {
+				b += `:not(${blacklistItem})`;
+			}
+			return b;
+		})();
 
-                for (const font of fonts) {
-                    const selectors = [];
-                    const axesStyles = [];
-                    let fontName = font.name;
-                    let stylesheet = "";
+		for (const font of fonts) {
+			const selectors = [];
+			const axesStyles = [];
+			let fontName = font.name;
+			let stylesheet = "";
 
-                    for (const selector of font.selectors) {
-                        selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklistSelectors}`);
-                    }
+			for (const selector of font.selectors) {
+				selectors.push(
+					`${updateSelector}:not([data-disablefont]) ${selector}${blacklistSelectors}`
+				);
+			}
 
-                    let axes = false;
-                    if (font.axes && Object.entries(font.axes).length) {
-                        axes = font.axes;
-                    } else if (font.file in files) {
-                        axes = files[font.file].axes;
-                    }
+			let axes = false;
+			if (font.axes && Object.entries(font.axes).length) {
+				axes = font.axes;
+			} else if (font.file in files) {
+				axes = files[font.file].axes;
+			}
 
-                    if (axes) {
-                        for (const axisData in axes) {
-                            axesStyles.push(`'${axes[axisData].id}' ${axes[axisData].value}`);
-                        }
-                        fontName = font.name + font.id;
-                    }
+			if (axes) {
+				for (const axisData in axes) {
+					axesStyles.push(`'${axes[axisData].id}' ${axes[axisData].value}`);
+				}
+				fontName = font.name + font.id;
+			}
 
-                    if (font.file in files) {
-                        stylesheet += `
+			if (font.file in files) {
+				stylesheet += `
                             @font-face {
                                 font-family: '${fontName}';
                                 src: url('${files[font.file].file}');
                                 font-weight: 100 900;
                                 font-stretch: 50% 200%;
                             }`;
-                    }
+			}
 
-                    const stack = `'${fontName}', ${font.fallback}`;
-                    stylesheet += `
+			const stack = `'${fontName}', ${font.fallback}`;
+			stylesheet += `
                         ${selectors.join(",")} {
                             font-family: ${stack} !important;
-                            ${axesStyles.length ? `font-variation-settings: ${axesStyles.join(",")};` : ""}
+                            ${
+								axesStyles.length
+									? `font-variation-settings: ${axesStyles.join(",")};`
+									: ""
+							}
                             ${font.css}
-                        }`
+                        }`;
 
-                stylesheets.push(stylesheet);
-            }
+			stylesheets.push(stylesheet);
+		}
 
-        callback && callback();
-    });
+		callback && callback();
+	});
 }
 
 function handleError(error) {
-    // console.error(error);
+	// console.error(error);
 }
