@@ -15,7 +15,6 @@
 // Extension variables
 let stylesheets = [];
 let updateCount = 0;
-let extensionActive = false;
 const defaultBlacklist = [
 	".icon",
 	".Icon",
@@ -35,7 +34,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
 	chrome.storage.local.set(
 		{
-			fontActivated: false,
+			extensionActive: false,
 			fonts: defaultFonts,
 			files: defaultFiles,
 			blacklist: defaultBlacklist
@@ -52,8 +51,8 @@ chrome.runtime.onStartup.addListener(() => {
 
 // Update font when tab becomes active
 chrome.tabs.onActivated.addListener(() => {
-	chrome.storage.local.get("fontActivated", ({ fontActivated }) => {
-		updateFonts(fontActivated, false);
+	chrome.storage.local.get("extensionActive", ({ extensionActive }) => {
+		updateFonts(extensionActive, false);
 	});
 });
 
@@ -65,14 +64,16 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
 	}
 
 	if (active && status === "loading") {
-		chrome.storage.local.get("fontActivated", ({ fontActivated }) => {
-			updateFonts(fontActivated, false);
+		chrome.storage.local.get("extensionActive", ({ extensionActive }) => {
+			updateFonts(extensionActive, false);
 		});
 	}
 });
 
 // Update fonts across all tabs
-function updateFonts(fontActivated, updateExisting) {
+function updateFonts(extensionActive, updatingCurrentTab) {
+	console.log(updateCount);
+
 	updateCount++;
 
 	// Update only the active tab
@@ -82,7 +83,7 @@ function updateFonts(fontActivated, updateExisting) {
 		currentWindow: true
 	};
 
-	if (fontActivated) {
+	if (extensionActive) {
 		chrome.tabs.query(tabsSettings, tabs => {
 			for (const tab of tabs) {
 				chrome.tabs.insertCSS(
@@ -101,12 +102,12 @@ function updateFonts(fontActivated, updateExisting) {
 		});
 	}
 
-	generateStyleSheet(updateExisting, () => {
+	generateStyleSheet(updatingCurrentTab, () => {
 		chrome.tabs.query(tabsSettings, tabs => {
 			for (const tab of tabs) {
-				injectStyleSheet(tab.id, fontActivated);
+				injectStyleSheet(tab.id, extensionActive);
 
-				if (updateExisting) {
+				if (updatingCurrentTab) {
 					chrome.tabs.executeScript(
 						tab.id,
 						{
@@ -128,9 +129,7 @@ function updateFonts(fontActivated, updateExisting) {
 // the body isn't. We don't want a delay, so the CSS will
 // enable the fonts immediately, and we only add a class
 // when we want to *remove* the custom fonts.
-//
-// DEBUG DATA: called once per tab, injected once per tab
-function injectStyleSheet(tabId, fontActivated) {
+function injectStyleSheet(tabId, extensionActive) {
 	if (chrome.runtime.lastError) {
 		handleError(chrome.runtime.lastError);
 	}
@@ -138,7 +137,7 @@ function injectStyleSheet(tabId, fontActivated) {
 	let stylesheetsCode = stylesheets.join("\n");
 	stylesheetsCode += "\nhtml{opacity:1!important}";
 
-	if (fontActivated) {
+	if (extensionActive) {
 		// Inject CSS to activate font
 		chrome.tabs.insertCSS(
 			tabId,
@@ -157,7 +156,7 @@ function injectStyleSheet(tabId, fontActivated) {
 		chrome.tabs.executeScript(
 			tabId,
 			{
-				code: `delete document.documentElement.dataset.disablefont;`
+				code: `delete document.documentElement.dataset.disablefont;document.documentElement.dataset.fontversion = "${updateCount}";`
 			},
 			() => {
 				if (chrome.runtime.lastError) {
@@ -181,8 +180,8 @@ function injectStyleSheet(tabId, fontActivated) {
 	}
 }
 
-function generateStyleSheet(updateExisting, callback) {
-	const updateSelector = updateExisting
+function generateStyleSheet(updatingCurrentTab, callback) {
+	const updateSelector = updatingCurrentTab
 		? `html[data-updatefont="${updateCount}"]`
 		: "html:not([data-updatefont])";
 
