@@ -44677,7 +44677,7 @@ addFont.onclick = function () {
 // Toggle extension on/off
 function updateStatus(status, updatingCurrentTab) {
 	chrome.storage.local.set({
-		"extensionActive": status
+		extensionActive: status
 	}, function () {
 		chrome.runtime.getBackgroundPage(function (backgroundPage) {
 			backgroundPage.updateFonts(status, updatingCurrentTab);
