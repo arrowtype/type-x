@@ -520,6 +520,7 @@ textarea:focus {
 	outline: 0;
 	border-radius: 0.25rem;
 	height: 1.75rem;
+	line-height: 1.75rem; /* Prevent cut-off descenders */
 	width: 100%;
 	-webkit-appearance: none;
 	padding: 0 1.5rem 0 0.6rem;
