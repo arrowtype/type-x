@@ -44599,601 +44599,745 @@ var localFonts = {};
 
 // Get current fonts from storage and show them in the popup
 chrome.fontSettings.getFontList(function (fonts) {
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
+	var _iteratorNormalCompletion = true;
+	var _didIteratorError = false;
+	var _iteratorError = undefined;
 
-    try {
-        for (var _iterator = fonts[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var font = _step.value;
+	try {
+		for (var _iterator = fonts[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+			var font = _step.value;
 
-            localFonts[font.displayName] = font.fontId;
-        }
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
-            }
-        } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
-        }
-    }
+			localFonts[font.displayName] = font.fontId;
+		}
+	} catch (err) {
+		_didIteratorError = true;
+		_iteratorError = err;
+	} finally {
+		try {
+			if (!_iteratorNormalCompletion && _iterator.return) {
+				_iterator.return();
+			}
+		} finally {
+			if (_didIteratorError) {
+				throw _iteratorError;
+			}
+		}
+	}
 
-    chrome.storage.local.get(["fonts", "files", "blacklist"], function (_ref) {
-        var fonts = _ref.fonts,
-            files = _ref.files,
-            blacklist = _ref.blacklist;
+	chrome.storage.local.get(["fonts", "files", "blacklist"], function (_ref) {
+		var fonts = _ref.fonts,
+		    files = _ref.files,
+		    blacklist = _ref.blacklist;
 
-        buildForm(fonts, files, blacklist);
-    });
+		buildForm(fonts, files, blacklist);
+	});
 });
 
 // Toggle extension on/off using the button
 activateFonts.onclick = function () {
-    chrome.storage.local.get("extensionActive", function (_ref2) {
-        var extensionActive = _ref2.extensionActive;
+	chrome.storage.local.get("extensionActive", function (_ref2) {
+		var extensionActive = _ref2.extensionActive;
 
-        updateStatus(!extensionActive);
-    });
+		updateStatus(!extensionActive);
+	});
 };
 
 // Show/hide font form
 showFonts.onclick = function () {
-    document.querySelector(".main-fonts").classList.toggle("show");
-    document.querySelector("footer").classList.toggle("show");
-    showFonts.classList.toggle("active");
+	document.querySelector(".main-fonts").classList.toggle("show");
+	document.querySelector("footer").classList.toggle("show");
+	showFonts.classList.toggle("active");
 };
 
 // Show/hide blacklist
 showBlacklist.onclick = function () {
-    document.querySelector(".blacklist").classList.toggle("show");
+	document.querySelector(".blacklist").classList.toggle("show");
 };
 
 // Add new font fieldset to form
 addFont.onclick = function () {
-    var randomId = window.crypto.getRandomValues(new Uint32Array(2)).join("");
-    chrome.storage.local.get("files", function (_ref3) {
-        var files = _ref3.files;
+	var randomId = window.crypto.getRandomValues(new Uint32Array(2)).join("");
+	chrome.storage.local.get("files", function (_ref3) {
+		var files = _ref3.files;
 
-        var newFont = {
-            "new": true,
-            "id": randomId,
-            "file": Object.keys(files)[0],
-            "fallback": ["monospace"],
-            "selectors": ["/* Add CSS selectors here */"],
-            "css": "/* Additional styles to apply */"
-        };
+		var newFont = {
+			new: true,
+			id: randomId,
+			file: Object.keys(files)[0],
+			fallback: ["monospace"],
+			selectors: ["/* Add CSS selectors here */"],
+			css: "/* Additional styles to apply */"
+		};
 
-        addFormElement(newFont, files);
-        saveForm();
-    });
+		addFormElement(newFont, files);
+		saveForm();
+	});
 };
 
 // Toggle extension on/off
 function updateStatus(status, updatingCurrentTab) {
-    chrome.storage.local.set({
-        "extensionActive": status
-    }, function () {
-        chrome.runtime.getBackgroundPage(function (backgroundPage) {
-            backgroundPage.updateFonts(status, updatingCurrentTab);
-        });
-        showStatus();
-    });
+	chrome.storage.local.set({
+		extensionActive: status
+	}, function () {
+		chrome.runtime.getBackgroundPage(function (backgroundPage) {
+			backgroundPage.updateFonts(status, updatingCurrentTab);
+		});
+		showStatus();
+	});
 }
 
 // Show status of extension in the popup
 var showStatus = function showStatus(firstRun) {
-    chrome.storage.local.get("extensionActive", function (_ref4) {
-        var extensionActive = _ref4.extensionActive;
+	chrome.storage.local.get("extensionActive", function (_ref4) {
+		var extensionActive = _ref4.extensionActive;
 
-        chrome.browserAction.setIcon({
-            path: "icons/typex-" + (extensionActive ? "active" : "off") + "@128.png"
-        });
-        activateFonts.classList.toggle("active", extensionActive);
-        !firstRun && activateFonts.classList.remove("first-run");
-    });
+		chrome.browserAction.setIcon({
+			path: "icons/typex-" + (extensionActive ? "active" : "off") + "@128.png"
+		});
+		activateFonts.classList.toggle("active", extensionActive);
+		!firstRun && activateFonts.classList.remove("first-run");
+	});
 };
 
 // Throttle updates
 // Source: https://gist.github.com/beaucharman/e46b8e4d03ef30480d7f4db5a78498ca
 var throttle = function throttle(fn, wait) {
-    var previouslyRun = void 0,
-        queuedToRun = void 0;
+	var previouslyRun = void 0,
+	    queuedToRun = void 0;
 
-    return function invokeFn() {
-        var now = Date.now();
+	return function invokeFn() {
+		var now = Date.now();
 
-        queuedToRun = clearTimeout(queuedToRun);
+		queuedToRun = clearTimeout(queuedToRun);
 
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
+		}
 
-        if (!previouslyRun || now - previouslyRun >= wait) {
-            fn.apply(null, args);
-            previouslyRun = now;
-        } else {
-            queuedToRun = setTimeout(invokeFn.bind.apply(invokeFn, [null].concat(args)), wait - (now - previouslyRun));
-        }
-    };
+		if (!previouslyRun || now - previouslyRun >= wait) {
+			fn.apply(null, args);
+			previouslyRun = now;
+		} else {
+			queuedToRun = setTimeout(invokeFn.bind.apply(invokeFn, [null].concat(args)), wait - (now - previouslyRun));
+		}
+	};
 };
 
 var throttledSaveForm = throttle(function () {
-    saveForm();
+	saveForm();
 }, 100);
 
 // Initialise form
 function initForm() {
-    document.querySelector("#fontsForm").oninput = function () {
-        throttledSaveForm();
-    };
+	document.querySelector("#fontsForm").oninput = function () {
+		throttledSaveForm();
+	};
 }
 
 // Generate form based on current settings
 function buildForm(fonts, files, blacklist) {
-    var form = document.querySelector("#fontsForm");
-    var usedFonts = form.querySelector("#usedFonts");
-    var blacklistEl = form.querySelector("[name=blacklist]");
+	var form = document.querySelector("#fontsForm");
+	var usedFonts = form.querySelector("#usedFonts");
+	var blacklistEl = form.querySelector("[name=blacklist]");
 
-    // Clear out previous form
-    while (usedFonts.firstChild) {
-        usedFonts.removeChild(usedFonts.firstChild);
-    }
+	// Clear out previous form
+	while (usedFonts.firstChild) {
+		usedFonts.removeChild(usedFonts.firstChild);
+	}
 
-    // Inject new fonts
-    var _iteratorNormalCompletion2 = true;
-    var _didIteratorError2 = false;
-    var _iteratorError2 = undefined;
+	// Inject new fonts
+	var _iteratorNormalCompletion2 = true;
+	var _didIteratorError2 = false;
+	var _iteratorError2 = undefined;
 
-    try {
-        for (var _iterator2 = fonts[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var font = _step2.value;
+	try {
+		for (var _iterator2 = fonts[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+			var font = _step2.value;
 
-            addFormElement(font, files);
-        }
+			addFormElement(font, files);
+		}
 
-        // Inject blacklist
-    } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                _iterator2.return();
-            }
-        } finally {
-            if (_didIteratorError2) {
-                throw _iteratorError2;
-            }
-        }
-    }
+		// Inject blacklist
+	} catch (err) {
+		_didIteratorError2 = true;
+		_iteratorError2 = err;
+	} finally {
+		try {
+			if (!_iteratorNormalCompletion2 && _iterator2.return) {
+				_iterator2.return();
+			}
+		} finally {
+			if (_didIteratorError2) {
+				throw _iteratorError2;
+			}
+		}
+	}
 
-    blacklistEl.value = blacklist.join(", ");
+	blacklistEl.value = blacklist.join(", ");
+
+	syncVariableValues();
 }
 
 // New file uploaded, append to all selects
 function updateFontDropdowns(id, name) {
-    var optgroups = document.querySelectorAll(".select-font select optgroup:first-child");
-    var _iteratorNormalCompletion3 = true;
-    var _didIteratorError3 = false;
-    var _iteratorError3 = undefined;
+	var optgroups = document.querySelectorAll(".font-file-select optgroup:first-child");
+	var _iteratorNormalCompletion3 = true;
+	var _didIteratorError3 = false;
+	var _iteratorError3 = undefined;
 
-    try {
-        for (var _iterator3 = optgroups[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-            var optgroup = _step3.value;
+	try {
+		for (var _iterator3 = optgroups[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+			var optgroup = _step3.value;
 
-            var options = optgroup.querySelectorAll("option");
-            var present = false;
-            var _iteratorNormalCompletion4 = true;
-            var _didIteratorError4 = false;
-            var _iteratorError4 = undefined;
+			var options = optgroup.querySelectorAll("option");
+			var present = false;
+			var _iteratorNormalCompletion4 = true;
+			var _didIteratorError4 = false;
+			var _iteratorError4 = undefined;
 
-            try {
-                for (var _iterator4 = options[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-                    var _option = _step4.value;
+			try {
+				for (var _iterator4 = options[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+					var _option = _step4.value;
 
-                    present = _option.value === name ? true : present;
-                }
-            } catch (err) {
-                _didIteratorError4 = true;
-                _iteratorError4 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
-                        _iterator4.return();
-                    }
-                } finally {
-                    if (_didIteratorError4) {
-                        throw _iteratorError4;
-                    }
-                }
-            }
+					present = _option.value === name ? true : present;
+				}
+			} catch (err) {
+				_didIteratorError4 = true;
+				_iteratorError4 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion4 && _iterator4.return) {
+						_iterator4.return();
+					}
+				} finally {
+					if (_didIteratorError4) {
+						throw _iteratorError4;
+					}
+				}
+			}
 
-            if (present) {
-                optgroup.value = name;
-            } else {
-                var option = document.createElement("option");
-                option.value = id;
-                option.text = name;
-                optgroup.append(option);
-            }
-        }
-    } catch (err) {
-        _didIteratorError3 = true;
-        _iteratorError3 = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                _iterator3.return();
-            }
-        } finally {
-            if (_didIteratorError3) {
-                throw _iteratorError3;
-            }
-        }
-    }
+			if (present) {
+				optgroup.value = name;
+			} else {
+				var option = document.createElement("option");
+				option.value = id;
+				option.text = name;
+				optgroup.append(option);
+			}
+		}
+	} catch (err) {
+		_didIteratorError3 = true;
+		_iteratorError3 = err;
+	} finally {
+		try {
+			if (!_iteratorNormalCompletion3 && _iterator3.return) {
+				_iterator3.return();
+			}
+		} finally {
+			if (_didIteratorError3) {
+				throw _iteratorError3;
+			}
+		}
+	}
 }
 
 // Add new font to the form
 function addFormElement(font, files) {
-    var usedFonts = document.querySelector("#usedFonts");
-    var template = document.querySelector("#newFont");
-    var el = document.importNode(template.content, true);
-    var parentEl = el.querySelector(".font");
+	var usedFonts = document.querySelector("#usedFonts");
+	var template = document.querySelector("#newFont");
+	var el = document.importNode(template.content, true);
+	var parentEl = el.querySelector(".font");
 
-    el.querySelector(".font-name-title").innerText = font.name || "New font override";
+	el.querySelector(".font-name-title").innerText = font.name || "New font override";
 
-    var fontSelect = el.querySelector(".select-font select");
+	var fontSelect = el.querySelector(".font-file-select");
 
-    var dropdown = document.createElement("select");
-    dropdown.setAttribute("name", "file");
-    dropdown.setAttribute("id", "file" + font.id);
-    dropdown.onchange = function (e) {
-        var parent = e.target.closest("fieldset");
-        var name = e.target.options[e.target.selectedIndex].text;
-        var fileId = e.target.options[e.target.selectedIndex].value;
-        parent.querySelector(".font-name-title").innerText = name;
-        addVariableSliders(false, parent);
-        chrome.storage.local.get("files", function (_ref5) {
-            var files = _ref5.files;
+	var dropdown = document.createElement("select");
+	dropdown.setAttribute("name", "file");
+	dropdown.setAttribute("id", "file" + font.id);
+	dropdown.classList.add("font-file-select");
+	dropdown.onchange = function (e) {
+		var parent = e.target.closest(".font");
+		var name = e.target.options[e.target.selectedIndex].text;
+		var fileId = e.target.options[e.target.selectedIndex].value;
+		parent.querySelector(".font-name-title").innerText = name;
+		addVariableSliders(false, parent);
+		addNamedInstances(false, parent);
+		chrome.storage.local.get("files", function (_ref5) {
+			var files = _ref5.files;
 
-            for (var file in files) {
-                if (file == fileId) {
-                    addVariableSliders(files[file].axes, parent);
-                }
-            }
-            saveForm();
-        });
-    };
+			for (var file in files) {
+				if (file == fileId) {
+					addVariableSliders(files[file].axes, parent);
+					addNamedInstances(files[file].instances, parent);
+				}
+			}
+			saveForm();
+		});
+	};
 
-    var extensionGroup = document.createElement("optgroup");
-    extensionGroup.setAttribute("label", "Custom fonts:");
-    for (var id in files) {
-        var option = document.createElement("option");
-        option.value = id;
-        option.text = files[id].name;
-        option.selected = font.file == id;
-        extensionGroup.append(option);
-    }
-    dropdown.append(extensionGroup);
+	var extensionGroup = document.createElement("optgroup");
+	extensionGroup.setAttribute("label", "Custom fonts:");
+	for (var id in files) {
+		var option = document.createElement("option");
+		option.value = id;
+		option.text = files[id].name;
+		option.selected = font.file == id;
+		extensionGroup.append(option);
+	}
+	dropdown.append(extensionGroup);
 
-    var localGroup = document.createElement("optgroup");
-    localGroup.setAttribute("label", "Local fonts:");
-    for (var _id in localFonts) {
-        var _option2 = document.createElement("option");
-        _option2.value = _id;
-        _option2.text = _id;
-        _option2.selected = font.file == _id;
-        localGroup.append(_option2);
-    }
-    dropdown.append(localGroup);
+	var localGroup = document.createElement("optgroup");
+	localGroup.setAttribute("label", "Local fonts:");
+	for (var _id in localFonts) {
+		var _option2 = document.createElement("option");
+		_option2.value = _id;
+		_option2.text = _id;
+		_option2.selected = font.file == _id;
+		localGroup.append(_option2);
+	}
+	dropdown.append(localGroup);
 
-    fontSelect.replaceWith(dropdown);
+	fontSelect.replaceWith(dropdown);
 
-    el.querySelector("[name=newfile]").dataset.fontid = font.id;
-    el.querySelector("[name=newfile]").onchange = grabFont;
+	el.querySelector("[name=newfile]").dataset.fontid = font.id;
+	el.querySelector("[name=newfile]").onchange = grabFont;
 
-    parentEl.dataset.fontid = font.id;
-    el.querySelector("[name=id]").value = font.id;
-    el.querySelector("[name=css]").value = font.css;
-    el.querySelector("[name=fallback]").value = font.fallback;
-    el.querySelector("[name=selectors]").value = font.selectors.join(", ");
+	parentEl.dataset.fontid = font.id;
+	el.querySelector("[name=id]").value = font.id;
+	el.querySelector("[name=css]").value = font.css;
+	el.querySelector("[name=fallback]").value = font.fallback;
+	el.querySelector("[name=selectors]").value = font.selectors.join(", ");
 
-    el.querySelector(".show-fallbacks").onclick = function (e) {
-        e.target.closest("fieldset").classList.toggle("show-font-fallbacks");
-    };
+	el.querySelector(".show-fallbacks").onclick = function (e) {
+		e.target.closest("fieldset").classList.toggle("show-font-fallbacks");
+	};
 
-    el.querySelector(".delete-font").onclick = function (e) {
-        e.target.closest("fieldset").remove();
-        saveForm();
-    };
+	el.querySelector(".delete-font").onclick = function (e) {
+		e.target.closest("fieldset").remove();
+		saveForm();
+	};
 
-    el.querySelector(".font-title button").onclick = function (e) {
-        e.target.closest("fieldset").classList.toggle("show-font-details");
-    };
+	el.querySelector(".font-title button").onclick = function (e) {
+		e.target.closest("fieldset").classList.toggle("show-font-details");
+	};
 
-    if (font.new) {
-        el.querySelector("fieldset").classList.add("show-font-details");
-    }
+	if (font.new) {
+		el.querySelector("fieldset").classList.add("show-font-details");
+	}
 
-    // Add variable sliders
-    var axes = false;
-    if (font.axes) {
-        axes = font.axes;
-    } else if (font.file in files) {
-        axes = files[font.file].axes;
-    }
-    addVariableSliders(axes, el);
+	// Add variable sliders
+	var axes = false;
+	if (font.axes) {
+		axes = font.axes;
+	} else if (font.file in files) {
+		axes = files[font.file].axes;
+	}
+	addVariableSliders(axes, el);
 
-    parentEl.addEventListener("dragover", highlight, false);
-    parentEl.addEventListener("dragleave", unhighlight, false);
-    parentEl.addEventListener("drop", grabFont, false);
+	// Add named variable instances
+	var instances = false;
+	if (font.instances) {
+		instances = font.instances;
+	} else if (font.file in files) {
+		instances = files[font.file].instances;
+	}
+	addNamedInstances(instances, parentEl);
 
-    usedFonts.prepend(el);
+	parentEl.addEventListener("dragover", highlight, false);
+	parentEl.addEventListener("dragleave", unhighlight, false);
+	parentEl.addEventListener("drop", grabFont, false);
+
+	usedFonts.prepend(el);
+}
+
+// Select named instance based on slider values
+function syncVariableValues() {
+	var containers = document.querySelectorAll(".font");
+	var _iteratorNormalCompletion5 = true;
+	var _didIteratorError5 = false;
+	var _iteratorError5 = undefined;
+
+	try {
+		for (var _iterator5 = containers[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+			var container = _step5.value;
+
+			var sliders = container.querySelectorAll(".variable-sliders [type=range]");
+
+			if (!sliders.length) break;
+
+			var customInstance = {};
+			var _iteratorNormalCompletion6 = true;
+			var _didIteratorError6 = false;
+			var _iteratorError6 = undefined;
+
+			try {
+				for (var _iterator6 = sliders[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+					var slider = _step6.value;
+
+					var name = slider.name.replace("var-", "");
+					customInstance[name] = parseFloat(slider.value);
+				}
+			} catch (err) {
+				_didIteratorError6 = true;
+				_iteratorError6 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion6 && _iterator6.return) {
+						_iterator6.return();
+					}
+				} finally {
+					if (_didIteratorError6) {
+						throw _iteratorError6;
+					}
+				}
+			}
+
+			var ci = JSON.stringify(customInstance);
+
+			var dropdown = container.querySelector(".select-instance");
+			var options = dropdown.querySelectorAll("option");
+			var sel = null;
+			var _iteratorNormalCompletion7 = true;
+			var _didIteratorError7 = false;
+			var _iteratorError7 = undefined;
+
+			try {
+				for (var _iterator7 = options[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+					var option = _step7.value;
+
+					if (option.dataset.instance == ci) {
+						sel = option.index;
+						break;
+					}
+				}
+			} catch (err) {
+				_didIteratorError7 = true;
+				_iteratorError7 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion7 && _iterator7.return) {
+						_iterator7.return();
+					}
+				} finally {
+					if (_didIteratorError7) {
+						throw _iteratorError7;
+					}
+				}
+			}
+
+			dropdown.selectedIndex = sel;
+		}
+	} catch (err) {
+		_didIteratorError5 = true;
+		_iteratorError5 = err;
+	} finally {
+		try {
+			if (!_iteratorNormalCompletion5 && _iterator5.return) {
+				_iterator5.return();
+			}
+		} finally {
+			if (_didIteratorError5) {
+				throw _iteratorError5;
+			}
+		}
+	}
+}
+
+function addNamedInstances(instances, el) {
+	var container = el.querySelector(".variable-instances");
+	container.innerHTML = "";
+
+	if (instances) {
+		var instanceDropdown = document.createElement("select");
+		instanceDropdown.classList.add("select-instance");
+		var option = document.createElement("option");
+		option.text = "— Custom Instance —";
+		option.value = 0;
+		instanceDropdown.append(option);
+
+		var _loop = function _loop(instance) {
+			var option = document.createElement("option");
+			option.text = instance;
+			option.value = instance;
+
+			var axes = instances[instance];
+			var orderedAxes = {};
+			Object.keys(axes).sort().forEach(function (key) {
+				orderedAxes[key] = axes[key];
+			});
+			option.dataset.instance = JSON.stringify(orderedAxes);
+			instanceDropdown.append(option);
+		};
+
+		for (var instance in instances) {
+			_loop(instance);
+		}
+
+		instanceDropdown.oninput = applyNamedInstance;
+		container.append(instanceDropdown);
+	}
+}
+
+function applyNamedInstance(e) {
+	var sel = e.target;
+	var axes = JSON.parse(sel.options[sel.selectedIndex].dataset.instance);
+	var parent = e.target.closest(".font");
+
+	for (var axis in axes) {
+		var slider = parent.querySelector("[name=var-" + axis + "]");
+		slider.value = axes[axis];
+		slider.dispatchEvent(new Event("input"));
+	}
 }
 
 function addVariableSliders(axes, el) {
-    el.querySelector(".variable-sliders").innerHTML = "";
-    if (!axes) {
-        el.querySelector(".variable-sliders-container").classList.remove("show");
-    } else {
-        var keys = Object.keys(axes);
-        keys.sort();
-        for (var i = 0; i < keys.length; ++i) {
-            var axis = {
-                id: keys[i],
-                name: axes[keys[i]].name,
-                min: axes[keys[i]].min,
-                max: axes[keys[i]].max,
-                value: axes[keys[i]].value
-            };
+	var newAxes = {};
+	el.querySelector(".variable-sliders").innerHTML = "";
+	if (!axes) {
+		el.querySelector(".variable-sliders-container").classList.remove("show");
+	} else {
+		var keys = Object.keys(axes).sort();
+		for (var i = 0; i < keys.length; ++i) {
+			var value = axes[keys[i]].value || axes[keys[i]].default || 0;
+			var axis = {
+				id: keys[i],
+				name: axes[keys[i]].name,
+				min: axes[keys[i]].min,
+				max: axes[keys[i]].max,
+				value: value
+			};
+			newAxes[keys[i]] = axis;
 
-            addSlider(axis, el);
-            el.querySelector(".variable-sliders-container").classList.add("show");
-        }
-    }
+			addSlider(axis, el);
+			el.querySelector(".variable-sliders-container").classList.add("show");
+		}
+	}
+	// Return new object of axes. TODO: we could just use
+	// the object Fontkit returns.
+	return newAxes;
 }
 
 // Store changes made to fonts
 // Note: files have already been stored at this point
 function saveForm() {
-    var newFonts = [];
-    var form = document.querySelector("#fontsForm");
-    var fieldsets = form.querySelectorAll("fieldset");
+	var newFonts = [];
+	var form = document.querySelector("#fontsForm");
+	var fieldsets = form.querySelectorAll("fieldset");
 
-    // Get new fonts
-    var _iteratorNormalCompletion5 = true;
-    var _didIteratorError5 = false;
-    var _iteratorError5 = undefined;
+	// Get new fonts
+	var _iteratorNormalCompletion8 = true;
+	var _didIteratorError8 = false;
+	var _iteratorError8 = undefined;
 
-    try {
-        for (var _iterator5 = fieldsets[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-            var fieldset = _step5.value;
+	try {
+		for (var _iterator8 = fieldsets[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+			var fieldset = _step8.value;
 
-            var newFont = {};
-            var inputs = fieldset.querySelectorAll("*[name]");
-            var axes = {};
-            var straightInputs = ["id", "css", "fallback"];
+			var newFont = {};
+			var inputs = fieldset.querySelectorAll("*[name]");
+			var _axes = {};
+			var straightInputs = ["id", "css", "fallback"];
 
-            var _iteratorNormalCompletion6 = true;
-            var _didIteratorError6 = false;
-            var _iteratorError6 = undefined;
+			var _iteratorNormalCompletion9 = true;
+			var _didIteratorError9 = false;
+			var _iteratorError9 = undefined;
 
-            try {
-                for (var _iterator6 = inputs[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-                    var input = _step6.value;
+			try {
+				for (var _iterator9 = inputs[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+					var input = _step9.value;
 
-                    if (input.name === "file") {
-                        newFont["name"] = input.options[input.selectedIndex].text;
-                        newFont["file"] = input.options[input.selectedIndex].value;
-                    } else if (straightInputs.includes(input.name)) {
-                        newFont[input.name] = input.value;
-                    } else if (input.name.startsWith("var-")) {
-                        var name = input.name.replace("var-", "");
-                        var axis = {
-                            id: name,
-                            name: input.dataset.name,
-                            min: input.min,
-                            max: input.max,
-                            value: input.value
-                        };
-                        axes[name] = axis;
-                    } else if (input.name === "selectors") {
-                        // Selectors should become an array
-                        newFont["selectors"] = input.value.split(",").map(function (i) {
-                            return i.trim();
-                        });
-                    }
-                }
-            } catch (err) {
-                _didIteratorError6 = true;
-                _iteratorError6 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion6 && _iterator6.return) {
-                        _iterator6.return();
-                    }
-                } finally {
-                    if (_didIteratorError6) {
-                        throw _iteratorError6;
-                    }
-                }
-            }
+					if (input.name === "file") {
+						newFont["name"] = input.options[input.selectedIndex].text;
+						newFont["file"] = input.options[input.selectedIndex].value;
+					} else if (straightInputs.includes(input.name)) {
+						newFont[input.name] = input.value;
+					} else if (input.name.startsWith("var-")) {
+						var name = input.name.replace("var-", "");
+						var axis = {
+							id: name,
+							name: input.dataset.name,
+							min: input.min,
+							max: input.max,
+							value: input.value
+						};
+						_axes[name] = axis;
+					} else if (input.name === "selectors") {
+						// Selectors should become an array
+						newFont["selectors"] = input.value.split(",").map(function (i) {
+							return i.trim();
+						});
+					}
+				}
+			} catch (err) {
+				_didIteratorError9 = true;
+				_iteratorError9 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion9 && _iterator9.return) {
+						_iterator9.return();
+					}
+				} finally {
+					if (_didIteratorError9) {
+						throw _iteratorError9;
+					}
+				}
+			}
 
-            newFont.axes = axes;
-            newFonts.unshift(newFont);
-        }
+			newFont.axes = _axes;
+			newFonts.unshift(newFont);
+		}
 
-        // Get blacklist
-    } catch (err) {
-        _didIteratorError5 = true;
-        _iteratorError5 = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion5 && _iterator5.return) {
-                _iterator5.return();
-            }
-        } finally {
-            if (_didIteratorError5) {
-                throw _iteratorError5;
-            }
-        }
-    }
+		// Get blacklist
+	} catch (err) {
+		_didIteratorError8 = true;
+		_iteratorError8 = err;
+	} finally {
+		try {
+			if (!_iteratorNormalCompletion8 && _iterator8.return) {
+				_iterator8.return();
+			}
+		} finally {
+			if (_didIteratorError8) {
+				throw _iteratorError8;
+			}
+		}
+	}
 
-    var blacklist = form.querySelector("[name=blacklist]").value.split(",").map(function (i) {
-        return i.trim();
-    });
+	var blacklist = form.querySelector("[name=blacklist]").value.split(",").map(function (i) {
+		return i.trim();
+	});
 
-    // Apply new fonts and activate extension
-    chrome.storage.local.set({
-        "fonts": newFonts,
-        "blacklist": blacklist
-    }, function () {
-        updateStatus(true, true);
-    });
+	// Apply new fonts and activate extension
+	chrome.storage.local.set({
+		fonts: newFonts,
+		blacklist: blacklist
+	}, function () {
+		updateStatus(true, true);
+	});
+
+	syncVariableValues();
 }
 
 // Keep track of file data, and hook up to rest
 // of form data on submit
 function grabFont(e) {
-    var files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
-    var file = files[0]; // Only use first file if multiple are dropped
-    var name = file.name;
-    var parent = e.target.closest("fieldset");
-    var fontId = parent.dataset.fontid;
+	var files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
+	var file = files[0]; // Only use first file if multiple are dropped
+	var name = file.name;
+	var parent = e.target.closest("fieldset");
+	var fontId = parent.dataset.fontid;
 
-    parent.classList.remove("highlight");
+	parent.classList.remove("highlight");
 
-    // Check if filetype is allowed
-    var allowedExt = ["ttf", "otf", "eot", "woff", "woff2"];
-    var ext = name.split('.').pop().toLowerCase();
-    if (!allowedExt.includes(ext)) {
-        return false;
-    }
+	// Check if filetype is allowed
+	var allowedExt = ["ttf", "otf", "eot", "woff", "woff2"];
+	var ext = name.split(".").pop().toLowerCase();
+	if (!allowedExt.includes(ext)) {
+		return false;
+	}
 
-    var reader = new FileReader();
-    reader.onload = function (_ref6) {
-        var target = _ref6.target;
+	var reader = new FileReader();
+	reader.onload = function (_ref6) {
+		var target = _ref6.target;
 
-        // Stick new file in storage
-        chrome.storage.local.get("files", function (_ref7) {
-            var files = _ref7.files;
+		// Stick new file in storage
+		chrome.storage.local.get("files", function (_ref7) {
+			var files = _ref7.files;
 
-            files[name] = {};
-            files[name].file = target.result;
-            files[name].name = name;
-            files[name].axes = {};
+			files[name] = {};
+			files[name].file = target.result;
+			files[name].name = name;
+			files[name].axes = {};
 
-            chrome.storage.local.set({
-                "files": files
-            }, function () {
-                parent.querySelector(".font-name-title").innerText = name;
-                // Update dropdown
-                updateFontDropdowns(name, name);
-                var dropdown = document.querySelector("#file" + fontId);
-                dropdown.value = name;
+			chrome.storage.local.set({
+				files: files
+			}, function () {
+				parent.querySelector(".font-name-title").innerText = name;
+				// Update dropdown
+				updateFontDropdowns(name, name);
+				var dropdown = document.querySelector("#file" + fontId);
+				dropdown.value = name;
 
-                // Font is saved, add variable axes, if any
-                grabVariableData(file, parent);
+				// Font is saved, add variable axes, if any
+				grabVariableData(file, parent);
 
-                // Note that we might save with the wrong axes here,
-                // as the grabVariableData function might save
-                saveForm();
-            });
-        });
-    };
-    reader.readAsDataURL(file);
+				// Note that we might save with the wrong axes here,
+				// as the grabVariableData function might save
+				saveForm();
+			});
+		});
+	};
+	reader.readAsDataURL(file);
 }
 
-// Analyse font for variable axes, add form inputs
-// for them
+// Analyse a *new* font for variable axes, create form inputs
 function grabVariableData(file, parent) {
-    var font = false;
+	var font = false;
 
-    parent.querySelector(".variable-sliders-container").classList.remove("show");
+	parent.querySelector(".variable-sliders-container").classList.remove("show");
 
-    (0, _blobToBuffer2.default)(file, function (error, buffer) {
-        try {
-            var axes = {};
-            font = _fontkit2.default.create(buffer);
+	(0, _blobToBuffer2.default)(file, function (_error, buffer) {
+		try {
+			font = _fontkit2.default.create(buffer);
 
-            // Clean out previous sliders
-            document.querySelector(".variable-sliders").innerHTML = "";
+			var _axes2 = addVariableSliders(font.variationAxes, parent);
+			addNamedInstances(font.namedVariations, parent);
 
-            var keys = Object.keys(font.variationAxes);
-            keys.sort();
-            for (var i = 0; i < keys.length; ++i) {
-                var axis = {
-                    id: keys[i],
-                    name: font.variationAxes[keys[i]].name,
-                    min: font.variationAxes[keys[i]].min,
-                    max: font.variationAxes[keys[i]].max,
-                    value: font.variationAxes[keys[i]].default
-                };
-                axes[keys[i]] = axis;
+			// Save form again, now with proper axes
+			saveForm();
 
-                addSlider(axis, parent);
-                parent.querySelector(".variable-sliders-container").classList.add("show");
-            }
+			chrome.storage.local.get("files", function (_ref8) {
+				var files = _ref8.files;
 
-            // Save form again, now with proper axes
-            saveForm();
+				files[file.name].axes = _axes2;
+				files[file.name].instances = font.namedVariations;
 
-            chrome.storage.local.get("files", function (_ref8) {
-                var files = _ref8.files;
-
-                files[file.name].axes = axes;
-
-                chrome.storage.local.set({
-                    "files": files
-                });
-            });
-        } catch (e) {
-            console.log("Failed to parse font.");
-        }
-    });
+				chrome.storage.local.set({
+					files: files
+				});
+			});
+		} catch (e) {
+			console.log("Failed to parse font.");
+		}
+	});
 }
 
 function addSlider(axis, parent) {
-    var variableSliders = parent.querySelector(".variable-sliders");
-    var template = document.querySelector("#variableSlider");
-    var el = document.importNode(template.content, true);
+	var variableSliders = parent.querySelector(".variable-sliders");
+	var template = document.querySelector("#variableSlider");
+	var el = document.importNode(template.content, true);
 
-    var input = el.querySelector("input");
-    var label = el.querySelector("label");
-    var value = el.querySelector(".slider-value");
+	var input = el.querySelector("input");
+	var label = el.querySelector("label");
+	var value = el.querySelector(".slider-value");
 
-    label.innerText = axis.name;
+	label.innerText = axis.name;
 
-    input.name = "var-" + axis.id;
-    input.min = axis.min;
-    input.max = axis.max;
-    input.value = axis.value;
-    input.dataset.name = axis.name;
-    value.innerText = axis.value;
+	input.name = "var-" + axis.id;
+	input.min = axis.min;
+	input.max = axis.max;
+	input.value = axis.value;
+	input.dataset.name = axis.name;
+	value.innerText = axis.value;
 
-    input.oninput = function (e) {
-        value.innerText = e.target.value;
-    };
+	input.oninput = function (e) {
+		value.innerText = e.target.value;
+	};
 
-    variableSliders.append(el);
+	variableSliders.append(el);
 }
 
 function highlight(e) {
-    this.classList.add("highlight");
-    e.preventDefault();
-    e.stopPropagation();
+	this.classList.add("highlight");
+	e.preventDefault();
+	e.stopPropagation();
 }
 
 function unhighlight(e) {
-    this.classList.remove("highlight");
-    e.preventDefault();
-    e.stopPropagation();
+	this.classList.remove("highlight");
+	e.preventDefault();
+	e.stopPropagation();
 }
 
 // Initialise popup
