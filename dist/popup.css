@@ -537,7 +537,7 @@ textarea:focus {
 	}
 }
 
-.variable-instances {
+.select-instance {
 	margin-top: 0.25rem;
 }
 
@@ -571,7 +571,6 @@ textarea:focus {
 
 .select-font-button svg {
 	width: 100%;
-	margin-bottom: var(--spacing-unit-half);
 }
 
 .select-font-button input {
