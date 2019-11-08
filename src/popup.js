@@ -32,9 +32,13 @@ chrome.fontSettings.getFontList(fonts => {
 
 // Toggle extension on/off using the button
 activateFonts.onclick = () => {
-	chrome.storage.local.get("fontActivated", ({ fontActivated }) => {
-		updateStatus(!fontActivated);
-	});
+    chrome.storage.local.get(
+        "extensionActive", ({
+            extensionActive
+        }) => {
+            updateStatus(!extensionActive);
+        }
+    );
 };
 
 // Show/hide font form
@@ -68,30 +72,31 @@ addFont.onclick = () => {
 };
 
 // Toggle extension on/off
-function updateStatus(status, updateExisting) {
-	chrome.storage.local.set(
-		{
-			fontActivated: status
-		},
-		() => {
-			chrome.runtime.getBackgroundPage(backgroundPage => {
-				backgroundPage.updateFonts(status, updateExisting);
-			});
-			showStatus();
-		}
-	);
+function updateStatus(status, updatingCurrentTab) {
+    chrome.storage.local.set({
+        "extensionActive": status
+    }, () => {
+        chrome.runtime.getBackgroundPage(backgroundPage => {
+            backgroundPage.updateFonts(status, updatingCurrentTab);
+        });
+        showStatus();
+    });
 }
 
 // Show status of extension in the popup
-const showStatus = firstRun => {
-	chrome.storage.local.get("fontActivated", ({ fontActivated }) => {
-		chrome.browserAction.setIcon({
-			path: `icons/typex-${fontActivated ? "active" : "off"}@128.png`
-		});
-		activateFonts.classList.toggle("active", fontActivated);
-		!firstRun && activateFonts.classList.remove("first-run");
-	});
-};
+const showStatus = (firstRun) => {
+    chrome.storage.local.get(
+        "extensionActive", ({
+            extensionActive
+        }) => {
+            chrome.browserAction.setIcon({
+                path: `icons/typex-${extensionActive ? "active" : "off"}@128.png`
+            });
+            activateFonts.classList.toggle("active", extensionActive);
+            !firstRun && activateFonts.classList.remove("first-run");
+        }
+    );
+}
 
 // Throttle updates
 // Source: https://gist.github.com/beaucharman/e46b8e4d03ef30480d7f4db5a78498ca
