@@ -44635,10 +44635,10 @@ chrome.fontSettings.getFontList(function (fonts) {
 
 // Toggle extension on/off using the button
 activateFonts.onclick = function () {
-    chrome.storage.local.get("fontActivated", function (_ref2) {
-        var fontActivated = _ref2.fontActivated;
+    chrome.storage.local.get("extensionActive", function (_ref2) {
+        var extensionActive = _ref2.extensionActive;
 
-        updateStatus(!fontActivated);
+        updateStatus(!extensionActive);
     });
 };
 
@@ -44675,12 +44675,12 @@ addFont.onclick = function () {
 };
 
 // Toggle extension on/off
-function updateStatus(status, updateExisting) {
+function updateStatus(status, updatingCurrentTab) {
     chrome.storage.local.set({
-        "fontActivated": status
+        "extensionActive": status
     }, function () {
         chrome.runtime.getBackgroundPage(function (backgroundPage) {
-            backgroundPage.updateFonts(status, updateExisting);
+            backgroundPage.updateFonts(status, updatingCurrentTab);
         });
         showStatus();
     });
@@ -44688,13 +44688,13 @@ function updateStatus(status, updateExisting) {
 
 // Show status of extension in the popup
 var showStatus = function showStatus(firstRun) {
-    chrome.storage.local.get("fontActivated", function (_ref4) {
-        var fontActivated = _ref4.fontActivated;
+    chrome.storage.local.get("extensionActive", function (_ref4) {
+        var extensionActive = _ref4.extensionActive;
 
         chrome.browserAction.setIcon({
-            path: "icons/typex-" + (fontActivated ? "active" : "off") + "@128.png"
+            path: "icons/typex-" + (extensionActive ? "active" : "off") + "@128.png"
         });
-        activateFonts.classList.toggle("active", fontActivated);
+        activateFonts.classList.toggle("active", extensionActive);
         !firstRun && activateFonts.classList.remove("first-run");
     });
 };
