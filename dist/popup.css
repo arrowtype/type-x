@@ -58,7 +58,7 @@
 
 	/* default font axis values */
 	--mono: 0;
-	--xprn: 0;
+	--casl: 0;
 	--wght: 400;
 	--slnt: 0;
 	--ital: 0.5;
@@ -88,13 +88,13 @@
 	/* TODO: load this from JavaScript through FontFaceSet
     so we can re-use recursive-fonts.js */
 	font-family: "Recursive";
-	src: url("./fonts/rec-mono_xprn_wght_slnt_ital--2019_09_30.woff2");
+	src: url("./fonts/recursive-MONO_CASL_wght_slnt_ital--2019_11_05-00_13--subset-0020_007F.woff2");
 }
 
 * {
 	font-family: "Recursive";
 	box-sizing: border-box;
-	font-variation-settings: "MONO" var(--mono), "XPRN" var(--xprn), "wght" var(--wght),
+	font-variation-settings: "MONO" var(--mono), "CASL" var(--casl), "wght" var(--wght),
 		"slnt" var(--slnt), "ital" var(--ital);
 }
 
@@ -127,7 +127,7 @@ button {
 /* Global styles */
 
 .all-caps {
-	--xprn: 1;
+	--casl: 1;
 	--wght: 500;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
@@ -177,7 +177,7 @@ header {
 }
 
 .toggle-switch-container {
-	--xprn: 1;
+	--casl: 1;
 	--wght: 400;
 	--slnt: 0;
 	color: var(--text-p2);
@@ -186,7 +186,7 @@ header {
 
 .activate-fonts:hover .toggle-switch-container,
 .activate-fonts.active .toggle-switch-container {
-	--xprn: 1;
+	--casl: 1;
 	--wght: 800;
 	--slnt: -15;
 	color: var(--text-p1);
@@ -319,7 +319,7 @@ input[type="text"] {
 }
 
 label.all-caps {
-	--xprn: 0;
+	--casl: 0;
 	font-size: var(--t3);
 	color: var(--text-p3);
 	margin-bottom: 0.125rem;
@@ -600,7 +600,7 @@ textarea:focus {
 }
 
 .font-name-title {
-	--xprn: 1;
+	--casl: 1;
 	--wght: 500;
 	font-size: var(--t1);
 	white-space: nowrap;
