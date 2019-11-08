@@ -71,11 +71,8 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
 });
 
 // Update fonts across all tabs
+let prevUpdateCount;
 function updateFonts(extensionActive, updatingCurrentTab) {
-	console.log(updateCount);
-
-	updateCount++;
-
 	// Update only the active tab
 	let tabsSettings = {
 		active: true,
@@ -156,7 +153,7 @@ function injectStyleSheet(tabId, extensionActive) {
 		chrome.tabs.executeScript(
 			tabId,
 			{
-				code: `delete document.documentElement.dataset.disablefont;document.documentElement.dataset.fontversion = "${updateCount}";`
+				code: `delete document.documentElement.dataset.disablefont;`
 			},
 			() => {
 				if (chrome.runtime.lastError) {
@@ -180,12 +177,18 @@ function injectStyleSheet(tabId, extensionActive) {
 	}
 }
 
+let prevFonts;
 function generateStyleSheet(updatingCurrentTab, callback) {
-	const updateSelector = updatingCurrentTab
-		? `html[data-updatefont="${updateCount}"]`
-		: "html:not([data-updatefont])";
-
 	chrome.storage.local.get(["fonts", "files", "blacklist"], ({ fonts, files, blacklist }) => {
+		// Check if fonts have been updated
+		const currentFonts = JSON.stringify(fonts);
+		const same = currentFonts == prevFonts;
+		prevFonts = currentFonts;
+		if (!same) updateCount++;
+
+		const updateSelector = updatingCurrentTab
+			? `html[data-updatefont="${updateCount}"]`
+			: "html:not([data-updatefont])";
 		stylesheets = [];
 
 		const blacklistSelectors = (() => {
