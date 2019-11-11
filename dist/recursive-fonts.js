@@ -13,61 +13,61 @@
 // limitations under the License.
 
 const defaultFonts = [
-	// {
-	// 	id: 1,
-	// 	name: "Recursive",
-	// 	file: "RecursiveOriginal",
-	// 	fallback: "monospace",
-	// 	selectors: [
-	// 		"code",
-	// 		"code *", // Code blocks with syntax highlighting
-	// 		"pre",
-	// 		"pre *", // Code blocks with syntax highlighting
-	// 		"samp",
-	// 		"kbd",
-	// 		".blob-code", // Github
-	// 		".blob-code *" // Github
-	// 	],
-	// 	css: "line-height: normal; font-feature-settings: normal;",
-	// 	inherit: false,
-	// 	axes: {
-	// 		MONO: {
-	// 			id: "MONO",
-	// 			name: "Monospace",
-	// 			min: 0,
-	// 			max: 1,
-	// 			value: 0
-	// 		},
-	// 		CASL: {
-	// 			id: "CASL",
-	// 			name: "Casual",
-	// 			min: 0,
-	// 			max: 1,
-	// 			value: 0
-	// 		},
-	// 		ital: {
-	// 			id: "ital",
-	// 			name: "Italic",
-	// 			min: 0,
-	// 			max: 1,
-	// 			value: 0.5
-	// 		},
-	// 		slnt: {
-	// 			id: "slnt",
-	// 			name: "Slant",
-	// 			min: -15,
-	// 			max: 0,
-	// 			value: 0
-	// 		},
-	// 		wght: {
-	// 			id: "wght",
-	// 			name: "Weight",
-	// 			min: 300,
-	// 			max: 900,
-	// 			value: 400
-	// 		}
-	// 	}
-	// },
+	{
+		id: 1,
+		name: "Recursive",
+		file: "RecursiveOriginal",
+		fallback: "monospace",
+		selectors: [
+			"code",
+			"code *", // Code blocks with syntax highlighting
+			"pre",
+			"pre *", // Code blocks with syntax highlighting
+			"samp",
+			"kbd",
+			".blob-code", // Github
+			".blob-code *" // Github
+		],
+		css: "line-height: normal; font-feature-settings: normal;",
+		inherit: false,
+		axes: {
+			MONO: {
+				id: "MONO",
+				name: "Monospace",
+				min: 0,
+				max: 1,
+				value: 0
+			},
+			CASL: {
+				id: "CASL",
+				name: "Casual",
+				min: 0,
+				max: 1,
+				value: 0
+			},
+			ital: {
+				id: "ital",
+				name: "Italic",
+				min: 0,
+				max: 1,
+				value: 0.5
+			},
+			slnt: {
+				id: "slnt",
+				name: "Slant",
+				min: -15,
+				max: 0,
+				value: 0
+			},
+			wght: {
+				id: "wght",
+				name: "Weight",
+				min: 300,
+				max: 900,
+				value: 400
+			}
+		}
+	},
 	{
 		id: 2,
 		name: "Recursive",
