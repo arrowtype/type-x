@@ -749,25 +749,30 @@ footer {
 	box-shadow: 0 -1px 0 var(--separator);
 }
 
-footer a {
+footer a,
+footer button {
+	color: var(--text-p3);
+	text-decoration: none;
 	transition: color var(--speed-1);
 }
 
-footer a:hover {
+footer a:hover,
+footer button:hover {
 	color: var(--accent);
 }
 
-footer span a {
-	color: var(--text-p3);
-	text-decoration: none;
+footer .muted-link {
+	color: inherit;
 }
 
-footer > a {
-	margin-left: auto;
-	color: inherit;
-	text-decoration: underline;
+footer span {
+	margin-right: auto;
 }
 
 footer.show {
 	display: flex;
+}
+
+.full-reset {
+	margin-right: var(--spacing-unit-half);
 }

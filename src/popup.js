@@ -18,7 +18,20 @@ const activateFonts = document.querySelector("#activateFonts");
 const showFonts = document.querySelector("#showFonts");
 const addFont = document.querySelector("#addFont");
 const showBlacklist = document.querySelector("#showBlacklist");
+const fullReset = document.querySelector(".full-reset");
 const localFonts = {};
+
+fullReset.onclick = () => {
+	if (window.confirm("Do you really want to reset Type-X?")) {
+		chrome.runtime.getBackgroundPage(backgroundPage => {
+			backgroundPage.updateFonts(false, true);
+			setTimeout(() => {
+				backgroundPage.initTypeX();
+				chrome.runtime.reload();
+			}, 100);
+		});
+	}
+};
 
 // Get current fonts from storage and show them in the popup
 chrome.fontSettings.getFontList(fonts => {

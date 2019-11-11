@@ -15,6 +15,7 @@
 // Extension variables
 let stylesheets = [];
 let updateCount = 0;
+let prevFonts;
 const defaultBlacklist = [
 	".icon",
 	".Icon",
@@ -32,6 +33,10 @@ chrome.runtime.onInstalled.addListener(() => {
 		handleError(chrome.runtime.lastError);
 	}
 
+	initTypeX();
+});
+
+function initTypeX() {
 	chrome.storage.local.set(
 		{
 			extensionActive: false,
@@ -43,7 +48,7 @@ chrome.runtime.onInstalled.addListener(() => {
 			generateStyleSheet();
 		}
 	);
-});
+}
 
 chrome.runtime.onStartup.addListener(() => {
 	generateStyleSheet();
@@ -177,7 +182,6 @@ function injectStyleSheet(tabId, extensionActive) {
 	}
 }
 
-let prevFonts;
 function generateStyleSheet(updatingCurrentTab, callback) {
 	chrome.storage.local.get(["fonts", "files", "blacklist"], ({ fonts, files, blacklist }) => {
 		// Check if fonts have been updated
