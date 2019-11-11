@@ -45057,22 +45057,22 @@ function addNamedInstances(instances, el) {
 
 	if (instances) {
 		// Create instances dropdown
-		var instanceDropdown = document.createElement("select");
-		instanceDropdown.classList.add("select-instance");
-		instanceDropdown.name = "select-instance";
+		var dropdown = document.createElement("select");
+		dropdown.classList.add("select-instance");
+		dropdown.name = "select-instance";
 
 		// Add "turn off font-variation-settings" option
 		var option = document.createElement("option");
 		option.text = "— Inherit page styles —";
 		option.value = "--inherit--";
-		instanceDropdown.append(option);
+		dropdown.append(option);
 
 		// Add "using axes, but none of a named instance" option
 		var option2 = document.createElement("option");
 		option2.text = "— Custom axes —";
 		option2.value = "--axes--";
 		option2.disabled = true;
-		instanceDropdown.append(option2);
+		dropdown.append(option2);
 
 		var _loop = function _loop(instance) {
 			var option = document.createElement("option");
@@ -45085,15 +45085,16 @@ function addNamedInstances(instances, el) {
 				orderedAxes[key] = axes[key];
 			});
 			option.dataset.instance = JSON.stringify(orderedAxes);
-			instanceDropdown.append(option);
+			dropdown.append(option);
 		};
 
 		for (var instance in instances) {
 			_loop(instance);
 		}
 
-		instanceDropdown.oninput = applyNamedInstance;
-		container.append(instanceDropdown);
+		dropdown.oninput = applyNamedInstance;
+		dropdown.selectedIndex = -1;
+		container.append(dropdown);
 	}
 }
 
