@@ -29,6 +29,7 @@ const defaultFonts = [
 			".blob-code *" // Github
 		],
 		css: "line-height: normal; font-feature-settings: normal;",
+		inherit: false,
 		axes: {
 			MONO: {
 				id: "MONO",
@@ -74,6 +75,7 @@ const defaultFonts = [
 		fallback: "sans-serif",
 		selectors: ["*"],
 		css: "",
+		inherit: false,
 		axes: {
 			MONO: {
 				id: "MONO",

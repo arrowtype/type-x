@@ -45059,22 +45059,19 @@ function addNamedInstances(instances, el) {
 		// Create instances dropdown
 		var instanceDropdown = document.createElement("select");
 		instanceDropdown.classList.add("select-instance");
+		instanceDropdown.name = "select-instance";
 
 		// Add "turn off font-variation-settings" option
-		// font-variation-settings: off
-		// axes values: ignored
 		var option = document.createElement("option");
 		option.text = "— Inherit page styles —";
 		option.value = "--inherit--";
 		instanceDropdown.append(option);
 
 		// Add "using axes, but none of a named instance" option
-		// Should this be a read-only option?
-		// font-variation-settings: on
-		// axes values: not equal to any named instance
 		var option2 = document.createElement("option");
 		option2.text = "— Custom axes —";
 		option2.value = "--axes--";
+		option2.disabled = true;
 		instanceDropdown.append(option2);
 
 		var _loop = function _loop(instance) {
@@ -45176,6 +45173,8 @@ function saveForm() {
 					if (input.name === "file") {
 						newFont["name"] = input.options[input.selectedIndex].text;
 						newFont["file"] = input.options[input.selectedIndex].value;
+					} else if (input.name === "select-instance") {
+						newFont["inherit"] = input.value === "--inherit--";
 					} else if (straightInputs.includes(input.name)) {
 						newFont[input.name] = input.value;
 					} else if (input.name.startsWith("var-")) {
