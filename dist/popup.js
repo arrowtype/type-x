@@ -44942,7 +44942,7 @@ function addFormElement(font, files) {
 	} else if (font.file in files) {
 		instances = files[font.file].instances;
 	}
-	addNamedInstances(instances, parentEl);
+	addNamedInstances(instances, parentEl, font.inherit);
 
 	parentEl.addEventListener("dragover", highlight, false);
 	parentEl.addEventListener("dragleave", unhighlight, false);
@@ -45051,7 +45051,7 @@ function syncVariableValues() {
 	}
 }
 
-function addNamedInstances(instances, el) {
+function addNamedInstances(instances, el, inherit) {
 	var container = el.querySelector(".variable-instances");
 	container.innerHTML = "";
 
@@ -45093,7 +45093,13 @@ function addNamedInstances(instances, el) {
 		}
 
 		dropdown.oninput = applyNamedInstance;
-		dropdown.selectedIndex = -1;
+
+		// If not explicitly set to inherit page styles,
+		// do not select an option from the dropdown, so
+		// syncVariableValues can do it for us
+		if (!inherit) {
+			dropdown.selectedIndex = -1;
+		}
 		container.append(dropdown);
 	}
 }
