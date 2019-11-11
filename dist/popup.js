@@ -44933,7 +44933,7 @@ function addFormElement(font, files) {
 	} else if (font.file in files) {
 		axes = files[font.file].axes;
 	}
-	addVariableSliders(axes, el);
+	addVariableSliders(axes, parentEl);
 
 	// Add named variable instances
 	var instances = false;
@@ -44996,8 +44996,15 @@ function syncVariableValues() {
 			var ci = JSON.stringify(customInstance);
 
 			var dropdown = container.querySelector(".select-instance");
+			if (dropdown.value == "--inherit--") {
+				container.querySelector(".variable-sliders-container").classList.add("mute");
+				return;
+			} else {
+				container.querySelector(".variable-sliders-container").classList.remove("mute");
+			}
+
 			var options = dropdown.querySelectorAll("option");
-			var sel = null;
+			var sel = 1; // "--axes--"
 			var _iteratorNormalCompletion7 = true;
 			var _didIteratorError7 = false;
 			var _iteratorError7 = undefined;
@@ -45049,12 +45056,26 @@ function addNamedInstances(instances, el) {
 	container.innerHTML = "";
 
 	if (instances) {
+		// Create instances dropdown
 		var instanceDropdown = document.createElement("select");
 		instanceDropdown.classList.add("select-instance");
+
+		// Add "turn off font-variation-settings" option
+		// font-variation-settings: off
+		// axes values: ignored
 		var option = document.createElement("option");
-		option.text = "— Custom Instance —";
-		option.value = 0;
+		option.text = "— Inherit page styles —";
+		option.value = "--inherit--";
 		instanceDropdown.append(option);
+
+		// Add "using axes, but none of a named instance" option
+		// Should this be a read-only option?
+		// font-variation-settings: on
+		// axes values: not equal to any named instance
+		var option2 = document.createElement("option");
+		option2.text = "— Custom axes —";
+		option2.value = "--axes--";
+		instanceDropdown.append(option2);
 
 		var _loop = function _loop(instance) {
 			var option = document.createElement("option");
@@ -45081,8 +45102,13 @@ function addNamedInstances(instances, el) {
 
 function applyNamedInstance(e) {
 	var sel = e.target;
-	var axes = JSON.parse(sel.options[sel.selectedIndex].dataset.instance);
+
+	if (sel.value == "--inherit--" || sel.value == "--axes--") {
+		return;
+	}
+
 	var parent = e.target.closest(".font");
+	var axes = JSON.parse(sel.options[sel.selectedIndex].dataset.instance);
 
 	for (var axis in axes) {
 		var slider = parent.querySelector("[name=var-" + axis + "]");
@@ -45323,6 +45349,9 @@ function addSlider(axis, parent) {
 
 	input.oninput = function (e) {
 		value.innerText = e.target.value;
+		// Move dropdown away from "--inherit--" option to ensure
+		// axes/dropdown are synced properly
+		parent.querySelector(".select-instance").value = "--axes--";
 	};
 
 	variableSliders.append(el);
