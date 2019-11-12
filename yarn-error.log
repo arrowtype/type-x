@@ -32,7 +32,7 @@ npm manifest:
     "version": "1.0.0",
     "description": "Type-X browser extension",
     "main": "index.js",
-    "repository": "git@github.com:kabisa/recursive-extension.git",
+    "repository": "git@github.com:arrowtype/type-x.git",
     "author": "Roel Nieskens <roel@pixelambacht.nl>",
     "license": "MIT",
     "private": true,
