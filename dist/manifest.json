@@ -1,7 +1,7 @@
 {
-    "name": "Recursive Font Swapper",
+    "name": "Type-X",
     "version": "1.1",
-    "description": "Swap out fonts with Recursive",
+    "description": "Test your fonts across the web!",
     "manifest_version": 2,
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "permissions": [
@@ -23,7 +23,7 @@
         "fonts/*"
     ],
     "browser_action": {
-        "default_title": "Recursive Font Swapper",
+        "default_title": "Type-X",
         "default_popup": "popup.html",
         "default_icon": {
             "16": "icons/typex-off@16.png",
