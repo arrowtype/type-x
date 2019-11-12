@@ -36,7 +36,7 @@ const defaultFonts = [
 				name: "Monospace",
 				min: 0,
 				max: 1,
-				value: 0
+				value: 1
 			},
 			CASL: {
 				id: "CASL",
@@ -75,7 +75,7 @@ const defaultFonts = [
 		fallback: "sans-serif",
 		selectors: ["*"],
 		css: "",
-		inherit: false,
+		inherit: true,
 		axes: {
 			MONO: {
 				id: "MONO",
