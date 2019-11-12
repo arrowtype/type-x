@@ -378,7 +378,7 @@ textarea:focus {
 .overrides {
 	height: 3rem;
 	background: var(--bg-main);
-	padding: 0 var(--spacing-unit);
+	padding: 0 calc(var(--spacing-unit)*0.75);
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
