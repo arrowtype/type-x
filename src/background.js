@@ -76,7 +76,6 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
 });
 
 // Update fonts across all tabs
-let prevUpdateCount;
 function updateFonts(extensionActive, updatingCurrentTab) {
 	// Update only the active tab
 	let tabsSettings = {
