@@ -44595,7 +44595,20 @@ var activateFonts = document.querySelector("#activateFonts");
 var showFonts = document.querySelector("#showFonts");
 var addFont = document.querySelector("#addFont");
 var showBlacklist = document.querySelector("#showBlacklist");
+var fullReset = document.querySelector(".full-reset");
 var localFonts = {};
+
+fullReset.onclick = function () {
+	if (window.confirm("Do you really want to reset Type-X?")) {
+		chrome.runtime.getBackgroundPage(function (backgroundPage) {
+			backgroundPage.updateFonts(false, true);
+			setTimeout(function () {
+				backgroundPage.initTypeX();
+				chrome.runtime.reload();
+			}, 100);
+		});
+	}
+};
 
 // Get current fonts from storage and show them in the popup
 chrome.fontSettings.getFontList(function (fonts) {
