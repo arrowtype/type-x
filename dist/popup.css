@@ -80,7 +80,7 @@
 		--gray-2: hsla(230, 3%, 91%, 1);
 		--accent: #0050ff;
 		--code: #2f5bbb;
-		--destructive: rgb(126, 14, 14);
+		--destructive: hsla(0, 80%, 50%, 1);
 	}
 }
 
