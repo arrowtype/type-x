@@ -1,158 +1,216 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="popup.css" />
+	</head>
 
-<head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="popup.css">
-</head>
+	<body>
+		<header>
+			<button type="button" id="activateFonts" class="activate-fonts first-run">
+				<span class="toggle-switch-container">
+					<span class="toggle-switch"></span>
+					Type-X
+				</span>
+			</button>
+			<button type="button" id="showFonts" class="show-fonts">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+					<path
+						fill="none"
+						stroke-linecap="round"
+						stroke-width="2"
+						d="M1 8L15 8M1 1L15 1M.878583652 15L14.8785837 15"
+					/>
+				</svg>
+			</button>
+		</header>
 
-<body>
+		<main class="main-fonts">
+			<div class="overrides all-caps">
+				<button type="button" id="addFont" class="add-font button-flex all-caps">
+					<span>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+							<g
+								fill="none"
+								fill-rule="evenodd"
+								stroke-linecap="round"
+								stroke-width="2"
+							>
+								<path d="M2,8 L14,8" />
+								<path d="M2,8 L14,8" transform="rotate(90 8 8)" />
+							</g>
+						</svg>
+						Add font override
+					</span>
+				</button>
+				<button type="button" class="all-caps button-flex full-reset">
+					<span>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+							<path
+								fill="none"
+								stroke-linecap="round"
+								stroke-width="2"
+								d="M13.849 5.055C12.902 2.697 10.754 1 8 1 4.222 1 1 4.134 1 8s3.222 7 7 7c2.878 0 5.35-1.823 6.308-4M15 1v5m0 0h-5"
+							/>
+						</svg>
+						Reset
+					</span>
+				</button>
+			</div>
+			<form id="fontsForm">
+				<div id="usedFonts"></div>
+				<div class="blacklist">
+					<div class="blacklist-buttons">
+						<button type="button" id="showBlacklist" class="show-blacklist button-flex">
+							<span>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="16"
+									height="16"
+									viewBox="0 0 16 16"
+								>
+									<g fill="none" fill-rule="evenodd" stroke-linecap="round">
+										<path
+											stroke-width="2"
+											d="M6 1L4 15M12 1L10 15M2 5L14 5M2 11L14 11"
+										/>
+									</g>
+								</svg>
+								Selectors to ignore...
+							</span>
+						</button>
+					</div>
+					<div class="blacklist-container">
+						<textarea rows="3" name="blacklist"></textarea>
+					</div>
+				</div>
+			</form>
+		</main>
 
-    <header>
-        <button type="button" id="activateFonts" class="activate-fonts first-run">
-            <span class="toggle-switch-container">
-                <span class="toggle-switch"></span>
-                Type-X
-            </span>
-        </button>
-        <button class="button apply-changes all-caps" type="button">
-            <span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                    <path fill="none" stroke-linecap="round" stroke-width="2"
-                        d="M13.849 5.055C12.902 2.697 10.754 1 8 1 4.222 1 1 4.134 1 8s3.222 7 7 7c2.878 0 5.35-1.823 6.308-4M15 1v5m0 0h-5" />
-                </svg>
-                <span class="button-text">
-                    Apply Edits
-                </span>
-            </span>
-        </button>
-        <button type="button" id="showFonts" class="show-fonts">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-                <path fill="none" stroke-linecap="round" stroke-width="2"
-                    d="M1 8L15 8M1 1L15 1M.878583652 15L14.8785837 15" />
-            </svg>
-        </button>
-    </header>
+		<footer>
+			<span class="all-caps">
+				BY <a href="http://pixelambacht.nl" target="_blank">PixelAmbacht</a> &
+				<a href="https://arrowtype.com/" target="_blank">Arrow Type</a>
+			</span>
+			<a
+				href="https://github.com/kabisa/recursive-extension"
+				target="_blank"
+				class="all-caps muted-link"
+				>Source</a
+			>
+		</footer>
 
-    <main class="main-fonts">
-        <div class="overrides all-caps">
-            <span class="overrides-title">Font Overrides</span>
+		<!-- Template:  -->
 
-            <button type="button" id="addFont" class="add-font">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                    <g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-width="2">
-                        <path d="M2,8 L14,8" />
-                        <path d="M2,8 L14,8" transform="rotate(90 8 8)" />
-                    </g>
-                </svg>
-            </button>
-        </div>
-        <form id="fontsForm">
-            <div id="usedFonts"></div>
-            <div class="blacklist">
-                <div class="blacklist-buttons">
-                    <button type="button" id="showBlacklist" class="show-blacklist">
-                        <span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                                <g fill="none" fill-rule="evenodd" stroke-linecap="round">
-                                    <path stroke-width="2" d="M6 1L4 15M12 1L10 15M2 5L14 5M2 11L14 11" />
-                                </g>
-                            </svg>
-                            Selectors to ignore...
-                        </span>
-                    </button>
-                </div>
-                <div class="blacklist-container">
-                    <textarea rows="3" name="blacklist"></textarea>
-                </div>
-            </div>
-        </form>
-    </main>
+		<template id="newFont">
+			<fieldset class="font">
+				<div class="font-title">
+					<button type="button">
+						<span class="font-name-title-container">
+							<span class="font-name-title"></span>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="16"
+								height="16"
+								viewBox="0 0 16 16"
+							>
+								<path
+									fill="none"
+									stroke-linecap="round"
+									stroke-width="2"
+									d="M11 8L6 3M6 13L11 8"
+								/>
+							</svg>
+						</span>
+					</button>
+				</div>
+				<div class="font-details">
+					<input type="hidden" name="id" value="" />
+					<div class="select-font">
+						<div class="select-font-dropdowns">
+							<select name="file" class="font-file-select"></select>
+							<div class="variable-instances"></div>
+						</div>
 
-    <footer>
-        <span class="all-caps">
-            BY <a href="http://pixelambacht.nl" target="_blank">PixelAmbacht</a> & <a href="https://arrowtype.com/"
-                target="_blank">Arrow Type</a>
-        </span>
-        <button type="button" class="all-caps full-reset muted-link">Reset</button>
-        <a href="https://github.com/kabisa/recursive-extension" target="_blank" class="all-caps muted-link">Source</a>
-    </footer>
+						<label class="select-font-button">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="16"
+								height="16"
+								viewBox="0 0 16 16"
+							>
+								<g
+									fill="none"
+									fill-rule="evenodd"
+									stroke-linecap="round"
+									stroke-width="2"
+								>
+									<path d="M3,14 L13,14" />
+									<path d="M4,6 L12,6" transform="rotate(90 8 6)" />
+									<path d="M3 7L8 2M8 2L13 7" />
+								</g>
+							</svg>
+							<input
+								type="file"
+								name="newfile"
+								value=""
+								accept=".ttf,.otf,.eot,.woff,.woff2"
+								alt="Load font"
+							/>
+						</label>
+					</div>
+					<div class="variable-sliders-container">
+						<label class="all-caps">Variable</label>
+						<div class="variable-sliders"></div>
+					</div>
+					<label class="all-caps">Elements</label>
+					<textarea rows="1" name="selectors"></textarea>
+					<label class="all-caps">CSS Styles</label>
+					<textarea rows="3" name="css"></textarea>
+					<div class="additional-button-container">
+						<button type="button" class="all-caps show-fallbacks">
+							Fallback fonts...
+						</button>
+						<button type="button" class="all-caps delete-font">
+							<span>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="16"
+									height="16"
+									viewBox="0 0 16 16"
+									stroke="#E57880"
+								>
+									<g
+										fill="none"
+										fill-rule="evenodd"
+										stroke-linecap="round"
+										stroke-width="2"
+										stroke-linejoin="round"
+									>
+										<g class="lid">
+											<path d="M3.5,4 L12.5,4" />
+											<rect width="2" height="2" x="7" y="2" />
+										</g>
+										<polygon points="5 7 11 7 11 14 5 14" />
+									</g>
+								</svg>
+								Delete
+							</span>
+						</button>
+					</div>
+					<textarea rows="1" name="fallback" class="fallback-fonts"></textarea>
+				</div>
+			</fieldset>
+		</template>
 
-    <!-- Template:  -->
+		<template id="variableSlider">
+			<div class="variable-slider">
+				<label for="slider-label"></label>
+				<input type="range" name="" min="" max="" value="" data-name="" step=".01" />
+				<span class="slider-value"></span>
+			</div>
+		</template>
 
-    <template id="newFont">
-        <fieldset class="font">
-            <div class="font-title">
-                <button type="button">
-                    <span class="font-name-title-container">
-                        <span class="font-name-title"></span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                            <path fill="none" stroke-linecap="round" stroke-width="2" d="M11 8L6 3M6 13L11 8" />
-                        </svg>
-                    </span>
-                </button>
-            </div>
-            <div class="font-details">
-                <input type="hidden" name="id" value="">
-                <div class="select-font">
-                    <div class="select-font-dropdowns">
-                        <select name="file" class="font-file-select"></select>
-                        <div class="variable-instances"></div>
-                    </div>
-
-                    <label class="select-font-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                            <g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-width="2">
-                                <path d="M3,14 L13,14" />
-                                <path d="M4,6 L12,6" transform="rotate(90 8 6)" />
-                                <path d="M3 7L8 2M8 2L13 7" />
-                            </g>
-                        </svg>
-                        <input type="file" name="newfile" value="" accept=".ttf,.otf,.eot,.woff,.woff2" alt="Load font">
-                    </label>
-                </div>
-                <div class="variable-sliders-container">
-                    <label class="all-caps">Variable</label>
-                    <div class="variable-sliders"></div>
-                </div>
-                <label class="all-caps">Elements</label>
-                <textarea rows="1" name="selectors"></textarea>
-                <label class="all-caps">CSS Styles</label>
-                <textarea rows="3" name="css"></textarea>
-                <div class="additional-button-container">
-                    <button type="button" class="all-caps show-fallbacks">Fallback fonts...</button>
-                    <button type="button" class="all-caps delete-font">
-                        <span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
-                                stroke="#E57880">
-                                <g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-width="2"
-                                    stroke-linejoin="round">
-                                    <g class="lid">
-                                        <path d="M3.5,4 L12.5,4" />
-                                        <rect width="2" height="2" x="7" y="2" />
-                                    </g>
-                                    <polygon points="5 7 11 7 11 14 5 14" />
-                                </g>
-                            </svg>
-                            Delete
-                        </span>
-                    </button>
-                </div>
-                <textarea rows="1" name="fallback" class="fallback-fonts"></textarea>
-            </div>
-        </fieldset>
-    </template>
-
-    <template id="variableSlider">
-        <div class="variable-slider">
-            <label for="slider-label"></label>
-            <input type="range" name="" min="" max="" value="" data-name="" step=".01">
-            <span class="slider-value"></span>
-        </div>
-    </template>
-
-    <script src="popup.js"></script>
-
-</body>
-
+		<script src="popup.js"></script>
+	</body>
 </html>
