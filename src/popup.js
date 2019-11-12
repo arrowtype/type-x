@@ -22,7 +22,7 @@ const fullReset = document.querySelector(".full-reset");
 const localFonts = {};
 
 fullReset.onclick = () => {
-	if (window.confirm("Do you really want to reset Type-X?")) {
+	if (window.confirm("Do you really want to reset Type-X? This will remove all loaded fonts and reset all font overrides to the extension default values. THIS CANNOT BE UNDONE.")) {
 		chrome.runtime.getBackgroundPage(backgroundPage => {
 			backgroundPage.updateFonts(false, true);
 			setTimeout(() => {

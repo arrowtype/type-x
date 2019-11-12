@@ -12359,7 +12359,7 @@ function _applyDecoratedDescriptor$1(target, property, decorators, descriptor, c
 }
 try {
     var iconv = function () {
-            throw new Error('Cannot find module \'iconv-lite\' from \'/Users/roel/work/recursive/extension/node_modules/fontkit\'');
+            throw new Error('Cannot find module \'iconv-lite\' from \'/Users/stephennixon/code/type-x/node_modules/fontkit\'');
         }();
 } catch (err) {
 }
@@ -41898,7 +41898,7 @@ module.exports = function shimFlags() {
     var DecodeStream, iconv;
     try {
         iconv = function () {
-            throw new Error('Cannot find module \'iconv-lite\' from \'/Users/roel/work/recursive/extension/node_modules/restructure/src\'');
+            throw new Error('Cannot find module \'iconv-lite\' from \'/Users/stephennixon/code/type-x/node_modules/restructure/src\'');
         }();
     } catch (_error) {
     }
@@ -42005,7 +42005,7 @@ module.exports = function shimFlags() {
     DecodeStream = require('./DecodeStream');
     try {
         iconv = function () {
-            throw new Error('Cannot find module \'iconv-lite\' from \'/Users/roel/work/recursive/extension/node_modules/restructure/src\'');
+            throw new Error('Cannot find module \'iconv-lite\' from \'/Users/stephennixon/code/type-x/node_modules/restructure/src\'');
         }();
     } catch (_error) {
     }
@@ -44599,7 +44599,7 @@ var fullReset = document.querySelector(".full-reset");
 var localFonts = {};
 
 fullReset.onclick = function () {
-	if (window.confirm("Do you really want to reset Type-X?")) {
+	if (window.confirm("Do you really want to reset Type-X? This will remove all loaded fonts and reset all font overrides to the extension default values. THIS CANNOT BE UNDONE.")) {
 		chrome.runtime.getBackgroundPage(function (backgroundPage) {
 			backgroundPage.updateFonts(false, true);
 			setTimeout(function () {
