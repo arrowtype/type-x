@@ -94,8 +94,8 @@
 * {
 	font-family: "Recursive";
 	box-sizing: border-box;
-	font-variation-settings: "MONO" var(--mono), "CASL" var(--casl), "wght" var(--wght),
-		"slnt" var(--slnt), "ital" var(--ital);
+	font-variation-settings: "MONO" var(--mono), "CASL" var(--casl), "wght" var(--wght), "slnt" var(--slnt),
+		"ital" var(--ital);
 }
 
 body {
@@ -143,16 +143,11 @@ button {
 /* General extension styles (MAIN) */
 
 .main-fonts {
-	display: none;
 	background: var(--bg-main);
 	width: 100%;
 	flex: auto;
 	margin-top: var(--unit-height);
 	margin-bottom: var(--footer-height);
-}
-
-.main-fonts.show {
-	display: block;
 }
 
 svg {
@@ -251,37 +246,6 @@ header {
 	background: var(--magic);
 }
 
-.show-fonts {
-	flex: none;
-	margin-left: 0.25em;
-	padding: var(--item-padding-taller);
-	background: var(--bg-alt);
-	transition: background var(--speed-1), stroke var(--speed-1);
-}
-
-.show-fonts:hover:hover {
-	background: var(--bg-main);
-}
-
-.show-fonts svg {
-	vertical-align: middle;
-	width: 1rem;
-	height: 1rem;
-}
-
-.show-fonts path {
-	stroke: var(--text-p2);
-}
-
-.show-fonts path {
-	transition: stroke var(--speed-1);
-}
-
-.show-fonts.active path,
-.show-fonts:hover path {
-	stroke: var(--accent);
-}
-
 /* Form stuff */
 
 fieldset {
@@ -376,9 +340,9 @@ textarea:focus {
 }
 
 .overrides {
-	height: 3rem;
+	height: calc(var(--unit-height) * 0.666);
 	background: var(--bg-main);
-	padding: 0 calc(var(--spacing-unit)*0.75);
+	padding: 0 calc(var(--spacing-unit) * 0.75);
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -388,9 +352,7 @@ textarea:focus {
 .overrides button {
 	color: var(--text-p3);
 	font-size: var(--t2);
-	padding: 0 0.5rem;
-	border-radius: 999px;
-	transition: color var(--speed-2), background var(--speed-2);
+	transition: color var(--speed-2);
 }
 
 .overrides button svg {
@@ -404,22 +366,13 @@ textarea:focus {
 	stroke: currentColor;
 }
 
-.add-font {
-	margin-left: -0.25rem;
-}
-
-.full-reset {
-	margin-right: -0.25rem;
-}
-
-.add-font:hover {
-	background: var(--bg-alt);
+.add-font:hover,
+.show-blacklist:hover {
 	color: var(--accent);
 }
 
 .full-reset:hover {
-	background: var(--destructive);
-	color: white;
+	color: var(--destructive);
 }
 
 /* Font */
@@ -494,7 +447,8 @@ textarea:focus {
 }
 
 .select-font-button svg {
-	width: 100%;
+	width: 1.5em;
+	height: 1.5em;
 }
 
 .select-font-button input {
@@ -502,20 +456,6 @@ textarea:focus {
 	height: 0;
 	padding: 0;
 	display: none;
-}
-
-.font-title {
-	width: calc(var(--extension-width) - 2 * var(--spacing-unit));
-	height: var(--unit-height);
-}
-
-.font-title button {
-	height: 100%;
-	width: 100%;
-	text-align: left;
-	width: calc(100% + 2 * var(--spacing-unit));
-	text-align: left;
-	padding: 0 var(--spacing-unit);
 }
 
 .font-name-title-container {
@@ -533,12 +473,27 @@ textarea:focus {
 	padding-right: var(--spacing-unit-half);
 }
 
+.font-title {
+	width: calc(var(--extension-width) - 2 * var(--spacing-unit));
+	height: var(--unit-height);
+}
+
+.font-title button {
+	height: 100%;
+	width: 100%;
+	text-align: left;
+	width: calc(100% + 2 * var(--spacing-unit));
+	text-align: left;
+	padding: 0 var(--spacing-unit);
+}
+
 .font-title svg {
 	width: 1em;
 	height: 1em;
 	margin-left: auto;
 	stroke: currentColor;
 	flex: none;
+	margin-right: -0.25em; /* Nicer optical alignment */
 }
 
 .font-title:hover path {
@@ -618,9 +573,6 @@ textarea:focus {
 	border-bottom: 1px solid var(--separator);
 	color: var(--text-p3);
 	font-size: var(--t2);
-}
-
-.blacklist-container {
 	display: none;
 }
 
@@ -629,7 +581,7 @@ textarea:focus {
 	stroke: currentColor;
 }
 
-.blacklist.show .blacklist-container {
+.blacklist.show {
 	display: block;
 }
 
@@ -653,12 +605,12 @@ textarea:focus {
 /* Footer */
 
 footer {
-	display: none;
 	position: fixed;
 	z-index: 1;
 	bottom: 0;
 	left: 0;
 	right: 0;
+	display: flex;
 	align-items: center;
 	font-size: var(--t3);
 	padding: 0.5rem;
@@ -682,8 +634,4 @@ footer button:hover {
 
 footer span {
 	margin-right: auto;
-}
-
-footer.show {
-	display: flex;
 }

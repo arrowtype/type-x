@@ -44592,7 +44592,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // See the License for the specific language governing permissions and
 // limitations under the License.
 var activateFonts = document.querySelector("#activateFonts");
-var showFonts = document.querySelector("#showFonts");
 var addFont = document.querySelector("#addFont");
 var showBlacklist = document.querySelector("#showBlacklist");
 var fullReset = document.querySelector(".full-reset");
@@ -44653,13 +44652,6 @@ activateFonts.onclick = function () {
 
 		updateStatus(!extensionActive);
 	});
-};
-
-// Show/hide font form
-showFonts.onclick = function () {
-	document.querySelector(".main-fonts").classList.toggle("show");
-	document.querySelector("footer").classList.toggle("show");
-	showFonts.classList.toggle("active");
 };
 
 // Show/hide blacklist
