@@ -24,7 +24,7 @@
 	--t3: 0.625rem;
 	/* sizing */
 	--extension-width: 19rem;
-	--header-height: 3rem;
+	--unit-height: 3rem;
 	--footer-height: 1rem;
 	--item-padding: 0.5rem 1rem;
 	--item-padding-tall: 0.75rem 1rem;
@@ -103,7 +103,7 @@ body {
 	color: var(--text-p1);
 	width: var(--extension-width);
 	margin: 0;
-	min-height: var(--header-height);
+	min-height: var(--unit-height);
 }
 
 .select-font-button,
@@ -147,7 +147,7 @@ button {
 	background: var(--bg-main);
 	width: 100%;
 	flex: auto;
-	margin-top: var(--header-height);
+	margin-top: var(--unit-height);
 	margin-bottom: var(--footer-height);
 }
 
@@ -168,7 +168,7 @@ header {
 	left: 0;
 	right: 0;
 	display: flex;
-	height: var(--header-height);
+	height: var(--unit-height);
 	background: var(--bg-alt);
 	box-shadow: 0 1px 0 var(--separator);
 }
@@ -287,7 +287,7 @@ header {
 fieldset {
 	border: 0;
 	margin: 0;
-	padding: var(--item-padding-tall);
+	padding: 0;
 	width: 100%;
 	background: var(--bg-main);
 	border-bottom: 1px solid var(--separator);
@@ -506,15 +506,16 @@ textarea:focus {
 
 .font-title {
 	width: calc(var(--extension-width) - 2 * var(--spacing-unit));
+	height: var(--unit-height);
 }
 
 .font-title button {
+	height: 100%;
 	width: 100%;
 	text-align: left;
 	width: calc(100% + 2 * var(--spacing-unit));
 	text-align: left;
-	padding: var(--spacing-unit);
-	margin: calc(-1 * var(--spacing-unit));
+	padding: 0 var(--spacing-unit);
 }
 
 .font-name-title-container {
@@ -558,7 +559,8 @@ textarea:focus {
 
 .show-font-details .font-details {
 	display: block;
-	padding-top: var(--spacing-unit-half);
+	padding: var(--spacing-unit);
+	padding-top: 0;
 }
 
 .additional-button-container {
