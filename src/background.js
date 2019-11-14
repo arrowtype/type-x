@@ -19,10 +19,14 @@ let prevFonts;
 const defaultBlacklist = [
 	".icon",
 	".Icon",
+	".glyphicon",
 	".fa",
 	".fas",
 	".far",
 	".fal",
+	".fab",
+	".font-fontello",
+	".material-icons",
 	".DPvwYc", // google hangouts
 	".Mwv9k", // google hangouts
 	".NtU4hc" // google hangouts
