@@ -163,6 +163,7 @@ header {
 	left: 0;
 	right: 0;
 	display: flex;
+	justify-content: space-between;
 	height: var(--unit-height);
 	background: var(--bg-alt);
 	box-shadow: 0 1px 0 var(--separator);
@@ -170,9 +171,9 @@ header {
 
 .activate-fonts {
 	text-align: left;
-	flex: auto;
+	flex: none;
 	font-size: var(--t2);
-	padding-left: var(--spacing-unit);
+	padding: 0 var(--spacing-unit);
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
 }
@@ -244,6 +245,21 @@ header {
 	opacity: 0;
 	box-shadow: 0 1px 3px #4c00ff, 0 0 2px #4c00ff;
 	background: var(--magic);
+}
+
+.add-font {
+	flex: none;
+	font-size: var(--t2);
+	padding: 0 var(--spacing-unit);
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+}
+
+.add-font svg {
+	stroke: currentColor;
+	width: 1em;
+	height: 1em;
+	margin-right: 0.5em;
 }
 
 /* Form stuff */
@@ -344,13 +360,12 @@ textarea:focus {
 }
 
 .overrides {
-	height: calc(var(--unit-height) * 0.666);
+	height: calc(var(--unit-height) * 2/3);
 	background: var(--bg-main);
 	padding: 0 calc(var(--spacing-unit) * 0.75);
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	border-bottom: 1px solid var(--separator);
 }
 
 .overrides button {
@@ -574,7 +589,7 @@ textarea:focus {
 .blacklist {
 	background: var(--bg-main);
 	padding: var(--item-padding-tall);
-	border-bottom: 1px solid var(--separator);
+	border-top: 1px solid var(--separator);
 	color: var(--text-p3);
 	font-size: var(--t2);
 	display: none;

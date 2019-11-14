@@ -13,61 +13,52 @@
 					Type-X
 				</span>
 			</button>
-			<button type="button" id="showFonts" class="show-fonts">
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-					<path
-						fill="none"
-						stroke-linecap="round"
-						stroke-width="2"
-						d="M1 8L15 8M1 1L15 1M.878583652 15L14.8785837 15"
-					/>
-				</svg>
+
+			<button type="button" id="addFont" class="add-font button-flex all-caps">
+				<span>
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+						<g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-width="2">
+							<path d="M2,8 L14,8" />
+							<path d="M2,8 L14,8" transform="rotate(90 8 8)" />
+						</g>
+					</svg>
+					Add font
+				</span>
 			</button>
 		</header>
 
 		<main class="main-fonts">
-			<div class="overrides all-caps">
-				<button type="button" id="addFont" class="add-font button-flex all-caps">
-					<span>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-							<g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-width="2">
-								<path d="M2,8 L14,8" />
-								<path d="M2,8 L14,8" transform="rotate(90 8 8)" />
-							</g>
-						</svg>
-						Add font
-					</span>
-				</button>
-				<button type="button" id="showBlacklist" class="all-caps show-blacklist button-flex">
-					<span>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-							<g fill="none" fill-rule="evenodd" stroke-linecap="round">
-								<path stroke-width="2" d="M6 1L4 15M12 1L10 15M2 5L14 5M2 11L14 11" />
-							</g>
-						</svg>
-						Ignore
-					</span>
-				</button>
-				<button type="button" class="all-caps button-flex full-reset">
-					<span>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-							<path
-								fill="none"
-								stroke-linecap="round"
-								stroke-width="2"
-								d="M13.849 5.055C12.902 2.697 10.754 1 8 1 4.222 1 1 4.134 1 8s3.222 7 7 7c2.878 0 5.35-1.823 6.308-4M15 1v5m0 0h-5"
-							/>
-						</svg>
-						Reset
-					</span>
-				</button>
-			</div>
 			<form id="fontsForm">
-                <div class="blacklist">
-                    Don't apply fonts to the following selectors:
-                    <textarea rows="3" name="blacklist"></textarea>
-                </div>
 				<div id="usedFonts"></div>
+				<div class="overrides all-caps">
+					<button type="button" id="showBlacklist" class="all-caps show-blacklist button-flex">
+						<span>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+								<g fill="none" fill-rule="evenodd" stroke-linecap="round">
+									<path stroke-width="2" d="M6 1L4 15M12 1L10 15M2 5L14 5M2 11L14 11" />
+								</g>
+							</svg>
+							Ignore
+						</span>
+					</button>
+					<button type="button" class="all-caps button-flex full-reset">
+						<span>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+								<path
+									fill="none"
+									stroke-linecap="round"
+									stroke-width="2"
+									d="M13.849 5.055C12.902 2.697 10.754 1 8 1 4.222 1 1 4.134 1 8s3.222 7 7 7c2.878 0 5.35-1.823 6.308-4M15 1v5m0 0h-5"
+								/>
+							</svg>
+							Reset
+						</span>
+					</button>
+				</div>
+				<div class="blacklist">
+					<span class="all-caps">Don't apply fonts to these selectors:</span>
+					<textarea rows="3" name="blacklist"></textarea>
+				</div>
 			</form>
 		</main>
 
