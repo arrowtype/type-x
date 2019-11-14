@@ -44946,7 +44946,7 @@ function addFormElement(font, files) {
 	} else if (font.file in files) {
 		axes = files[font.file].axes;
 	}
-	addVariableSliders(axes, el);
+	addVariableSliders(axes, parentEl);
 
 	// Add named variable instances
 	var instances = false;
@@ -44955,7 +44955,7 @@ function addFormElement(font, files) {
 	} else if (font.file in files) {
 		instances = files[font.file].instances;
 	}
-	addNamedInstances(instances, parentEl);
+	addNamedInstances(instances, parentEl, font.inherit);
 
 	parentEl.addEventListener("dragover", highlight, false);
 	parentEl.addEventListener("dragleave", unhighlight, false);
@@ -45009,8 +45009,15 @@ function syncVariableValues() {
 			var ci = JSON.stringify(customInstance);
 
 			var dropdown = container.querySelector(".select-instance");
+			if (dropdown.value == "--inherit--") {
+				container.querySelector(".variable-sliders-container").classList.add("mute");
+				return;
+			} else {
+				container.querySelector(".variable-sliders-container").classList.remove("mute");
+			}
+
 			var options = dropdown.querySelectorAll("option");
-			var sel = null;
+			var sel = 1; // "--axes--"
 			var _iteratorNormalCompletion7 = true;
 			var _didIteratorError7 = false;
 			var _iteratorError7 = undefined;
@@ -45057,17 +45064,28 @@ function syncVariableValues() {
 	}
 }
 
-function addNamedInstances(instances, el) {
+function addNamedInstances(instances, el, inherit) {
 	var container = el.querySelector(".variable-instances");
 	container.innerHTML = "";
 
 	if (instances) {
-		var instanceDropdown = document.createElement("select");
-		instanceDropdown.classList.add("select-instance");
+		// Create instances dropdown
+		var dropdown = document.createElement("select");
+		dropdown.classList.add("select-instance");
+		dropdown.name = "select-instance";
+
+		// Add "turn off font-variation-settings" option
 		var option = document.createElement("option");
-		option.text = "— Custom Instance —";
-		option.value = 0;
-		instanceDropdown.append(option);
+		option.text = "[Inherit page styles]";
+		option.value = "--inherit--";
+		dropdown.append(option);
+
+		// Add "using axes, but none of a named instance" option
+		var option2 = document.createElement("option");
+		option2.text = "[Custom axes]";
+		option2.value = "--axes--";
+		option2.disabled = true;
+		dropdown.append(option2);
 
 		var _loop = function _loop(instance) {
 			var option = document.createElement("option");
@@ -45080,22 +45098,34 @@ function addNamedInstances(instances, el) {
 				orderedAxes[key] = axes[key];
 			});
 			option.dataset.instance = JSON.stringify(orderedAxes);
-			instanceDropdown.append(option);
+			dropdown.append(option);
 		};
 
 		for (var instance in instances) {
 			_loop(instance);
 		}
 
-		instanceDropdown.oninput = applyNamedInstance;
-		container.append(instanceDropdown);
+		dropdown.oninput = applyNamedInstance;
+
+		// If not explicitly set to inherit page styles,
+		// do not select an option from the dropdown, so
+		// syncVariableValues can do it for us
+		if (!inherit) {
+			dropdown.selectedIndex = -1;
+		}
+		container.append(dropdown);
 	}
 }
 
 function applyNamedInstance(e) {
 	var sel = e.target;
-	var axes = JSON.parse(sel.options[sel.selectedIndex].dataset.instance);
+
+	if (sel.value == "--inherit--" || sel.value == "--axes--") {
+		return;
+	}
+
 	var parent = e.target.closest(".font");
+	var axes = JSON.parse(sel.options[sel.selectedIndex].dataset.instance);
 
 	for (var axis in axes) {
 		var slider = parent.querySelector("[name=var-" + axis + "]");
@@ -45163,6 +45193,8 @@ function saveForm() {
 					if (input.name === "file") {
 						newFont["name"] = input.options[input.selectedIndex].text;
 						newFont["file"] = input.options[input.selectedIndex].value;
+					} else if (input.name === "select-instance") {
+						newFont["inherit"] = input.value === "--inherit--";
 					} else if (straightInputs.includes(input.name)) {
 						newFont[input.name] = input.value;
 					} else if (input.name.startsWith("var-")) {
@@ -45336,6 +45368,9 @@ function addSlider(axis, parent) {
 
 	input.oninput = function (e) {
 		value.innerText = e.target.value;
+		// Move dropdown away from "--inherit--" option to ensure
+		// axes/dropdown are synced properly
+		parent.querySelector(".select-instance").value = "--axes--";
 	};
 
 	variableSliders.append(el);

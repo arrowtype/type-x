@@ -221,7 +221,9 @@ function generateStyleSheet(updatingCurrentTab, callback) {
 				axes = files[font.file].axes;
 			}
 
-			if (axes) {
+			// Only inject variable axes when font has axes,
+			// and we don't want to inherit page styles
+			if (axes && !font.inherit) {
 				for (const axisData in axes) {
 					axesStyles.push(`'${axes[axisData].id}' ${axes[axisData].value}`);
 				}
