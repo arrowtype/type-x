@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import fontkit from "fontkit";
+import fontkit from "fontkit-next";
 import blobToBuffer from "blob-to-buffer";
 
 const activateFonts = document.querySelector("#activateFonts");
