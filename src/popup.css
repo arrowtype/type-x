@@ -127,7 +127,6 @@ button {
 .button-flex span {
 	display: flex;
 	align-items: center;
-	padding: 0.25rem 0;
 }
 
 /* Global styles */
@@ -247,21 +246,6 @@ header {
 	background: var(--magic);
 }
 
-.add-font {
-	flex: none;
-	font-size: var(--t2);
-	padding: 0 var(--spacing-unit);
-	text-transform: uppercase;
-	letter-spacing: 0.1em;
-}
-
-.add-font svg {
-	stroke: currentColor;
-	width: 1em;
-	height: 1em;
-	margin-right: 0.5em;
-}
-
 /* Form stuff */
 
 fieldset {
@@ -359,39 +343,79 @@ textarea:focus {
 	flex: auto;
 }
 
-.overrides {
-	height: calc(var(--unit-height) * 2/3);
+/* UI contols */
+.controls {
+	height: calc(var(--unit-height) * 2 / 3);
 	background: var(--bg-main);
-	padding: 0 calc(var(--spacing-unit) * 0.75);
+	padding: 0 var(--spacing-unit);
 	display: flex;
-	align-items: center;
 	justify-content: space-between;
 }
 
-.overrides button {
+.add-font,
+.delete-font,
+.controls button {
+	flex: none;
+	align-self: center;
+	text-transform: uppercase;
+	padding: 0 var(--spacing-unit-half);
+	border-radius: 1rem;
 	color: var(--text-p3);
+	transition: background var(--speed-2), color var(--speed-2);
 	font-size: var(--t2);
-	transition: color var(--speed-2);
+	font-weight: 600;
+	min-height: 26px;
 }
 
-.overrides button svg {
+.add-font svg,
+.controls button svg {
 	stroke: currentColor;
 	width: 1em;
 	height: 1em;
-	margin-right: 0.5em;
-}
-
-.overrides button:hover svg {
-	stroke: currentColor;
+	margin-right: var(--spacing-unit-half);
 }
 
 .add-font:hover,
-.show-blacklist:hover {
+.delete-font:hover,
+.controls button:hover {
+	background: var(--bg-alt);
 	color: var(--accent);
 }
 
-.full-reset:hover {
-	color: var(--destructive);
+.add-font:hover svg,
+.delete-font:hover svg,
+.controls button:hover svg {
+	stroke: currentColor;
+}
+
+.show-blacklist {
+	margin-left: calc(var(--spacing-unit-half) * -1);
+}
+
+.delete-font,
+.full-reset {
+	margin-right: calc(var(--spacing-unit-half) * -1);
+}
+
+.add-font {
+	margin-right: var(--spacing-unit-half);
+}
+
+.add-font:hover {
+	background: var(--bg-main);
+}
+
+.controls .full-reset:hover,
+.delete-font:hover {
+	background: var(--destructive);
+	color: var(--text-p1);
+}
+
+@media (prefers-color-scheme: light) {
+	.controls .full-reset:hover,
+	.delete-font:hover {
+		color: var(--bg-main);
+	}
 }
 
 /* Font */
@@ -443,7 +467,6 @@ textarea:focus {
 
 .select-font-button {
 	flex: none;
-	margin-left: 0.25rem;
 	margin-left: var(--spacing-unit-half);
 	padding-left: var(--spacing-unit-half);
 	padding-right: var(--spacing-unit-half);
@@ -535,52 +558,28 @@ textarea:focus {
 	display: block;
 	padding: var(--spacing-unit);
 	padding-top: 0;
+	padding-bottom: var(--spacing-unit-half);
 }
 
 .additional-button-container {
-	font-size: var(--t3);
 	display: flex;
 	justify-content: space-between;
-	padding-top: var(--spacing-unit-half);
 }
 
-.additional-button-container .delete-font {
-	padding: 0.25rem 0.5rem;
-	border-radius: 1rem;
-	margin-right: -0.5rem;
-	color: var(--destructive);
-	transition: background var(--speed-2), color var(--speed-2);
-	font-size: var(--t2);
-	font-weight: 600;
-}
-
-.additional-button-container .delete-font:hover {
-	background: var(--destructive);
-	color: var(--text-p1);
-}
-
-@media (prefers-color-scheme: light) {
-	.additional-button-container .delete-font:hover {
-		color: var(--bg-main);
-	}
-}
-
-.additional-button-container .delete-font span {
-	display: flex;
-	align-items: center;
-}
-
-.additional-button-container .delete-font svg {
-	margin-right: 0.25em;
-	transform: translateY(-1px);
+/* Spacing is a little off on this particular icon,
+   so tweak this with some magic numbers */
+.delete-font svg {
 	stroke: currentColor;
+	width: 1.25em;
+	height: 1.25em;
+	margin-right: calc(var(--spacing-unit-half) * 0.75);
 }
 
-.additional-button-container .delete-font g.lid {
+.delete-font g.lid {
 	transition: transform var(--speed-2);
 }
 
-.additional-button-container .delete-font:hover g.lid {
+.delete-font:hover g.lid {
 	transform: rotate(-15deg) translate(-15%, 5%);
 }
 
@@ -593,11 +592,6 @@ textarea:focus {
 	color: var(--text-p3);
 	font-size: var(--t2);
 	display: none;
-}
-
-.show-blacklist svg {
-	margin-right: 0.25em;
-	stroke: currentColor;
 }
 
 .blacklist.show {
@@ -636,7 +630,7 @@ footer {
 	color: var(--gray-0);
 	background: var(--bg-alt);
 	height: var(--footer-height);
-	box-shadow: 0 -1px 0 var(--separator);
+	border-top: 1px solid var(--separator);
 }
 
 footer a,
