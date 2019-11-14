@@ -35,7 +35,17 @@
 								<path d="M2,8 L14,8" transform="rotate(90 8 8)" />
 							</g>
 						</svg>
-						Add font override
+						Add font
+					</span>
+				</button>
+				<button type="button" id="showBlacklist" class="all-caps show-blacklist button-flex">
+					<span>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+							<g fill="none" fill-rule="evenodd" stroke-linecap="round">
+								<path stroke-width="2" d="M6 1L4 15M12 1L10 15M2 5L14 5M2 11L14 11" />
+							</g>
+						</svg>
+						Ignore
 					</span>
 				</button>
 				<button type="button" class="all-caps button-flex full-reset">
@@ -53,24 +63,11 @@
 				</button>
 			</div>
 			<form id="fontsForm">
+                <div class="blacklist">
+                    Don't apply fonts to the following selectors:
+                    <textarea rows="3" name="blacklist"></textarea>
+                </div>
 				<div id="usedFonts"></div>
-				<div class="blacklist">
-					<div class="blacklist-buttons">
-						<button type="button" id="showBlacklist" class="show-blacklist button-flex">
-							<span>
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-									<g fill="none" fill-rule="evenodd" stroke-linecap="round">
-										<path stroke-width="2" d="M6 1L4 15M12 1L10 15M2 5L14 5M2 11L14 11" />
-									</g>
-								</svg>
-								Selectors to ignore...
-							</span>
-						</button>
-					</div>
-					<div class="blacklist-container">
-						<textarea rows="3" name="blacklist"></textarea>
-					</div>
-				</div>
 			</form>
 		</main>
 
@@ -94,7 +91,7 @@
 					<button type="button">
 						<span class="font-name-title-container">
 							<span class="font-name-title"></span>
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
 								<path fill="none" stroke-linecap="round" stroke-width="2" d="M11 8L6 3M6 13L11 8" />
 							</svg>
 						</span>
@@ -109,7 +106,7 @@
 						</div>
 
 						<label class="select-font-button">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
 								<g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-width="2">
 									<path d="M3,14 L13,14" />
 									<path d="M4,6 L12,6" transform="rotate(90 8 6)" />

@@ -15,7 +15,6 @@ import fontkit from "fontkit";
 import blobToBuffer from "blob-to-buffer";
 
 const activateFonts = document.querySelector("#activateFonts");
-const showFonts = document.querySelector("#showFonts");
 const addFont = document.querySelector("#addFont");
 const showBlacklist = document.querySelector("#showBlacklist");
 const fullReset = document.querySelector(".full-reset");
@@ -48,13 +47,6 @@ activateFonts.onclick = () => {
 	chrome.storage.local.get("extensionActive", ({ extensionActive }) => {
 		updateStatus(!extensionActive);
 	});
-};
-
-// Show/hide font form
-showFonts.onclick = () => {
-	document.querySelector(".main-fonts").classList.toggle("show");
-	document.querySelector("footer").classList.toggle("show");
-	showFonts.classList.toggle("active");
 };
 
 // Show/hide blacklist
