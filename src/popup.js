@@ -20,7 +20,11 @@ const fullReset = document.querySelector(".full-reset");
 const localFonts = {};
 
 fullReset.onclick = () => {
-	if (window.confirm("Do you really want to reset Type-X? This will remove all loaded fonts and reset all font overrides to the extension default values. THIS CANNOT BE UNDONE.")) {
+	if (
+		window.confirm(
+			"Do you really want to reset Type-X? This will remove all loaded fonts and reset all font overrides to the extension default values. THIS CANNOT BE UNDONE."
+		)
+	) {
 		chrome.runtime.getBackgroundPage(backgroundPage => {
 			backgroundPage.updateFonts(false, true);
 			setTimeout(() => {
@@ -96,36 +100,6 @@ const showStatus = firstRun => {
 		!firstRun && activateFonts.classList.remove("first-run");
 	});
 };
-
-// Throttle updates
-// Source: https://gist.github.com/beaucharman/e46b8e4d03ef30480d7f4db5a78498ca
-const throttle = (fn, wait) => {
-	let previouslyRun, queuedToRun;
-
-	return function invokeFn(...args) {
-		const now = Date.now();
-
-		queuedToRun = clearTimeout(queuedToRun);
-
-		if (!previouslyRun || now - previouslyRun >= wait) {
-			fn.apply(null, args);
-			previouslyRun = now;
-		} else {
-			queuedToRun = setTimeout(invokeFn.bind(null, ...args), wait - (now - previouslyRun));
-		}
-	};
-};
-
-const throttledSaveForm = throttle(() => {
-	saveForm();
-}, 100);
-
-// Initialise form
-function initForm() {
-	document.querySelector("#fontsForm").oninput = () => {
-		throttledSaveForm();
-	};
-}
 
 // Generate form based on current settings
 function buildForm(fonts, files, blacklist) {
@@ -274,6 +248,11 @@ function addFormElement(font, files) {
 	parentEl.addEventListener("dragleave", unhighlight, false);
 	parentEl.addEventListener("drop", grabFont, false);
 
+	const textareas = el.querySelectorAll("textarea");
+	for (const textarea of textareas) {
+		textarea.oninput = saveForm;
+	}
+
 	usedFonts.prepend(el);
 }
 
@@ -321,6 +300,7 @@ function addNamedInstances(instances, el, inherit) {
 		const dropdown = document.createElement("select");
 		dropdown.classList.add("select-instance");
 		dropdown.name = "select-instance";
+		dropdown.onchange = applyNamedInstance;
 
 		// Add "turn off font-variation-settings" option
 		const option = document.createElement("option");
@@ -351,8 +331,6 @@ function addNamedInstances(instances, el, inherit) {
 			dropdown.append(option);
 		}
 
-		dropdown.oninput = applyNamedInstance;
-
 		// If not explicitly set to inherit page styles,
 		// do not select an option from the dropdown, so
 		// syncVariableValues can do it for us
@@ -376,8 +354,9 @@ function applyNamedInstance(e) {
 	for (const axis in axes) {
 		const slider = parent.querySelector(`[name=var-${axis}]`);
 		slider.value = axes[axis];
-		slider.dispatchEvent(new Event("input"));
 	}
+
+	saveForm();
 }
 
 function addVariableSliders(axes, el) {
@@ -511,11 +490,9 @@ function grabFont(e) {
 					dropdown.value = name;
 
 					// Font is saved, add variable axes, if any
-					grabVariableData(file, parent);
-
-					// Note that we might save with the wrong axes here,
-					// as the grabVariableData function might save
-					saveForm();
+					grabVariableData(file, parent).then(() => {
+						saveForm();
+					});
 				}
 			);
 		});
@@ -525,20 +502,16 @@ function grabFont(e) {
 
 // Analyse a *new* font for variable axes, create form inputs
 function grabVariableData(file, parent) {
+	parent.querySelector(".variable-sliders-container").classList.remove("show");
+
 	return import(/* webpackChunkName: "fontkit" */ "fontkit-next").then(({ default: fontkit }) => {
 		let font = false;
-
-		parent.querySelector(".variable-sliders-container").classList.remove("show");
-
 		blobToBuffer(file, (_error, buffer) => {
 			try {
 				font = fontkit.create(buffer);
 
 				const axes = addVariableSliders(font.variationAxes, parent);
 				addNamedInstances(font.namedVariations, parent);
-
-				// Save form again, now with proper axes
-				saveForm();
 
 				chrome.storage.local.get("files", ({ files }) => {
 					files[file.name].axes = axes;
@@ -578,6 +551,7 @@ function addSlider(axis, parent) {
 		// Move dropdown away from "--inherit--" option to ensure
 		// axes/dropdown are synced properly
 		parent.querySelector(".select-instance").value = "--axes--";
+		saveForm();
 	};
 
 	variableSliders.append(el);
@@ -597,4 +571,3 @@ function unhighlight(e) {
 
 // Initialise popup
 showStatus(true);
-initForm();
