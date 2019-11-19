@@ -1,5 +1,5 @@
 module.exports = {
-	mode: "development",
+	mode: "production",
 	performance: {
 		maxEntrypointSize: 500000
 	},
