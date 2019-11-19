@@ -5,7 +5,8 @@ module.exports = {
 	},
 	entry: "./src/popup.js",
 	output: {
-		filename: "popup.js"
+		filename: "popup.js",
+		chunkFilename: "[name].bundle.js"
 	},
 	node: {
 		fs: "empty"

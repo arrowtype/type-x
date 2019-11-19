@@ -11,7 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import fontkit from "fontkit-next";
 import blobToBuffer from "blob-to-buffer";
 
 const activateFonts = document.querySelector("#activateFonts");
@@ -534,31 +533,33 @@ function grabFont(e) {
 
 // Analyse a *new* font for variable axes, create form inputs
 function grabVariableData(file, parent) {
-	let font = false;
+	return import(/* webpackChunkName: "fontkit" */ "fontkit-next").then(({ default: fontkit }) => {
+		let font = false;
 
-	parent.querySelector(".variable-sliders-container").classList.remove("show");
+		parent.querySelector(".variable-sliders-container").classList.remove("show");
 
-	blobToBuffer(file, (_error, buffer) => {
-		try {
-			font = fontkit.create(buffer);
+		blobToBuffer(file, (_error, buffer) => {
+			try {
+				font = fontkit.create(buffer);
 
-			const axes = addVariableSliders(font.variationAxes, parent);
-			addNamedInstances(font.namedVariations, parent);
+				const axes = addVariableSliders(font.variationAxes, parent);
+				addNamedInstances(font.namedVariations, parent);
 
-			// Save form again, now with proper axes
-			saveForm();
+				// Save form again, now with proper axes
+				saveForm();
 
-			chrome.storage.local.get("files", ({ files }) => {
-				files[file.name].axes = axes;
-				files[file.name].instances = font.namedVariations;
+				chrome.storage.local.get("files", ({ files }) => {
+					files[file.name].axes = axes;
+					files[file.name].instances = font.namedVariations;
 
-				chrome.storage.local.set({
-					files: files
+					chrome.storage.local.set({
+						files: files
+					});
 				});
-			});
-		} catch (e) {
-			console.log("Failed to parse font.");
-		}
+			} catch (e) {
+				console.log("Failed to parse font.");
+			}
+		});
 	});
 }
 
