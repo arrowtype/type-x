@@ -31,6 +31,12 @@ const defaultBlacklist = [
 	".Mwv9k", // google hangouts
 	".NtU4hc" // google hangouts
 ];
+// Query only the active tab
+const tabsSettings = {
+	active: true,
+	windowType: "normal",
+	currentWindow: true
+};
 
 chrome.runtime.onInstalled.addListener(() => {
 	if (chrome.runtime.lastError) {
@@ -41,6 +47,21 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 function initTypeX() {
+	chrome.tabs.query(tabsSettings, tabs => {
+		for (const tab of tabs) {
+			chrome.tabs.executeScript(
+				tab.id,
+				{
+					code: `delete document.documentElement.dataset.updatefont;`
+				},
+				() => {
+					if (chrome.runtime.lastError) {
+						handleError(chrome.runtime.lastError);
+					}
+				}
+			);
+		}
+	});
 	chrome.storage.local.set(
 		{
 			extensionActive: false,
@@ -81,13 +102,6 @@ chrome.tabs.onUpdated.addListener((_tabId, { status }, { active }) => {
 
 // Update fonts across all tabs
 function updateFonts(extensionActive, updatingCurrentTab) {
-	// Update only the active tab
-	let tabsSettings = {
-		active: true,
-		windowType: "normal",
-		currentWindow: true
-	};
-
 	if (extensionActive) {
 		chrome.tabs.query(tabsSettings, tabs => {
 			for (const tab of tabs) {
@@ -213,9 +227,7 @@ function generateStyleSheet(updatingCurrentTab, callback) {
 			let stylesheet = "";
 
 			for (const selector of font.selectors) {
-				selectors.push(
-					`${updateSelector}:not([data-disablefont]) ${selector}${blacklistSelectors}`
-				);
+				selectors.push(`${updateSelector}:not([data-disablefont]) ${selector}${blacklistSelectors}`);
 			}
 
 			let axes = false;
@@ -248,11 +260,7 @@ function generateStyleSheet(updatingCurrentTab, callback) {
 			stylesheet += `
                         ${selectors.join(",")} {
                             font-family: ${stack} !important;
-                            ${
-								axesStyles.length
-									? `font-variation-settings: ${axesStyles.join(",")};`
-									: ""
-							}
+                            ${axesStyles.length ? `font-variation-settings: ${axesStyles.join(",")};` : ""}
                             ${font.css}
                         }`;
 
