@@ -345,6 +345,7 @@ function applyNamedInstance(e) {
 	const sel = e.target;
 
 	if (sel.value == "--inherit--" || sel.value == "--axes--") {
+		saveForm();
 		return;
 	}
 
