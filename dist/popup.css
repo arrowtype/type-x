@@ -80,7 +80,7 @@
 		--gray-2: hsla(230, 3%, 91%, 1);
 		--accent: #0050ff;
 		--code: #2f5bbb;
-		--destructive: rgb(126, 14, 14);
+		--destructive: hsla(0, 80%, 50%, 1);
 	}
 }
 
@@ -94,8 +94,8 @@
 * {
 	font-family: "Recursive";
 	box-sizing: border-box;
-	font-variation-settings: "MONO" var(--mono), "CASL" var(--casl), "wght" var(--wght),
-		"slnt" var(--slnt), "ital" var(--ital);
+	font-variation-settings: "MONO" var(--mono), "CASL" var(--casl), "wght" var(--wght), "slnt" var(--slnt),
+		"ital" var(--ital);
 }
 
 body {
@@ -124,6 +124,11 @@ button {
 	border-radius: 1rem;
 }
 
+.button-flex span {
+	display: flex;
+	align-items: center;
+}
+
 /* Global styles */
 
 .all-caps {
@@ -137,16 +142,11 @@ button {
 /* General extension styles (MAIN) */
 
 .main-fonts {
-	display: none;
 	background: var(--bg-main);
 	width: 100%;
 	flex: auto;
 	margin-top: var(--unit-height);
 	margin-bottom: var(--footer-height);
-}
-
-.main-fonts.show {
-	display: block;
 }
 
 svg {
@@ -162,6 +162,7 @@ header {
 	left: 0;
 	right: 0;
 	display: flex;
+	justify-content: space-between;
 	height: var(--unit-height);
 	background: var(--bg-alt);
 	box-shadow: 0 1px 0 var(--separator);
@@ -169,9 +170,9 @@ header {
 
 .activate-fonts {
 	text-align: left;
-	flex: auto;
+	flex: none;
 	font-size: var(--t2);
-	padding-left: var(--spacing-unit);
+	padding: 0 var(--spacing-unit);
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
 }
@@ -243,37 +244,6 @@ header {
 	opacity: 0;
 	box-shadow: 0 1px 3px #4c00ff, 0 0 2px #4c00ff;
 	background: var(--magic);
-}
-
-.show-fonts {
-	flex: none;
-	margin-left: 0.25em;
-	padding: var(--item-padding-taller);
-	background: var(--bg-alt);
-	transition: background var(--speed-1), stroke var(--speed-1);
-}
-
-.show-fonts:hover:hover {
-	background: var(--bg-main);
-}
-
-.show-fonts svg {
-	vertical-align: middle;
-	width: 16px;
-	height: 16px;
-}
-
-.show-fonts path {
-	stroke: var(--text-p2);
-}
-
-.show-fonts path {
-	transition: stroke var(--speed-1);
-}
-
-.show-fonts.active path,
-.show-fonts:hover path {
-	stroke: var(--accent);
 }
 
 /* Form stuff */
@@ -373,133 +343,78 @@ textarea:focus {
 	flex: auto;
 }
 
-.overrides {
-	height: 3rem;
+/* UI contols */
+.controls {
+	height: calc(var(--unit-height) * 2 / 3);
 	background: var(--bg-main);
 	padding: 0 var(--spacing-unit);
 	display: flex;
-	align-items: center;
-	border-bottom: 1px solid var(--separator);
-	color: var(--text-p3);
-	font-size: var(--t2);
+	justify-content: space-between;
 }
 
-.overrides-title {
-	margin-right: auto;
+.add-font,
+.delete-font,
+.controls button {
+	flex: none;
+	align-self: center;
+	text-transform: uppercase;
+	padding: 0 var(--spacing-unit-half);
+	border-radius: 1rem;
+	color: var(--text-p3);
+	transition: background var(--speed-2), color var(--speed-2);
+	font-size: var(--t2);
+	font-weight: 600;
+	min-height: 26px;
+}
+
+.add-font svg,
+.controls button svg {
+	stroke: currentColor;
+	width: 1em;
+	height: 1em;
+	margin-right: var(--spacing-unit-half);
+}
+
+.add-font:hover,
+.delete-font:hover,
+.controls button:hover {
+	background: var(--bg-alt);
+	color: var(--accent);
+}
+
+.add-font:hover svg,
+.delete-font:hover svg,
+.controls button:hover svg {
+	stroke: currentColor;
+}
+
+.show-blacklist {
+	margin-left: calc(var(--spacing-unit-half) * -1);
+}
+
+.delete-font,
+.full-reset {
+	margin-right: calc(var(--spacing-unit-half) * -1);
 }
 
 .add-font {
-	flex: none;
-	border-radius: 50%;
-	width: 2rem;
-	height: 2rem;
-	transition: color var(--speed-2), background var(--speed-2);
-	padding: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: -0.25rem -0.5rem;
+	margin-right: var(--spacing-unit-half);
 }
 
 .add-font:hover {
-	background: var(--bg-alt);
-	color: var(--accent);
+	background: var(--bg-main);
 }
 
-.add-font:hover svg {
-	stroke: currentColor;
-}
-
-.apply-changes {
-	flex: none;
-	margin-right: var(--spacing-unit-half);
+.controls .full-reset:hover,
+.delete-font:hover {
+	background: var(--destructive);
 	color: var(--text-p1);
-	opacity: 0;
-	transition: opacity 500ms;
-	pointer-events: none;
-	font-weight: 600;
 }
 
-.apply-changes.show {
-	pointer-events: auto;
-	opacity: 1;
-}
-
-.apply-changes > span {
-	display: flex;
-	align-items: center;
-	background: var(--bg-main);
-	padding: calc(var(--spacing-unit-half) + 2px);
-	border-radius: 999px;
-	position: relative;
-}
-
-/* "inside space" on button */
-.apply-changes > span:before {
-	content: "";
-	background: var(--bg-alt);
-	width: calc(100% - 4px);
-	height: calc(100% - 4px);
-	display: flex;
-	position: absolute;
-	top: 2px;
-	left: 2px;
-	border-radius: 999px;
-	z-index: 1;
-}
-
-/* "border" on button */
-.apply-changes > span:after {
-	content: "";
-	background: var(--magic);
-	width: 100%;
-	height: 100%;
-	display: flex;
-	position: absolute;
-	top: 0;
-	left: 0;
-	border-radius: 999px;
-	z-index: 0;
-	opacity: 1;
-	transition: opacity 0.5s;
-}
-
-.apply-changes .button-text {
-	position: relative;
-	z-index: 2;
-}
-
-.apply-changes svg {
-	width: 16px;
-	height: 16px;
-	margin-right: var(--spacing-unit-half);
-	stroke: currentColor;
-	z-index: 1;
-}
-
-.apply-changes path {
-	box-shadow: 0 0 2px var(--accent-shadow);
-}
-
-.apply-changes:hover > span {
-	color: var(--accent);
-}
-
-.apply-changes:hover > span:before {
-	background: var(--bg-main);
-}
-
-.apply-changes:hover > span:after {
-	opacity: 0;
-}
-
-.apply-changes.show:hover svg {
-	animation: spin 0.4s forwards;
-}
-
-@keyframes spin {
-	to {
-		transform: rotate(360deg);
+@media (prefers-color-scheme: light) {
+	.controls .full-reset:hover,
+	.delete-font:hover {
+		color: var(--bg-main);
 	}
 }
 
@@ -552,7 +467,6 @@ textarea:focus {
 
 .select-font-button {
 	flex: none;
-	margin-left: 0.25rem;
 	margin-left: var(--spacing-unit-half);
 	padding-left: var(--spacing-unit-half);
 	padding-right: var(--spacing-unit-half);
@@ -575,7 +489,8 @@ textarea:focus {
 }
 
 .select-font-button svg {
-	width: 100%;
+	width: 1.5em;
+	height: 1.5em;
 }
 
 .select-font-button input {
@@ -583,20 +498,6 @@ textarea:focus {
 	height: 0;
 	padding: 0;
 	display: none;
-}
-
-.font-title {
-	width: calc(var(--extension-width) - 2 * var(--spacing-unit));
-	height: var(--unit-height);
-}
-
-.font-title button {
-	height: 100%;
-	width: 100%;
-	text-align: left;
-	width: calc(100% + 2 * var(--spacing-unit));
-	text-align: left;
-	padding: 0 var(--spacing-unit);
 }
 
 .font-name-title-container {
@@ -614,12 +515,27 @@ textarea:focus {
 	padding-right: var(--spacing-unit-half);
 }
 
+.font-title {
+	width: calc(var(--extension-width) - 2 * var(--spacing-unit));
+	height: var(--unit-height);
+}
+
+.font-title button {
+	height: 100%;
+	width: 100%;
+	text-align: left;
+	width: calc(100% + 2 * var(--spacing-unit));
+	text-align: left;
+	padding: 0 var(--spacing-unit);
+}
+
 .font-title svg {
 	width: 1em;
 	height: 1em;
 	margin-left: auto;
 	stroke: currentColor;
 	flex: none;
+	margin-right: -0.25em; /* Nicer optical alignment */
 }
 
 .font-title:hover path {
@@ -642,52 +558,28 @@ textarea:focus {
 	display: block;
 	padding: var(--spacing-unit);
 	padding-top: 0;
+	padding-bottom: var(--spacing-unit-half);
 }
 
 .additional-button-container {
-	font-size: var(--t3);
 	display: flex;
 	justify-content: space-between;
-	padding-top: var(--spacing-unit-half);
 }
 
-.additional-button-container .delete-font {
-	padding: 0.25rem 0.5rem;
-	border-radius: 1rem;
-	margin-right: -0.5rem;
-	color: var(--destructive);
-	transition: background var(--speed-2), color var(--speed-2);
-	font-size: var(--t2);
-	font-weight: 600;
-}
-
-.additional-button-container .delete-font:hover {
-	background: var(--destructive);
-	color: var(--text-p1);
-}
-
-@media (prefers-color-scheme: light) {
-	.additional-button-container .delete-font:hover {
-		color: var(--bg-main);
-	}
-}
-
-.additional-button-container .delete-font span {
-	display: flex;
-	align-items: center;
-}
-
-.additional-button-container .delete-font svg {
-	margin-right: 0.25em;
-	transform: translateY(-1px);
+/* Spacing is a little off on this particular icon,
+   so tweak this with some magic numbers */
+.delete-font svg {
 	stroke: currentColor;
+	width: 1.25em;
+	height: 1.25em;
+	margin-right: calc(var(--spacing-unit-half) * 0.75);
 }
 
-.additional-button-container .delete-font g.lid {
+.delete-font g.lid {
 	transition: transform var(--speed-2);
 }
 
-.additional-button-container .delete-font:hover g.lid {
+.delete-font:hover g.lid {
 	transform: rotate(-15deg) translate(-15%, 5%);
 }
 
@@ -696,27 +588,13 @@ textarea:focus {
 .blacklist {
 	background: var(--bg-main);
 	padding: var(--item-padding-tall);
-	border-bottom: 1px solid var(--separator);
+	border-top: 1px solid var(--separator);
 	color: var(--text-p3);
 	font-size: var(--t2);
-}
-
-.blacklist-container {
 	display: none;
 }
 
-.show-blacklist span {
-	display: flex;
-	align-items: center;
-	padding: 0.25rem 0;
-}
-
-.show-blacklist svg {
-	margin-right: 0.25rem;
-	stroke: currentColor;
-}
-
-.blacklist.show .blacklist-container {
+.blacklist.show {
 	display: block;
 }
 
@@ -740,19 +618,19 @@ textarea:focus {
 /* Footer */
 
 footer {
-	display: none;
 	position: fixed;
 	z-index: 1;
 	bottom: 0;
 	left: 0;
 	right: 0;
+	display: flex;
 	align-items: center;
 	font-size: var(--t3);
 	padding: 0.5rem;
 	color: var(--gray-0);
 	background: var(--bg-alt);
 	height: var(--footer-height);
-	box-shadow: 0 -1px 0 var(--separator);
+	border-top: 1px solid var(--separator);
 }
 
 footer a,
@@ -767,18 +645,6 @@ footer button:hover {
 	color: var(--accent);
 }
 
-footer .muted-link {
-	color: inherit;
-}
-
 footer span {
 	margin-right: auto;
-}
-
-footer.show {
-	display: flex;
-}
-
-.full-reset {
-	margin-right: var(--spacing-unit-half);
 }

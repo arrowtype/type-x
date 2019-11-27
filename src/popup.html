@@ -13,64 +13,51 @@
 					Type-X
 				</span>
 			</button>
-			<button class="button apply-changes all-caps" type="button">
+
+			<button type="button" id="addFont" class="add-font button-flex">
 				<span>
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-						<path
-							fill="none"
-							stroke-linecap="round"
-							stroke-width="2"
-							d="M13.849 5.055C12.902 2.697 10.754 1 8 1 4.222 1 1 4.134 1 8s3.222 7 7 7c2.878 0 5.35-1.823 6.308-4M15 1v5m0 0h-5"
-						/>
-					</svg>
-					<span class="button-text">
-						Apply Edits
-					</span>
-				</span>
-			</button>
-			<button type="button" id="showFonts" class="show-fonts">
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-					<path
-						fill="none"
-						stroke-linecap="round"
-						stroke-width="2"
-						d="M1 8L15 8M1 1L15 1M.878583652 15L14.8785837 15"
-					/>
-				</svg>
-			</button>
-		</header>
-
-		<main class="main-fonts">
-			<div class="overrides all-caps">
-				<span class="overrides-title">Font Overrides</span>
-
-				<button type="button" id="addFont" class="add-font">
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
 						<g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-width="2">
 							<path d="M2,8 L14,8" />
 							<path d="M2,8 L14,8" transform="rotate(90 8 8)" />
 						</g>
 					</svg>
-				</button>
-			</div>
+					Add font
+				</span>
+			</button>
+		</header>
+
+		<main class="main-fonts">
 			<form id="fontsForm">
 				<div id="usedFonts"></div>
+				<div class="controls">
+					<button type="button" id="showBlacklist" class="button-flex show-blacklist">
+						<span>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+								<g fill="none" fill-rule="evenodd" stroke-linecap="round">
+									<path stroke-width="2" d="M6 1L4 15M12 1L10 15M2 5L14 5M2 11L14 11" />
+								</g>
+							</svg>
+							Ignore...
+						</span>
+					</button>
+					<button type="button" class="button-flex full-reset">
+						<span>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+								<path
+									fill="none"
+									stroke-linecap="round"
+									stroke-width="2"
+									d="M13.849 5.055C12.902 2.697 10.754 1 8 1 4.222 1 1 4.134 1 8s3.222 7 7 7c2.878 0 5.35-1.823 6.308-4M15 1v5m0 0h-5"
+								/>
+							</svg>
+							Reset
+						</span>
+					</button>
+				</div>
 				<div class="blacklist">
-					<div class="blacklist-buttons">
-						<button type="button" id="showBlacklist" class="show-blacklist">
-							<span>
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-									<g fill="none" fill-rule="evenodd" stroke-linecap="round">
-										<path stroke-width="2" d="M6 1L4 15M12 1L10 15M2 5L14 5M2 11L14 11" />
-									</g>
-								</svg>
-								Selectors to ignore...
-							</span>
-						</button>
-					</div>
-					<div class="blacklist-container">
-						<textarea rows="3" name="blacklist"></textarea>
-					</div>
+					<span class="all-caps">Don't apply fonts to these selectors:</span>
+					<textarea rows="3" name="blacklist"></textarea>
 				</div>
 			</form>
 		</main>
@@ -82,10 +69,9 @@
 				&
 				<a href="https://arrowtype.com/" target="_blank">Arrow Type</a>
 			</span>
-			<button type="button" class="all-caps full-reset muted-link">
-				Reset
-			</button>
-			<a href="https://github.com/arrowtype/type-x" target="_blank" class="all-caps muted-link">Source</a>
+			<a href="https://github.com/kabisa/recursive-extension" target="_blank" class="all-caps muted-link"
+				>Source</a
+			>
 		</footer>
 
 		<!-- Template:  -->
@@ -96,7 +82,7 @@
 					<button type="button">
 						<span class="font-name-title-container">
 							<span class="font-name-title"></span>
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
 								<path fill="none" stroke-linecap="round" stroke-width="2" d="M11 8L6 3M6 13L11 8" />
 							</svg>
 						</span>
@@ -111,7 +97,7 @@
 						</div>
 
 						<label class="select-font-button">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
 								<g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-width="2">
 									<path d="M3,14 L13,14" />
 									<path d="M4,6 L12,6" transform="rotate(90 8 6)" />
@@ -139,15 +125,9 @@
 						<button type="button" class="all-caps show-fallbacks">
 							Fallback fonts...
 						</button>
-						<button type="button" class="all-caps delete-font">
+						<button type="button" class="button-flex delete-font">
 							<span>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="16"
-									height="16"
-									viewBox="0 0 16 16"
-									stroke="#E57880"
-								>
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
 									<g
 										fill="none"
 										fill-rule="evenodd"
