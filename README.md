@@ -1,5 +1,5 @@
 <p align="center">
-    <img alt="type-x icon" src="design/branding/toolbar-icons/typex-active@128.png" width="64" />
+    <img alt="type-x icon" src="src/icons/typex-active@128.png" width="64" />
 </p>
 <h1 align="center">
   Type-X: test your fonts across the web!
