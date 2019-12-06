@@ -1,6 +1,7 @@
 {
     "name": "Type-X",
     "version": "1.1",
+    "default_locale": "en",
     "description": "Test your fonts across the web!",
     "manifest_version": 2,
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
@@ -35,5 +36,7 @@
         "16": "icons/typex-off@16.png",
         "48": "icons/typex-off@48.png",
         "128": "icons/typex-off@128.png"
-    }
+    },
+    "homepage_url": "https://github.com/arrowtype/type-x"
+
 }
