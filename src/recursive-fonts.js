@@ -30,6 +30,7 @@ const defaultFonts = [
 		],
 		css: "line-height: normal; font-feature-settings: normal;",
 		inherit: false,
+		activeinstance: "Mono Linear Regular",
 		axes: {
 			MONO: {
 				id: "MONO",
@@ -76,6 +77,7 @@ const defaultFonts = [
 		selectors: ["*"],
 		css: "",
 		inherit: true,
+		activeinstance: "Sans Linear Regular",
 		axes: {
 			MONO: {
 				id: "MONO",
