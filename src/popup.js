@@ -295,7 +295,7 @@ function addNamedInstances(instances, el) {
 	const container = el.querySelector(".variable-instances");
 	container.innerHTML = "";
 
-	if (instances) {
+	if (Object.keys(instances).length > 0) {
 		// Create instances dropdown
 		const dropdown = document.createElement("select");
 		dropdown.classList.add("select-instance");
