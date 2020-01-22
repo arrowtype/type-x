@@ -515,6 +515,10 @@ textarea:focus {
 	padding-right: var(--spacing-unit-half);
 }
 
+.font-name-instance {
+	transform: translateY(0.075em);
+}
+
 .font-title {
 	width: calc(var(--extension-width) - 2 * var(--spacing-unit));
 	height: var(--unit-height);
