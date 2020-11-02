@@ -88,7 +88,7 @@
 	/* TODO: load this from JavaScript through FontFaceSet
     so we can re-use recursive-fonts.js */
 	font-family: "Recursive";
-	src: url("./fonts/recursive-MONO_CASL_wght_slnt_ital--full_gsub--2019_11_17-23_48.woff2");
+	src: url("./fonts/Recursive_VF_1.066.woff2");
 }
 
 * {
