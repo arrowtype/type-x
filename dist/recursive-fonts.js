@@ -64,8 +64,8 @@ const defaultFonts = [
 				id: "wght",
 				name: "Weight",
 				min: 300,
-				max: 900,
-				value: 400
+				max: 1000,
+				value: 300
 			}
 		}
 	},
@@ -111,8 +111,8 @@ const defaultFonts = [
 				id: "wght",
 				name: "Weight",
 				min: 300,
-				max: 900,
-				value: 400
+				max: 1000,
+				value: 300
 			}
 		}
 	}
