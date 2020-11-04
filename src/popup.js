@@ -119,6 +119,7 @@ function buildForm(fonts, files, blacklist) {
 
 	// Inject blacklist
 	blacklistEl.value = blacklist.join(", ");
+	blacklistEl.oninput = saveForm;
 
 	syncVariableValues();
 }
