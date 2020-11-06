@@ -1,9 +1,13 @@
 <p align="center">
-    <img alt="type-x icon" src="design/branding/toolbar-icons/typex-active@128.png" width="64" />
+    <img alt="type-x icon" src="src/icons/typex-active@128.png" width="64" />
 </p>
 <h1 align="center">
   Type-X: test your fonts across the web!
 </h1>
+
+<h3 align="center"><a href="https://chrome.google.com/webstore/detail/type-x/bfnfnnicdjkkialkldogjjmmfeiopbin" target="_blank">Now on the Chrome Web Store ↗</a></h3>
+
+---
 
 Type-X is a Google Chrome extension that makes it easy and efficient to test local fonts on any website.
 
@@ -26,27 +30,7 @@ Whatever reason you want to override fonts, Type-X makes it fast, easy, and fun.
 
 ## Installation
 
-Find the Type-X extension in the [Chrome web store](https://chrome.google.com/webstore/category/extensions). (A direct link will be added once it's released.)
-
-### Install in Developer Mode
-
-If you wish to develop or edit the extension itself, you can clone this repo and use it in Chrome:
-
-1. Download the latest release from https://github.com/arrowtype/type-x/releases
-2. Unzip the release. This will change it to a folder called `dist` (short for "distribution").
-3. Go to chrome://extensions/ in Chrome
-4. Turn on "Developer Mode"
-5. Click "Load unpacked"
-6. Click "Load unpacked" and navigate to the `dist` folder of the repo you cloned – alternatively, you can just drag-n-drop the `dist` folder into the extensions page.
-
-
-### Local development
-
-If you wish to work on the code of Type-X, follow these steps, then install in developer mode (see above).
-
-1. Git Clone the repo
-2. Run `yarn` to set up dependencies, then `yarn build` to build
-3. Extension will be saved in the `dist` folder
+Find the Type-X extension in the [Chrome web store](https://chrome.google.com/webstore/detail/type-x/bfnfnnicdjkkialkldogjjmmfeiopbin).
 
 ## Usage
 
@@ -139,3 +123,25 @@ Did you get stuck on something?
 Have you found a bug?
 
 Let us know! [File an issue](https://github.com/arrowtype/type-x/issues) or make a pull request (please see [Contributing guidelines](CONTRIBUTING.md)).
+
+## Development
+
+### Install in Developer Mode
+
+If you wish to develop or edit the extension itself, you can clone this repo and use it in Chrome:
+
+1. Download the latest release from https://github.com/arrowtype/type-x/releases
+2. Unzip the release. This will change it to a folder called `dist` (short for "distribution").
+3. Go to chrome://extensions/ in Chrome
+4. Turn on "Developer Mode"
+5. Click "Load unpacked"
+6. Click "Load unpacked" and navigate to the `dist` folder of the repo you cloned – alternatively, you can just drag-n-drop the `dist` folder into the extensions page.
+
+
+### Local development
+
+If you wish to work on the code of Type-X, follow these steps, then install in developer mode (see above).
+
+1. Git Clone the repo
+2. Run `yarn` to set up dependencies, then `yarn build` to build
+3. Extension will be saved in the `dist` folder

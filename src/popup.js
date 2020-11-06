@@ -119,6 +119,7 @@ function buildForm(fonts, files, blacklist) {
 
 	// Inject blacklist
 	blacklistEl.value = blacklist.join(", ");
+	blacklistEl.oninput = saveForm;
 
 	syncVariableValues();
 }
@@ -162,7 +163,6 @@ function addFormElement(font, files) {
 		const parent = e.target.closest(".font");
 		const name = e.target.options[e.target.selectedIndex].text;
 		const fileId = e.target.options[e.target.selectedIndex].value;
-		parent.querySelector(".font-name-title").innerText = name;
 		addVariableSliders(false, parent);
 		addNamedInstances(false, parent);
 		chrome.storage.local.get("files", ({ files }) => {
@@ -174,6 +174,7 @@ function addFormElement(font, files) {
 			}
 			saveForm();
 		});
+		parent.querySelector(".font-name-title").innerText = name;
 	};
 
 	const extensionGroup = document.createElement("optgroup");
@@ -244,6 +245,13 @@ function addFormElement(font, files) {
 	}
 	addNamedInstances(instances, parentEl);
 
+	// Select the named instance, if in use
+	const instanceDropdown = el.querySelector(".select-instance");
+	if(instanceDropdown) {
+		instanceDropdown.value = font.activeinstance;
+		el.querySelector(".font-name-instance").innerText = font.activeinstance;
+	}
+
 	parentEl.addEventListener("dragover", highlight, false);
 	parentEl.addEventListener("dragleave", unhighlight, false);
 	parentEl.addEventListener("drop", grabFont, false);
@@ -295,7 +303,7 @@ function addNamedInstances(instances, el) {
 	const container = el.querySelector(".variable-instances");
 	container.innerHTML = "";
 
-	if (instances) {
+	if (Object.keys(instances).length > 0) {
 		// Create instances dropdown
 		const dropdown = document.createElement("select");
 		dropdown.classList.add("select-instance");
@@ -337,19 +345,23 @@ function addNamedInstances(instances, el) {
 
 function applyNamedInstance(e) {
 	const sel = e.target;
+	const parent = e.target.closest(".font");
+
+	const instanceName = sel.value == "--inherit--" ? "" : sel.value;
+	parent.querySelector(".font-name-instance").innerText = instanceName;
 
 	if (sel.value == "--inherit--" || sel.value == "--axes--") {
 		saveForm();
 		return;
 	}
 
-	const parent = e.target.closest(".font");
 	const axes = JSON.parse(sel.options[sel.selectedIndex].dataset.instance);
 
 	for (const axis in axes) {
 		const slider = parent.querySelector(`[name=var-${axis}]`);
 		slider.value = axes[axis];
 	}
+
 
 	saveForm();
 }
@@ -400,7 +412,11 @@ function saveForm() {
 				newFont["name"] = input.options[input.selectedIndex].text;
 				newFont["file"] = input.options[input.selectedIndex].value;
 			} else if (input.name === "select-instance") {
-				newFont["inherit"] = input.value === "--inherit--";
+				if(input.value === "--inherit--") {
+					newFont["inherit"] = true;
+				} else {
+					newFont["activeinstance"] = input.value;
+				}
 			} else if (straightInputs.includes(input.name)) {
 				newFont[input.name] = input.value;
 			} else if (input.name.startsWith("var-")) {
