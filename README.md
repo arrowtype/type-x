@@ -8,7 +8,7 @@
 <!--<h3 align="center"><a href="https://chrome.google.com/webstore/detail/type-x/bfnfnnicdjkkialkldogjjmmfeiopbin" target="_blank">Now on the Chrome Web Store ↗</a></h3>-->
 
 <h3 align="center">
-Type-X is currently unlisted from the Chrome Web Store for maintenance.<br/>However, it can still be used in Chrome Developer Mode (see below).
+Type-X is currently unlisted from the Chrome Web Store for maintenance.<br/>However, it can still be used in Chrome Developer Mode (see <a href="https://github.com/arrowtype/type-x/blob/master/README.md#install-in-developer-mode">below</a>).
 </h3>
 
 ---
