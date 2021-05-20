@@ -357,8 +357,6 @@ function applyNamedInstance(e) {
 
 	const axes = JSON.parse(sel.options[sel.selectedIndex].dataset.instance);
 
-	console.log(axes)
-
 	for (const axis in axes) {
 		const slider = parent.querySelector(`[name=var-${axis}]`);
 		slider.value = axes[axis];
