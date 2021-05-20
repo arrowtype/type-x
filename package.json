@@ -1,6 +1,6 @@
 {
   "name": "Type-X",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Type-X browser extension",
   "repository": "git@github.com:arrowtype/type-x.git",
   "author": "Roel Nieskens <roel@pixelambacht.nl>",
