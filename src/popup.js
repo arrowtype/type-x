@@ -254,3 +254,6 @@ function generateStyleSheet() {
 		}
 	);
 }
+
+// Initial setup when popup is opened
+updateStatus(false);
