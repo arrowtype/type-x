@@ -101,6 +101,21 @@ const showStatus = firstRun => {
 		});
 		activateFonts.classList.toggle("active", extensionActive);
 		!firstRun && activateFonts.classList.remove("first-run");
+		// Let's normalize the contents of the local storage, in case we're not
+		// set up properly set
+		chrome.storage.local.get(
+			["fonts", "files", "blacklist"],
+			({ fonts, files, blacklist }) => {
+				fonts = fonts || [];
+				files = files || {};
+				blacklist = blacklist || [];
+				chrome.storage.local.set({
+					fonts,
+					files,
+					blacklist
+				});
+			}
+		);
 	});
 };
 
