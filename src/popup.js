@@ -98,21 +98,17 @@ fullReset.onclick = () => {
 			"Do you really want to reset Type-X? This will remove all loaded fonts and reset all font overrides to the extension default values. THIS CANNOT BE UNDONE."
 		)
 	) {
-		updateStatus(false);
-		setTimeout(() => {
-			resetToDefaults();
-		}, 100);
+		chrome.storage.local.set(
+			{
+				extensionActive: false,
+				fonts: defaultFonts,
+				files: defaultFiles,
+				blacklist: defaultBlacklist
+			},
+			() => updateStatus(false)
+		);
 	}
 };
-
-function resetToDefaults() {
-	chrome.storage.local.set({
-		extensionActive: false,
-		fonts: defaultFonts,
-		files: defaultFiles,
-		blacklist: defaultBlacklist
-	});
-}
 
 // If for some reason things were not properly set up, or we got in a muddle
 function normalizeLocalStorage() {
