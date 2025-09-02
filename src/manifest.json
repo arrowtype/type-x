@@ -1,41 +1,37 @@
 {
-    "name": "Type-X",
-    "version": "1.3",
-    "description": "Test your fonts across the web!",
-    "short_name": "Type-X",
-    "manifest_version": 2,
-    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-    "permissions": [
-        "activeTab",
-        "fontSettings",
-        "storage",
-        "unlimitedStorage",
-        "*://*/*"
-    ],
-    "background": {
-        "scripts": [
-            "recursive-fonts.js",
-            "background.js"
-        ],
-        "persistent": false
-    },
-    "web_accessible_resources": [
-        "fonts/*"
-    ],
-    "browser_action": {
-        "default_title": "Type-X",
-        "default_popup": "popup.html",
-        "default_icon": {
-            "16": "icons/typex-off@16.png",
-            "48": "icons/typex-off@48.png",
-            "128": "icons/typex-off@128.png"
-        }
-    },
-    "icons": {
-        "16": "icons/typex-off@16.png",
-        "48": "icons/typex-off@48.png",
-        "128": "icons/typex-off@128.png"
-    },
-    "homepage_url": "https://github.com/arrowtype/type-x"
-
+  "name": "Type-X",
+  "version": "1.3",
+  "description": "Test your fonts across the web!",
+  "short_name": "Type-X",
+  "manifest_version": 3,
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "permissions": ["activeTab", "fontSettings", "storage", "unlimitedStorage"],
+  "host_permissions": ["*://*/*"],
+  "background": {
+    "scripts": ["recursive-fonts.js", "background.js"],
+    "persistent": false
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["fonts/*"],
+      "matches": ["*://*/*"]
+    }
+  ],
+  "browser_action": {
+    "default_title": "Type-X",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/typex-off@16.png",
+      "48": "icons/typex-off@48.png",
+      "128": "icons/typex-off@128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/typex-off@16.png",
+    "48": "icons/typex-off@48.png",
+    "128": "icons/typex-off@128.png"
+  },
+  "homepage_url": "https://github.com/arrowtype/type-x"
 }
