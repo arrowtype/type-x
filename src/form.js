@@ -457,7 +457,7 @@ function grabVariableData(file, parent) {
 	let bufferPromise = file.arrayBuffer();
 
 	let font = false;
-	bufferPromise.then(buffer => {
+	return bufferPromise.then(buffer => {
 		try {
 			font = create(Buffer.from(buffer));
 
