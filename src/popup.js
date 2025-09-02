@@ -110,12 +110,12 @@ export function updateStatus(status) {
 		{
 			extensionActive: status
 		},
-		async () => {
+		() => {
 			chrome.tabs.query(
 				{ active: true, currentWindow: true },
 				async tabs => {
 					const activeTab = tabs[0];
-					generateStyleSheet();
+					await generateStyleSheet();
 					await injectStyleSheet(activeTab.id, status);
 				}
 			);
@@ -157,71 +157,71 @@ async function injectStyleSheet(tabId, extensionActive) {
 	});
 }
 
-function generateStyleSheet() {
-	chrome.storage.local.get(
-		["fonts", "files", "blacklist"],
-		({ fonts, files, blacklist }) => {
-			stylesheets = [];
-			const blacklistSelectors = (() => {
-				let b = "";
-				for (const blacklistItem of blacklist) {
-					b += `:not(${blacklistItem})`;
-				}
-				return b;
-			})();
+async function generateStyleSheet() {
+	let { fonts, files, blacklist } = await chrome.storage.local.get([
+		"fonts",
+		"files",
+		"blacklist"
+	]);
+	stylesheets = [];
+	const blacklistSelectors = (() => {
+		let b = "";
+		for (const blacklistItem of blacklist) {
+			b += `:not(${blacklistItem})`;
+		}
+		return b;
+	})();
 
-			for (const font of fonts) {
-				const selectors = [];
-				const axesStyles = [];
-				let fontName = font.name;
-				let stylesheet = "";
+	for (const font of fonts) {
+		const selectors = [];
+		const axesStyles = [];
+		let fontName = font.name;
+		let stylesheet = "";
 
-				for (const selector of font.selectors) {
-					selectors.push(
-						`html:not([data-disablefont]) ${selector}${blacklistSelectors}`
-					);
-				}
+		for (const selector of font.selectors) {
+			selectors.push(
+				`html:not([data-disablefont]) ${selector}${blacklistSelectors}`
+			);
+		}
 
-				let axes = false;
-				if (font.axes && Object.entries(font.axes).length) {
-					axes = font.axes;
-				} else if (font.file in files) {
-					axes = files[font.file].axes;
-				}
+		let axes = false;
+		if (font.axes && Object.entries(font.axes).length) {
+			axes = font.axes;
+		} else if (font.file in files) {
+			axes = files[font.file].axes;
+		}
 
-				// Only inject variable axes when font has axes,
-				// and we don't want to inherit page styles
-				if (axes && !font.inherit) {
-					for (const axisData in axes) {
-						axesStyles.push(
-							`'${axes[axisData].id}' ${axes[axisData].value}`
-						);
-					}
-					fontName = font.name + font.id;
-				}
+		// Only inject variable axes when font has axes,
+		// and we don't want to inherit page styles
+		if (axes && !font.inherit) {
+			for (const axisData in axes) {
+				axesStyles.push(
+					`'${axes[axisData].id}' ${axes[axisData].value}`
+				);
+			}
+			fontName = font.name + font.id;
+		}
 
-				if (font.file in files) {
-					stylesheet += `
+		if (font.file in files) {
+			stylesheet += `
 							@font-face {
 								font-family: '${fontName}';
 								src: url('${files[font.file].file}');
 								font-weight: 100 900;
 								font-stretch: 50% 200%;
 							}`;
-				}
+		}
 
-				const stack = `'${fontName}', ${font.fallback}`;
-				stylesheet += `
+		const stack = `'${fontName}', ${font.fallback}`;
+		stylesheet += `
 						${selectors.join(",")} {
 							font-family: ${stack} !important;
 							${axesStyles.length ? `font-variation-settings: ${axesStyles.join(",")};` : ""}
 							${font.css}
 						}`;
 
-				stylesheets.push(stylesheet);
-			}
-		}
-	);
+		stylesheets.push(stylesheet);
+	}
 }
 
 // Initial setup when popup is opened
