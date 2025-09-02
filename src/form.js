@@ -1,4 +1,3 @@
-import blobToBuffer from "blob-to-buffer";
 import { updateStatus } from "./popup.js";
 
 const localFonts = {};
@@ -438,15 +437,24 @@ function grabFont(e) {
 }
 
 // Analyse a *new* font for variable axes, create form inputs
+/**
+ *
+ * @param {File} file
+ * @param {HTMLElement} parent
+ * @returns
+ */
 function grabVariableData(file, parent) {
 	parent
 		.querySelector(".variable-sliders-container")
 		.classList.remove("show");
+	let bufferPromise = file.arrayBuffer().then(buff => {
+		return new Uint8Array(buff);
+	});
 
 	return import(/* webpackChunkName: "fontkit" */ "fontkit-next").then(
 		({ default: fontkit }) => {
 			let font = false;
-			blobToBuffer(file, (_error, buffer) => {
+			bufferPromise.then(buffer => {
 				try {
 					font = fontkit.create(buffer);
 

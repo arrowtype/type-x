@@ -10,7 +10,6 @@
 		"build": "npx webpack"
 	},
 	"dependencies": {
-		"blob-to-buffer": "^1.2.8",
 		"buffer": "^6.0.3",
 		"fontkit-next": "^1.8.1",
 		"iconv-lite": "^0.7.0",
