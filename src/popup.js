@@ -40,9 +40,12 @@ chrome.fontSettings.getFontList(fonts => {
 	for (const font of fonts) {
 		localFonts[font.displayName] = font.fontId;
 	}
-	chrome.storage.local.get(["fonts", "files", "blacklist"], ({ fonts, files, blacklist }) => {
-		buildForm(fonts, files, blacklist);
-	});
+	chrome.storage.local.get(
+		["fonts", "files", "blacklist"],
+		({ fonts, files, blacklist }) => {
+			buildForm(fonts, files, blacklist);
+		}
+	);
 });
 
 // Toggle extension on/off using the button
@@ -126,7 +129,9 @@ function buildForm(fonts, files, blacklist) {
 
 // New file uploaded, append to all selects
 function updateFontDropdowns(id, name) {
-	const optgroups = document.querySelectorAll(".font-file-select optgroup:first-child");
+	const optgroups = document.querySelectorAll(
+		".font-file-select optgroup:first-child"
+	);
 	for (const optgroup of optgroups) {
 		const options = optgroup.querySelectorAll("option");
 		let present = false;
@@ -151,7 +156,8 @@ function addFormElement(font, files) {
 	const el = document.importNode(template.content, true);
 	const parentEl = el.querySelector(".font");
 
-	el.querySelector(".font-name-title").innerText = font.name || "New font override";
+	el.querySelector(".font-name-title").innerText =
+		font.name || "New font override";
 
 	const fontSelect = el.querySelector(".font-file-select");
 
@@ -247,7 +253,7 @@ function addFormElement(font, files) {
 
 	// Select the named instance, if in use
 	const instanceDropdown = el.querySelector(".select-instance");
-	if(instanceDropdown) {
+	if (instanceDropdown) {
 		instanceDropdown.value = font.activeinstance;
 		el.querySelector(".font-name-instance").innerText = font.activeinstance;
 	}
@@ -268,7 +274,9 @@ function addFormElement(font, files) {
 function syncVariableValues() {
 	const containers = document.querySelectorAll(".font");
 	for (const container of containers) {
-		const sliders = container.querySelectorAll(".variable-sliders [type=range]");
+		const sliders = container.querySelectorAll(
+			".variable-sliders [type=range]"
+		);
 
 		if (!sliders.length) break;
 
@@ -281,10 +289,14 @@ function syncVariableValues() {
 
 		const dropdown = container.querySelector(".select-instance");
 		if (dropdown.value == "--inherit--") {
-			container.querySelector(".variable-sliders-container").classList.add("mute");
+			container
+				.querySelector(".variable-sliders-container")
+				.classList.add("mute");
 			return;
 		} else {
-			container.querySelector(".variable-sliders-container").classList.remove("mute");
+			container
+				.querySelector(".variable-sliders-container")
+				.classList.remove("mute");
 		}
 
 		const options = dropdown.querySelectorAll("option");
@@ -332,7 +344,7 @@ function addNamedInstances(instances, el) {
 			const orderedAxes = {};
 			Object.keys(axes)
 				.sort()
-				.forEach(function(key) {
+				.forEach(function (key) {
 					orderedAxes[key] = axes[key];
 				});
 			option.dataset.instance = JSON.stringify(orderedAxes);
@@ -362,7 +374,6 @@ function applyNamedInstance(e) {
 		slider.value = axes[axis];
 	}
 
-
 	saveForm();
 }
 
@@ -370,7 +381,9 @@ function addVariableSliders(axes, el) {
 	const newAxes = {};
 	el.querySelector(".variable-sliders").innerHTML = "";
 	if (!axes) {
-		el.querySelector(".variable-sliders-container").classList.remove("show");
+		el.querySelector(".variable-sliders-container").classList.remove(
+			"show"
+		);
 	} else {
 		const keys = Object.keys(axes).sort();
 		for (let i = 0; i < keys.length; ++i) {
@@ -385,7 +398,9 @@ function addVariableSliders(axes, el) {
 			newAxes[keys[i]] = axis;
 
 			addSlider(axis, el);
-			el.querySelector(".variable-sliders-container").classList.add("show");
+			el.querySelector(".variable-sliders-container").classList.add(
+				"show"
+			);
 		}
 	}
 	// Return new object of axes. TODO: we could just use
@@ -412,7 +427,7 @@ function saveForm() {
 				newFont["name"] = input.options[input.selectedIndex].text;
 				newFont["file"] = input.options[input.selectedIndex].value;
 			} else if (input.name === "select-instance") {
-				if(input.value === "--inherit--") {
+				if (input.value === "--inherit--") {
 					newFont["inherit"] = true;
 				} else {
 					newFont["activeinstance"] = input.value;
@@ -431,7 +446,9 @@ function saveForm() {
 				axes[name] = axis;
 			} else if (input.name === "selectors") {
 				// Selectors should become an array
-				newFont["selectors"] = input.value.split(",").map(i => i.trim());
+				newFont["selectors"] = input.value
+					.split(",")
+					.map(i => i.trim());
 			}
 		}
 
@@ -472,10 +489,7 @@ function grabFont(e) {
 
 	// Check if filetype is allowed
 	const allowedExt = ["ttf", "otf", "eot", "woff", "woff2"];
-	const ext = name
-		.split(".")
-		.pop()
-		.toLowerCase();
+	const ext = name.split(".").pop().toLowerCase();
 	if (!allowedExt.includes(ext)) {
 		return false;
 	}
@@ -513,30 +527,34 @@ function grabFont(e) {
 
 // Analyse a *new* font for variable axes, create form inputs
 function grabVariableData(file, parent) {
-	parent.querySelector(".variable-sliders-container").classList.remove("show");
+	parent
+		.querySelector(".variable-sliders-container")
+		.classList.remove("show");
 
-	return import(/* webpackChunkName: "fontkit" */ "fontkit-next").then(({ default: fontkit }) => {
-		let font = false;
-		blobToBuffer(file, (_error, buffer) => {
-			try {
-				font = fontkit.create(buffer);
+	return import(/* webpackChunkName: "fontkit" */ "fontkit-next").then(
+		({ default: fontkit }) => {
+			let font = false;
+			blobToBuffer(file, (_error, buffer) => {
+				try {
+					font = fontkit.create(buffer);
 
-				const axes = addVariableSliders(font.variationAxes, parent);
-				addNamedInstances(font.namedVariations, parent);
+					const axes = addVariableSliders(font.variationAxes, parent);
+					addNamedInstances(font.namedVariations, parent);
 
-				chrome.storage.local.get("files", ({ files }) => {
-					files[file.name].axes = axes;
-					files[file.name].instances = font.namedVariations;
+					chrome.storage.local.get("files", ({ files }) => {
+						files[file.name].axes = axes;
+						files[file.name].instances = font.namedVariations;
 
-					chrome.storage.local.set({
-						files: files
+						chrome.storage.local.set({
+							files: files
+						});
 					});
-				});
-			} catch (e) {
-				console.log("Failed to parse font.");
-			}
-		});
-	});
+				} catch (e) {
+					console.log("Failed to parse font.");
+				}
+			});
+		}
+	);
 }
 
 function addSlider(axis, parent) {
