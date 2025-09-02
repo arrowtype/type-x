@@ -61,30 +61,17 @@ addFont.onclick = () => {
 	});
 };
 
-function debugMessage(_message, _tabId) {
-	// chrome.tabs.sendMessage(tabId, { type: "debug", message });
-}
-
 let injectedCSS = {};
-
 async function insertOrReplaceCss(tabId, text) {
 	if (tabId in injectedCSS) {
-		console.log("Old CSS");
-		console.log(injectedCSS[tabId]);
 		if (injectedCSS[tabId] == text) {
-			console.log("CSS was same, ignoring");
 			return;
 		}
-		console.log("Removing old CSS");
 		await chrome.scripting.removeCSS({
 			target: { tabId },
 			css: injectedCSS[tabId]
 		});
 	}
-
-	console.log("Inserting new");
-	console.log(text);
-
 	await chrome.scripting.insertCSS({
 		target: { tabId },
 		css: text
@@ -109,23 +96,6 @@ fullReset.onclick = () => {
 		);
 	}
 };
-
-// If for some reason things were not properly set up, or we got in a muddle
-function normalizeLocalStorage() {
-	chrome.storage.local.get(
-		["fonts", "files", "blacklist"],
-		({ fonts, files, blacklist }) => {
-			if (fonts === undefined) fonts = defaultFonts;
-			if (files === undefined) files = defaultFiles;
-			if (blacklist === undefined) blacklist = defaultBlacklist;
-			chrome.storage.local.set({
-				fonts,
-				files,
-				blacklist
-			});
-		}
-	);
-}
 
 // Toggle extension on/off using the button
 activateFonts.onclick = () => {
@@ -162,7 +132,6 @@ const showStatus = firstRun => {
 		});
 		activateFonts.classList.toggle("active", extensionActive);
 		!firstRun && activateFonts.classList.remove("first-run");
-		normalizeLocalStorage();
 	});
 };
 
