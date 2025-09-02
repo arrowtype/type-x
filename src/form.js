@@ -1,4 +1,5 @@
 import { updateStatus } from "./popup.js";
+import { create } from "fontkit";
 
 const localFonts = {};
 
@@ -452,34 +453,28 @@ function grabVariableData(file, parent) {
 	parent
 		.querySelector(".variable-sliders-container")
 		.classList.remove("show");
-	let bufferPromise = file.arrayBuffer().then(buff => {
-		return new Uint8Array(buff);
-	});
+	let bufferPromise = file.arrayBuffer();
 
-	return import(/* webpackChunkName: "fontkit" */ "fontkit-next").then(
-		({ default: fontkit }) => {
-			let font = false;
-			bufferPromise.then(buffer => {
-				try {
-					font = fontkit.create(buffer);
+	let font = false;
+	bufferPromise.then(buffer => {
+		try {
+			font = create(Buffer.from(buffer));
 
-					const axes = addVariableSliders(font.variationAxes, parent);
-					addNamedInstances(font.namedVariations, parent);
+			const axes = addVariableSliders(font.variationAxes, parent);
+			addNamedInstances(font.namedVariations, parent);
 
-					chrome.storage.local.get("files", ({ files }) => {
-						files[file.name].axes = axes;
-						files[file.name].instances = font.namedVariations;
+			chrome.storage.local.get("files", ({ files }) => {
+				files[file.name].axes = axes;
+				files[file.name].instances = font.namedVariations;
 
-						chrome.storage.local.set({
-							files: files
-						});
-					});
-				} catch (e) {
-					console.log("Failed to parse font.");
-				}
+				chrome.storage.local.set({
+					files: files
+				});
 			});
+		} catch (e) {
+			console.log("Failed to parse font.");
 		}
-	);
+	});
 }
 
 function addSlider(axis, parent) {
