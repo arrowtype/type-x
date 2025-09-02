@@ -1,3 +1,4 @@
+const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
@@ -16,11 +17,16 @@ module.exports = {
 			fs: false,
 			buffer: require.resolve("buffer"),
 			string_decoder: require.resolve("string_decoder/"),
-			stream: false,
-			util: require.resolve("util")
+			stream: require.resolve("stream-browserify"),
+			util: require.resolve("util"),
+			process: require.resolve("process/browser")
 		}
 	},
 	plugins: [
+		new webpack.ProvidePlugin({
+			Buffer: ["buffer", "Buffer"],
+			process: "process/browser"
+		}),
 		new CopyPlugin({
 			patterns: [
 				{ from: "src/icons", to: "icons/" },
