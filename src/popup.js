@@ -96,7 +96,7 @@ function updateStatus(status, updatingCurrentTab) {
 // Show status of extension in the popup
 const showStatus = firstRun => {
 	chrome.storage.local.get("extensionActive", ({ extensionActive }) => {
-		chrome.browserAction.setIcon({
+		chrome.action.setIcon({
 			path: `icons/typex-${extensionActive ? "active" : "off"}@128.png`
 		});
 		activateFonts.classList.toggle("active", extensionActive);
