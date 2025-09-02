@@ -155,11 +155,11 @@ export function addFormElement(font, files) {
 	addVariableSliders(axes, parentEl);
 
 	// Add named variable instances
-	let instances = false;
+	let instances = {};
 	if (font.instances) {
 		instances = font.instances;
 	} else if (font.file in files) {
-		instances = files[font.file].instances;
+		instances = files[font.file].instances || {};
 	}
 	addNamedInstances(instances, parentEl);
 
@@ -396,6 +396,7 @@ export function saveForm() {
 // Keep track of file data, and hook up to rest
 // of form data on submit
 function grabFont(e) {
+	/** @type {FileList} */
 	const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
 	const file = files[0]; // Only use first file if multiple are dropped
 	const name = file.name;
