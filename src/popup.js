@@ -170,27 +170,22 @@ const showStatus = firstRun => {
 // the body isn't. We don't want a delay, so the CSS will
 // enable the fonts immediately, and we only add a class
 // when we want to *remove* the custom fonts.
+let customFontsOn = () => {
+	delete document.documentElement.dataset.disablefont;
+};
+let customFontsOff = () => {
+	document.documentElement.dataset.disablefont = "";
+};
 async function injectStyleSheet(tabId, extensionActive) {
 	let stylesheetsCode = stylesheets.join("\n");
 	if (extensionActive) {
 		// Inject CSS to activate font
 		await insertOrReplaceCss(tabId, stylesheetsCode);
-		// Remove force-disable class
-		chrome.scripting.executeScript({
-			target: { tabId },
-			func: () => {
-				delete document.documentElement.dataset.disablefont;
-			}
-		});
-	} else {
-		// Add force-disable class
-		chrome.scripting.executeScript({
-			target: { tabId },
-			func: () => {
-				document.documentElement.dataset.disablefont = "";
-			}
-		});
 	}
+	chrome.scripting.executeScript({
+		target: { tabId },
+		func: extensionActive ? customFontsOn : customFontsOff
+	});
 }
 
 function generateStyleSheet() {
