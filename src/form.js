@@ -81,7 +81,7 @@ export function addFormElement(font, files) {
 		const name = e.target.options[e.target.selectedIndex].text;
 		const fileId = e.target.options[e.target.selectedIndex].value;
 		addVariableSliders(false, parent);
-		addNamedInstances(false, parent);
+		addNamedInstances({}, parent);
 		chrome.storage.local.get("files", ({ files }) => {
 			for (const file in files) {
 				if (file == fileId) {
@@ -222,6 +222,11 @@ function syncVariableValues() {
 	}
 }
 
+/**
+ * Add named instances to the font editor.
+ * @param {Record<string, any>} instances
+ * @param {HTMLElement} el
+ */
 function addNamedInstances(instances, el) {
 	const container = el.querySelector(".variable-instances");
 	container.innerHTML = "";
