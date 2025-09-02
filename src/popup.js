@@ -19,21 +19,84 @@ const showBlacklist = document.querySelector("#showBlacklist");
 const fullReset = document.querySelector(".full-reset");
 const localFonts = {};
 
+import { defaultFiles, defaultFonts } from "./recursive-fonts";
+const defaultBlacklist = [
+	".icon",
+	".Icon",
+	".glyphicon",
+	".fa",
+	".fas",
+	".far",
+	".fal",
+	".fab",
+	".font-fontello",
+	".material-icons",
+	".DPvwYc", // google hangouts
+	".Mwv9k", // google hangouts
+	".NtU4hc" // google hangouts
+];
+let stylesheets = [];
+let updateCount = 0;
+let prevFonts;
+
+function debugMessage(message, tabId) {
+	chrome.tabs.sendMessage(tabId, { type: "debug", message });
+}
+
+function updateTab(extensionActive) {
+	chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+		const activeTab = tabs[0];
+		if (extensionActive) {
+			chrome.scripting.insertCSS({
+				target: { tabId: activeTab.id },
+				css: "html{opacity:0.75!important}"
+			});
+		}
+		generateStyleSheet(true, activeTab.id, () => {
+			injectStyleSheet(activeTab.id, extensionActive);
+			chrome.tabs.sendMessage(activeTab.id, { updateCount });
+		});
+	});
+}
+
 fullReset.onclick = () => {
 	if (
 		window.confirm(
 			"Do you really want to reset Type-X? This will remove all loaded fonts and reset all font overrides to the extension default values. THIS CANNOT BE UNDONE."
 		)
 	) {
-		chrome.runtime.getBackgroundPage(backgroundPage => {
-			backgroundPage.updateFonts(false, true);
-			setTimeout(() => {
-				backgroundPage.initTypeX();
-				chrome.runtime.reload();
-			}, 100);
-		});
+		updateTab(false);
+		setTimeout(() => {
+			resetToDefaults();
+		}, 100);
 	}
 };
+
+function resetToDefaults() {
+	chrome.storage.local.set({
+		extensionActive: false,
+		fonts: defaultFonts,
+		files: defaultFiles,
+		blacklist: defaultBlacklist
+	});
+}
+
+// If for some reason things were not properly set up, or we got in a muddle
+function normalizeLocalStorage() {
+	chrome.storage.local.get(
+		["fonts", "files", "blacklist"],
+		({ fonts, files, blacklist }) => {
+			if (fonts === undefined) fonts = defaultFonts;
+			if (files === undefined) files = defaultFiles;
+			if (blacklist === undefined) blacklist = defaultBlacklist;
+			chrome.storage.local.set({
+				fonts,
+				files,
+				blacklist
+			});
+		}
+	);
+}
 
 // Get current fonts from storage and show them in the popup
 chrome.fontSettings.getFontList(fonts => {
@@ -79,15 +142,13 @@ addFont.onclick = () => {
 };
 
 // Toggle extension on/off
-function updateStatus(status, updatingCurrentTab) {
+function updateStatus(status) {
 	chrome.storage.local.set(
 		{
 			extensionActive: status
 		},
 		() => {
-			chrome.runtime.getBackgroundPage(backgroundPage => {
-				backgroundPage.updateFonts(status, updatingCurrentTab);
-			});
+			updateTab(status);
 			showStatus();
 		}
 	);
@@ -101,21 +162,7 @@ const showStatus = firstRun => {
 		});
 		activateFonts.classList.toggle("active", extensionActive);
 		!firstRun && activateFonts.classList.remove("first-run");
-		// Let's normalize the contents of the local storage, in case we're not
-		// set up properly set
-		chrome.storage.local.get(
-			["fonts", "files", "blacklist"],
-			({ fonts, files, blacklist }) => {
-				fonts = fonts || [];
-				files = files || {};
-				blacklist = blacklist || [];
-				chrome.storage.local.set({
-					fonts,
-					files,
-					blacklist
-				});
-			}
-		);
+		normalizeLocalStorage();
 	});
 };
 
@@ -611,6 +658,138 @@ function unhighlight(e) {
 	this.classList.remove("highlight");
 	e.preventDefault();
 	e.stopPropagation();
+}
+
+// Injecting the stylesheet is fast, adding a class to
+// the body isn't. We don't want a delay, so the CSS will
+// enable the fonts immediately, and we only add a class
+// when we want to *remove* the custom fonts.
+function injectStyleSheet(tabId, extensionActive) {
+	if (chrome.runtime.lastError) {
+		handleError(chrome.runtime.lastError);
+	}
+
+	let stylesheetsCode = stylesheets.join("\n");
+	stylesheetsCode += "\nhtml{opacity:1!important}";
+
+	if (extensionActive) {
+		// Inject CSS to activate font
+		console.log("Injecting stylesheets");
+		console.log(stylesheetsCode);
+		chrome.scripting.insertCSS({
+			target: { tabId },
+			css: stylesheetsCode
+		});
+		// Remove force-disable class
+		chrome.scripting.executeScript({
+			target: { tabId },
+			func: () => {
+				delete document.documentElement.dataset.disablefont;
+			}
+		});
+	} else {
+		// Add force-disable class
+		console.log("Adding force-disable");
+		chrome.scripting.executeScript({
+			target: { tabId },
+			func: () => {
+				document.documentElement.dataset.disablefont = "";
+			}
+		});
+	}
+}
+
+function generateStyleSheet(updatingCurrentTab, tabId, callback) {
+	chrome.storage.local.get(
+		["fonts", "files", "blacklist"],
+		({ fonts, files, blacklist }) => {
+			// Check if fonts have been updated
+			const currentFonts = JSON.stringify(fonts);
+			const same = currentFonts == prevFonts;
+			prevFonts = currentFonts;
+			if (same) updateCount++;
+			debugMessage(
+				`Update count in generateStyleSheet is ${updateCount}`,
+				tabId
+			);
+
+			const updateSelector = updatingCurrentTab
+				? `html[data-updatefont="${updateCount}"]`
+				: "html:not([data-updatefont])";
+			stylesheets = [];
+
+			const blacklistSelectors = (() => {
+				let b = "";
+				for (const blacklistItem of blacklist) {
+					b += `:not(${blacklistItem})`;
+				}
+				return b;
+			})();
+
+			for (const font of fonts) {
+				const selectors = [];
+				const axesStyles = [];
+				let fontName = font.name;
+				let stylesheet = "";
+
+				for (const selector of font.selectors) {
+					selectors.push(
+						`${updateSelector}:not([data-disablefont]) ${selector}${blacklistSelectors}`
+					);
+				}
+
+				let axes = false;
+				if (font.axes && Object.entries(font.axes).length) {
+					axes = font.axes;
+				} else if (font.file in files) {
+					axes = files[font.file].axes;
+				}
+
+				// Only inject variable axes when font has axes,
+				// and we don't want to inherit page styles
+				if (axes && !font.inherit) {
+					for (const axisData in axes) {
+						axesStyles.push(
+							`'${axes[axisData].id}' ${axes[axisData].value}`
+						);
+					}
+					fontName = font.name + font.id;
+				}
+
+				if (font.file in files) {
+					stylesheet += `
+                            @font-face {
+                                font-family: '${fontName}';
+                                src: url('${files[font.file].file}');
+                                font-weight: 100 900;
+                                font-stretch: 50% 200%;
+                            }`;
+				}
+
+				const stack = `'${fontName}', ${font.fallback}`;
+				stylesheet += `
+                        ${selectors.join(",")} {
+                            font-family: ${stack} !important;
+                            ${
+								axesStyles.length
+									? `font-variation-settings: ${axesStyles.join(
+											","
+									  )};`
+									: ""
+							}
+                            ${font.css}
+                        }`;
+
+				stylesheets.push(stylesheet);
+			}
+			debugMessage(
+				`Generated stylesheet; update count is ${updateCount}`,
+				tabId
+			);
+
+			callback && callback();
+		}
+	);
 }
 
 // Initialise popup
