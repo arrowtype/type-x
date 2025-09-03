@@ -16,7 +16,7 @@ const activateFonts = document.querySelector("#activateFonts");
 const fullReset = document.querySelector(".full-reset");
 
 import { defaultFiles, defaultFonts } from "./recursive-fonts";
-import { addFormElement, saveForm } from "./form.js";
+import { addFormElement, buildForm, saveForm } from "./form.js";
 
 const defaultBlacklist = [
 	".icon",
@@ -91,7 +91,11 @@ fullReset.onclick = () => {
 				files: defaultFiles,
 				blacklist: defaultBlacklist
 			},
-			runTypeX
+			() => {
+				// Rebuild the menu
+				buildForm();
+				runTypeX();
+			}
 		);
 	}
 };
@@ -118,7 +122,6 @@ export async function runTypeX() {
 		path: `icons/typex-${extensionActive ? "active" : "off"}@128.png`
 	});
 	activateFonts.classList.toggle("active", extensionActive);
-	!firstRun && activateFonts.classList.remove("first-run");
 }
 
 // Injecting the stylesheet is fast, adding a class to

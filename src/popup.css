@@ -224,12 +224,6 @@ header {
 	transition: left 100ms ease-in-out, opacity 100ms ease-in-out;
 }
 
-.first-run .toggle-switch,
-.first-run .toggle-switch::after,
-.first-run .toggle-switch::before {
-	transition: none;
-}
-
 .activate-fonts.active .toggle-switch {
 	background: var(--gray-1);
 }

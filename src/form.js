@@ -8,16 +8,17 @@ chrome.fontSettings.getFontList(fonts => {
 	for (const font of fonts) {
 		localFonts[font.displayName] = font.fontId;
 	}
-	chrome.storage.local.get(
-		["fonts", "files", "blacklist"],
-		({ fonts, files, blacklist }) => {
-			buildForm(fonts, files, blacklist);
-		}
-	);
+	buildForm();
 });
 
 // Generate form based on current settings
-function buildForm(fonts, files, blacklist) {
+export async function buildForm() {
+	let { fonts, files, blacklist } = await chrome.storage.local.get([
+		"fonts",
+		"files",
+		"blacklist"
+	]);
+
 	const form = document.querySelector("#fontsForm");
 	const usedFonts = form.querySelector("#usedFonts");
 	const blacklistEl = form.querySelector("[name=blacklist]");
