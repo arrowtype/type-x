@@ -44,21 +44,20 @@ showBlacklist.onclick = () => {
 };
 
 // Add new font fieldset to form
-addFont.onclick = () => {
+addFont.onclick = async () => {
 	const randomId = window.crypto.getRandomValues(new Uint32Array(2)).join("");
-	chrome.storage.local.get("files", ({ files }) => {
-		const newFont = {
-			new: true,
-			id: randomId,
-			file: Object.keys(files)[0],
-			fallback: ["monospace"],
-			selectors: ["/* Add CSS selectors here */"],
-			css: "/* Additional styles to apply */"
-		};
+	let { files } = await chrome.storage.local.get("files");
+	const newFont = {
+		new: true,
+		id: randomId,
+		file: Object.keys(files)[0],
+		fallback: ["monospace"],
+		selectors: ["/* Add CSS selectors here */"],
+		css: "/* Additional styles to apply */"
+	};
 
-		addFormElement(newFont, files);
-		saveForm();
-	});
+	addFormElement(newFont, files);
+	saveForm();
 };
 
 let injectedCSS = {};
@@ -92,48 +91,35 @@ fullReset.onclick = () => {
 				files: defaultFiles,
 				blacklist: defaultBlacklist
 			},
-			() => updateStatus(false)
+			runTypeX
 		);
 	}
 };
 
 // Toggle extension on/off using the button
-activateFonts.onclick = () => {
-	chrome.storage.local.get("extensionActive", ({ extensionActive }) => {
-		updateStatus(!extensionActive);
+activateFonts.onclick = async () => {
+	let { extensionActive } = await chrome.storage.local.get("extensionActive");
+	await chrome.storage.local.set({
+		extensionActive: !extensionActive
 	});
+	await runTypeX();
 };
 
-// Toggle extension on/off
-export function updateStatus(status) {
-	chrome.storage.local.set(
-		{
-			extensionActive: status
-		},
-		() => {
-			chrome.tabs.query(
-				{ active: true, currentWindow: true },
-				async tabs => {
-					const activeTab = tabs[0];
-					await generateStyleSheet();
-					await injectStyleSheet(activeTab.id, status);
-				}
-			);
-			showStatus();
-		}
-	);
+// Do the thing! (Generate stylesheet and inject into active tab)
+export async function runTypeX() {
+	let tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+	let { extensionActive } = await chrome.storage.local.get("extensionActive");
+	console.log("Running typeX, active is", extensionActive);
+	const activeTab = tabs[0];
+	await generateStyleSheet();
+	await injectStyleSheet(activeTab.id);
+	// Show status of extension in the popup
+	chrome.action.setIcon({
+		path: `icons/typex-${extensionActive ? "active" : "off"}@128.png`
+	});
+	activateFonts.classList.toggle("active", extensionActive);
+	!firstRun && activateFonts.classList.remove("first-run");
 }
-
-// Show status of extension in the popup
-const showStatus = firstRun => {
-	chrome.storage.local.get("extensionActive", ({ extensionActive }) => {
-		chrome.action.setIcon({
-			path: `icons/typex-${extensionActive ? "active" : "off"}@128.png`
-		});
-		activateFonts.classList.toggle("active", extensionActive);
-		!firstRun && activateFonts.classList.remove("first-run");
-	});
-};
 
 // Injecting the stylesheet is fast, adding a class to
 // the body isn't. We don't want a delay, so the CSS will
@@ -145,7 +131,8 @@ let customFontsOn = () => {
 let customFontsOff = () => {
 	document.documentElement.dataset.disablefont = "";
 };
-async function injectStyleSheet(tabId, extensionActive) {
+async function injectStyleSheet(tabId) {
+	let { extensionActive } = await chrome.storage.local.get("extensionActive");
 	let stylesheetsCode = stylesheets.join("\n");
 	if (extensionActive) {
 		// Inject CSS to activate font
@@ -238,4 +225,4 @@ await chrome.storage.local.set({
 	files,
 	blacklist
 });
-updateStatus(false);
+runTypeX();

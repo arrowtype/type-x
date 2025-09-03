@@ -1,4 +1,4 @@
-import { updateStatus } from "./popup.js";
+import { runTypeX } from "./popup.js";
 import { create } from "fontkit";
 
 const localFonts = {};
@@ -385,8 +385,11 @@ export function saveForm() {
 			fonts: newFonts,
 			blacklist: blacklist
 		},
-		() => {
-			updateStatus(true);
+		async () => {
+			await chrome.storage.local.set({
+				extensionActive: true
+			});
+			runTypeX();
 		}
 	);
 
