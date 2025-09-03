@@ -25,7 +25,7 @@
 	/* sizing */
 	--extension-width: 19rem;
 	--unit-height: 3rem;
-	--footer-height: 1rem;
+	--footer-height: 1.5rem;
 	--item-padding: 0.5rem 1rem;
 	--item-padding-tall: 0.75rem 1rem;
 	--item-padding-taller: 1rem 1rem;
@@ -630,7 +630,7 @@ footer {
 	display: flex;
 	align-items: center;
 	font-size: var(--t3);
-	padding: 0.5rem;
+	padding: 0.5rem 1rem 0.6rem;
 	color: var(--gray-0);
 	background: var(--bg-alt);
 	height: var(--footer-height);
@@ -649,6 +649,6 @@ footer button:hover {
 	color: var(--accent);
 }
 
-footer span {
+footer a:first-of-type {
 	margin-right: auto;
 }
