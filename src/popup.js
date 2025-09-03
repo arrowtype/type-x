@@ -224,5 +224,18 @@ async function generateStyleSheet() {
 	}
 }
 
-// Initial setup when popup is opened
+// Check there's something in local storage and reset to defaults if not
+let { fonts, files, blacklist } = await chrome.storage.local.get([
+	"fonts",
+	"files",
+	"blacklist"
+]);
+if (fonts === undefined) fonts = defaultFonts;
+if (files === undefined) files = defaultFiles;
+if (blacklist === undefined) blacklist = defaultBlacklist;
+await chrome.storage.local.set({
+	fonts,
+	files,
+	blacklist
+});
 updateStatus(false);
