@@ -63,8 +63,6 @@ If you wish to work on the code of Type-X, follow these steps, then install in d
 
 Click the switch to activate font overrides! Click it again to remove your overrides.
 
-Click the menu icon (`☰`) to control your font overrides.
-
 ### Font Overrides
 
 Type-X can have one or more font overrides at a given time, and these overrides are applied to all web pages you visit with Type-X activated.
