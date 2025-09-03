@@ -73,10 +73,6 @@ To customize an override, click the `›` icon to expand it.
 
 To remove an override, expand one of the font overrides and click `Delete`. Note: deleting an override does not delete the font file, even if you have loaded the font file directly into the extension.
 
-#### Apply edits (visible after any change)
-
-If you have made a change to a font override, this button will appear in the top bar. Click it to apply your changes.
-
 #### Font menu
 
 Select any font that is local to your computer, or any font that you have loaded into the extension.
@@ -90,6 +86,8 @@ Note: if you have loaded *a lot* of fonts, it is possible you may eventually hit
 #### Using variable fonts
 
 Type-X can't parse local variable fonts. To use use a variable font and have Type-X automatically detect axes to provide sliders, you must load the font file as specified above.
+
+Hint: When you load in a variable font with a weight axis, you can select the font style option “[Inherit page styles]” to pick up styles such as weight from a page. This is a really handy way to test your weights!
 
 Note: the sliders are shown to assist you in selecting your preferred axis location. For performance reasons, Type-X doesn't currently have a live-reloading form, meaning that you must click "Apply Edits" to make your axis-slider changes take effect.
 
