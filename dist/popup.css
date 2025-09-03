@@ -47,11 +47,23 @@
 	--accent: #44d7b6;
 	--code: #f0d6b4;
 	--destructive: #e57880;
-	--magic: linear-gradient(135deg, rgba(16, 205, 103, 1), rgba(16, 205, 103, 0) 55%),
+	--magic: linear-gradient(
+			135deg,
+			rgba(16, 205, 103, 1),
+			rgba(16, 205, 103, 0) 55%
+		),
 		linear-gradient(225deg, rgba(251, 208, 0, 1), rgba(251, 208, 0, 0) 70%),
-		linear-gradient(315deg, rgba(210, 46, 237, 1), rgba(210, 46, 237, 0) 55%),
+		linear-gradient(
+			315deg,
+			rgba(210, 46, 237, 1),
+			rgba(210, 46, 237, 0) 55%
+		),
 		linear-gradient(45deg, rgba(83, 59, 230, 1), rgba(83, 59, 230, 0) 95%),
-		linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%);
+		linear-gradient(
+			90deg,
+			rgba(255, 255, 255, 1),
+			rgba(255, 255, 255, 1) 100%
+		);
 	/* transitions */
 	--speed-1: 0.25s;
 	--speed-2: 0.4s;
@@ -94,8 +106,8 @@
 * {
 	font-family: "Recursive";
 	box-sizing: border-box;
-	font-variation-settings: "MONO" var(--mono), "CASL" var(--casl), "wght" var(--wght), "slnt" var(--slnt),
-		"ital" var(--ital);
+	font-variation-settings: "MONO" var(--mono), "CASL" var(--casl),
+		"wght" var(--wght), "slnt" var(--slnt), "ital" var(--ital);
 }
 
 body {
@@ -472,7 +484,7 @@ textarea:focus {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	border: 2px dashed var(--gray-0);
+	border: 2px solid var(--gray-0);
 	border-radius: 0.25rem;
 	text-transform: uppercase;
 	font-size: var(--t3);
@@ -485,6 +497,12 @@ textarea:focus {
 .select-font-button svg {
 	width: 1.5em;
 	height: 1.5em;
+	stroke: var(--text-p3);
+	transition: stroke var(--speed-2);
+}
+
+.select-font-button:hover svg {
+	stroke: var(--accent);
 }
 
 .select-font-button input {
