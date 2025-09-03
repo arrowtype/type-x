@@ -1,20 +1,32 @@
 {
-  "name": "Type-X",
-  "version": "1.0.2",
-  "description": "Type-X browser extension",
-  "repository": "git@github.com:arrowtype/type-x.git",
-  "author": "Roel Nieskens <roel@pixelambacht.nl>",
-  "license": "MIT",
-  "private": true,
-  "scripts": {
-    "build": "rm -rf dist && cp -a src dist && npx webpack"
-  },
-  "dependencies": {
-    "blob-to-buffer": "^1.2.8",
-    "fontkit-next": "^1.8.1"
-  },
-  "devDependencies": {
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10"
-  }
+	"name": "Type-X",
+	"version": "1.0.2",
+	"description": "Type-X browser extension",
+	"repository": "git@github.com:arrowtype/type-x.git",
+	"author": "Roel Nieskens <roel@pixelambacht.nl>",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"build": "npx webpack"
+	},
+	"dependencies": {
+		"buffer": "^6.0.3",
+		"fontkit": "^2.0.4",
+		"iconv-lite": "^0.7.0",
+		"process": "^0.11.10",
+		"stream-browserify": "^3.0.0",
+		"string_decoder": "^1.3.0",
+		"util": "^0.12.5"
+	},
+	"devDependencies": {
+		"copy-webpack-plugin": "^13.0.1",
+		"webpack": "^5.82.0",
+		"webpack-cli": "^6.0.1"
+	},
+	"prettier": {
+		"tabWidth": 4,
+		"useTabs": true,
+		"arrowParens": "avoid",
+		"trailingComma": "none"
+	}
 }
