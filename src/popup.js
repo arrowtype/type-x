@@ -33,8 +33,6 @@ const defaultBlacklist = [
 	".Mwv9k", // google hangouts
 	".NtU4hc" // google hangouts
 ];
-let stylesheets = [];
-
 const showBlacklist = document.querySelector("#showBlacklist");
 const addFont = document.querySelector("#addFont");
 
@@ -60,24 +58,6 @@ addFont.onclick = async () => {
 	saveForm();
 };
 
-let injectedCSS = {};
-async function insertOrReplaceCss(tabId, text) {
-	if (tabId in injectedCSS) {
-		if (injectedCSS[tabId] == text) {
-			return;
-		}
-		await chrome.scripting.removeCSS({
-			target: { tabId },
-			css: injectedCSS[tabId]
-		});
-	}
-	await chrome.scripting.insertCSS({
-		target: { tabId },
-		css: text
-	});
-	injectedCSS[tabId] = text;
-}
-
 fullReset.onclick = () => {
 	if (
 		window.confirm(
@@ -94,29 +74,14 @@ fullReset.onclick = () => {
 			() => {
 				// Rebuild the menu
 				buildForm();
-				runTypeX();
+				callTypeX();
 			}
 		);
 	}
 };
 
-// Toggle extension on/off using the button
-activateFonts.onclick = async () => {
+async function showStatus() {
 	let { extensionActive } = await chrome.storage.local.get("extensionActive");
-	await chrome.storage.local.set({
-		extensionActive: !extensionActive
-	});
-	await runTypeX();
-};
-
-// Do the thing! (Generate stylesheet and inject into active tab)
-export async function runTypeX() {
-	let tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-	let { extensionActive } = await chrome.storage.local.get("extensionActive");
-	console.log("Running typeX, active is", extensionActive);
-	const activeTab = tabs[0];
-	await generateStyleSheet();
-	await injectStyleSheet(activeTab.id);
 	// Show status of extension in the popup
 	chrome.action.setIcon({
 		path: `icons/typex-${extensionActive ? "active" : "off"}@128.png`
@@ -124,94 +89,18 @@ export async function runTypeX() {
 	activateFonts.classList.toggle("active", extensionActive);
 }
 
-// Injecting the stylesheet is fast, adding a class to
-// the body isn't. We don't want a delay, so the CSS will
-// enable the fonts immediately, and we only add a class
-// when we want to *remove* the custom fonts.
-let customFontsOn = () => {
-	delete document.documentElement.dataset.disablefont;
-};
-let customFontsOff = () => {
-	document.documentElement.dataset.disablefont = "";
-};
-async function injectStyleSheet(tabId) {
+// Toggle extension on/off using the button
+activateFonts.onclick = async () => {
 	let { extensionActive } = await chrome.storage.local.get("extensionActive");
-	let stylesheetsCode = stylesheets.join("\n");
-	if (extensionActive) {
-		// Inject CSS to activate font
-		await insertOrReplaceCss(tabId, stylesheetsCode);
-	}
-	chrome.scripting.executeScript({
-		target: { tabId },
-		func: extensionActive ? customFontsOn : customFontsOff
+	await chrome.storage.local.set({
+		extensionActive: !extensionActive
 	});
-}
+	await callTypeX();
+	await showStatus();
+};
 
-async function generateStyleSheet() {
-	let { fonts, files, blacklist } = await chrome.storage.local.get([
-		"fonts",
-		"files",
-		"blacklist"
-	]);
-	stylesheets = [];
-	const blacklistSelectors = (() => {
-		let b = "";
-		for (const blacklistItem of blacklist) {
-			b += `:not(${blacklistItem})`;
-		}
-		return b;
-	})();
-
-	for (const font of fonts) {
-		const selectors = [];
-		const axesStyles = [];
-		let fontName = font.name;
-		let stylesheet = "";
-
-		for (const selector of font.selectors) {
-			selectors.push(
-				`html:not([data-disablefont]) ${selector}${blacklistSelectors}`
-			);
-		}
-
-		let axes = false;
-		if (font.axes && Object.entries(font.axes).length) {
-			axes = font.axes;
-		} else if (font.file in files) {
-			axes = files[font.file].axes;
-		}
-
-		// Only inject variable axes when font has axes,
-		// and we don't want to inherit page styles
-		if (axes && !font.inherit) {
-			for (const axisData in axes) {
-				axesStyles.push(
-					`'${axes[axisData].id}' ${axes[axisData].value}`
-				);
-			}
-			fontName = font.name + font.id;
-		}
-
-		if (font.file in files) {
-			stylesheet += `
-							@font-face {
-								font-family: '${fontName}';
-								src: url('${files[font.file].file}');
-								font-weight: 100 900;
-								font-stretch: 50% 200%;
-							}`;
-		}
-
-		const stack = `'${fontName}', ${font.fallback}`;
-		stylesheet += `
-						${selectors.join(",")} {
-							font-family: ${stack} !important;
-							${axesStyles.length ? `font-variation-settings: ${axesStyles.join(",")};` : ""}
-							${font.css}
-						}`;
-
-		stylesheets.push(stylesheet);
-	}
+async function callTypeX() {
+	chrome.runtime.sendMessage({ runTypeX: true });
 }
 
 // Check there's something in local storage and reset to defaults if not
@@ -228,4 +117,5 @@ await chrome.storage.local.set({
 	files,
 	blacklist
 });
-runTypeX();
+
+showStatus();

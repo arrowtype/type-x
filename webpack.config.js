@@ -6,9 +6,13 @@ module.exports = {
 	performance: {
 		maxEntrypointSize: 500000
 	},
-	entry: "./src/popup.js",
+	entry: {
+		popup: "./src/popup.js",
+		content: "./src/content.js",
+		"service-worker": "./src/service-worker.js"
+	},
 	output: {
-		filename: "popup.js",
+		filename: "[name].js",
 		chunkFilename: "[name].bundle.js",
 		clean: true
 	},
