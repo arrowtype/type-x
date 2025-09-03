@@ -1,0 +1,1 @@
+chrome.runtime.sendMessage({runTypeX:!0,pageLoad:!0});

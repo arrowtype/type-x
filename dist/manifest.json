@@ -21,6 +21,15 @@
 			"matches": ["*://*/*"]
 		}
 	],
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["content.js"]
+		}
+	],
+	"background": {
+		"service_worker": "service-worker.js"
+	},
 	"action": {
 		"default_title": "Type-X",
 		"default_popup": "popup.html",
