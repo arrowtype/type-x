@@ -99,7 +99,7 @@ activateFonts.onclick = async () => {
 	await showStatus();
 };
 
-async function callTypeX() {
+export async function callTypeX() {
 	chrome.runtime.sendMessage({ runTypeX: true });
 }
 
