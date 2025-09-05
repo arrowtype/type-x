@@ -1,6 +1,6 @@
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
-let mode = "development";
+let mode = "production";
 
 module.exports = {
 	mode: mode,
