@@ -168,9 +168,13 @@ export function addFormElement(font: Font, files: Record<string, FontFile>) {
 
 	// Select the named instance, if in use
 	const instanceDropdown: HTMLSelectElement | null = el.querySelector(".select-instance");
+	const fontNameInstanceLabel = el.querySelector<HTMLSpanElement>(".font-name-instance");
 	if (instanceDropdown) {
 		instanceDropdown.value = font.activeinstance;
-		el.querySelector<HTMLSpanElement>(".font-name-instance").innerText = font.activeinstance;
+		fontNameInstanceLabel.innerText = font.activeinstance;
+	}
+	if (font.inherit) {
+		fontNameInstanceLabel.innerText = "[Inherit page styles]";
 	}
 
 	parentEl.addEventListener("dragover", highlight, false);
