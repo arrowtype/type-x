@@ -175,6 +175,7 @@ export function addFormElement(font: Font, files: Record<string, FontFile>) {
 	}
 	if (font.inherit) {
 		fontNameInstanceLabel.innerText = "[Inherit page styles]";
+		instanceDropdown.value = "--inherit--";
 	}
 
 	parentEl.addEventListener("dragover", highlight, false);
