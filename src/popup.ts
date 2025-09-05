@@ -75,9 +75,15 @@ fullReset.onclick = async () => {
 		// Rebuild the menu
 		buildForm();
 		callTypeX();
-		showStatus();
 	}
 };
+
+// Update the status when storage changess
+chrome.storage.local.onChanged.addListener(changes => {
+	if (changes.extensionActive) {
+		showStatus();
+	}
+});
 
 async function showStatus() {
 	let { extensionActive } = await chrome.storage.local.get("extensionActive");
@@ -95,7 +101,6 @@ activateFonts.onclick = async () => {
 		extensionActive: !extensionActive
 	});
 	await callTypeX();
-	await showStatus();
 };
 
 export async function callTypeX() {
