@@ -16,7 +16,8 @@ const activateFonts = document.querySelector("#activateFonts");
 const fullReset = document.querySelector(".full-reset");
 
 import { defaultFiles, defaultFonts } from "./recursive-fonts";
-import { addFormElement, buildForm, saveForm } from "./form.js";
+import { addFormElement, buildForm, saveForm } from "./form.ts";
+import { Font } from "./font.ts";
 
 const defaultBlacklist = [
 	".icon",
@@ -45,14 +46,14 @@ showBlacklist.onclick = () => {
 addFont.onclick = async () => {
 	const randomId = window.crypto.getRandomValues(new Uint32Array(2)).join("");
 	let { files } = await chrome.storage.local.get("files");
-	const newFont = {
+	const newFont = Font.fromObject({
 		new: true,
 		id: randomId,
 		file: Object.keys(files)[0],
 		fallback: ["monospace"],
 		selectors: ["/* Add CSS selectors here */"],
 		css: "/* Additional styles to apply */"
-	};
+	});
 
 	addFormElement(newFont, files);
 	saveForm();

@@ -1,7 +1,9 @@
+import { Axis, Font, FontFile, FontkitAxis, IFont, Location } from "./font.js";
 import { callTypeX } from "./popup.js";
 import { create } from "fontkit";
+import type { Font as FontkitFont } from "fontkit";
 
-const localFonts = {};
+const localFonts: Record<string, string> = {};
 
 // Get current fonts from storage and show them in the popup
 chrome.fontSettings.getFontList(fonts => {
@@ -21,7 +23,7 @@ export async function buildForm() {
 
 	const form = document.querySelector("#fontsForm");
 	const usedFonts = form.querySelector("#usedFonts");
-	const blacklistEl = form.querySelector("[name=blacklist]");
+	const blacklistEl = form.querySelector("[name=blacklist]") as HTMLInputElement;
 
 	// Clear out previous form
 	while (usedFonts.firstChild) {
@@ -41,48 +43,49 @@ export async function buildForm() {
 }
 
 // New file uploaded, append to all selects
-function updateFontDropdowns(id, name) {
+function updateFontDropdowns(id: string, name: string) {
 	const optgroups = document.querySelectorAll(
 		".font-file-select optgroup:first-child"
-	);
-	for (const optgroup of optgroups) {
+	) as NodeListOf<HTMLOptGroupElement>;
+	optgroups.forEach(optgroup => {
 		const options = optgroup.querySelectorAll("option");
 		let present = false;
-		for (const option of options) {
+		options.forEach(option => {
 			present = option.value === name ? true : present;
-		}
+		});
 		if (present) {
-			optgroup.value = name;
+			optgroup.label = name;
 		} else {
 			const option = document.createElement("option");
 			option.value = id;
 			option.text = name;
 			optgroup.append(option);
 		}
-	}
+	})
 }
 
 // Add new font to the form
-export function addFormElement(font, files) {
+export function addFormElement(font: Font, files: Record<string, FontFile>) {
 	const usedFonts = document.querySelector("#usedFonts");
-	const template = document.querySelector("#newFont");
+	const template: HTMLTemplateElement = document.querySelector("#newFont");
 	const el = document.importNode(template.content, true);
-	const parentEl = el.querySelector(".font");
+	const parentEl: HTMLFieldSetElement = el.querySelector(".font");
 
-	el.querySelector(".font-name-title").innerText =
+	el.querySelector<HTMLSpanElement>(".font-name-title").innerText =
 		font.name || "New font override";
 
 	const fontSelect = el.querySelector(".font-file-select");
 
-	const dropdown = document.createElement("select");
+	const dropdown = document.createElement("select") as HTMLSelectElement;
 	dropdown.setAttribute("name", "file");
 	dropdown.setAttribute("id", `file${font.id}`);
 	dropdown.classList.add("font-file-select");
 	dropdown.onchange = e => {
-		const parent = e.target.closest(".font");
-		const name = e.target.options[e.target.selectedIndex].text;
-		const fileId = e.target.options[e.target.selectedIndex].value;
-		addVariableSliders(false, parent);
+		let target = e.target as HTMLSelectElement;
+		const parent: HTMLFieldSetElement = target.closest(".font");
+		const name = target.options[target.selectedIndex].text;
+		const fileId = target.options[target.selectedIndex].value;
+		addVariableSliders({}, parent);
 		addNamedInstances({}, parent);
 		chrome.storage.local.get("files", ({ files }) => {
 			for (const file in files) {
@@ -93,7 +96,7 @@ export function addFormElement(font, files) {
 			}
 			saveForm();
 		});
-		parent.querySelector(".font-name-title").innerText = name;
+		parent.querySelector<HTMLSpanElement>(".font-name-title").innerText = name;
 	};
 
 	const extensionGroup = document.createElement("optgroup");
@@ -120,26 +123,27 @@ export function addFormElement(font, files) {
 
 	fontSelect.replaceWith(dropdown);
 
-	el.querySelector("[name=newfile]").dataset.fontid = font.id;
-	el.querySelector("[name=newfile]").onchange = grabFont;
+	const newFileInput: HTMLInputElement = el.querySelector("[name=newfile]");
+	newFileInput.dataset.fontid = font.id;
+	newFileInput.onchange = grabFont;
 
 	parentEl.dataset.fontid = font.id;
-	el.querySelector("[name=id]").value = font.id;
-	el.querySelector("[name=css]").value = font.css;
-	el.querySelector("[name=fallback]").value = font.fallback;
-	el.querySelector("[name=selectors]").value = font.selectors.join(", ");
+	el.querySelector<HTMLInputElement>("[name=id]").value = font.id;
+	el.querySelector<HTMLTextAreaElement>("[name=css]").value = font.css;
+	el.querySelector<HTMLTextAreaElement>("[name=fallback]").value = font.fallback;
+	el.querySelector<HTMLTextAreaElement>("[name=selectors]").value = font.selectors.join(", ");
 
-	el.querySelector(".show-fallbacks").onclick = e => {
-		e.target.closest("fieldset").classList.toggle("show-font-fallbacks");
+	el.querySelector<HTMLButtonElement>(".show-fallbacks").onclick = e => {
+		(e.target as HTMLButtonElement).closest("fieldset").classList.toggle("show-font-fallbacks");
 	};
 
-	el.querySelector(".delete-font").onclick = e => {
-		e.target.closest("fieldset").remove();
+	el.querySelector<HTMLButtonElement>(".delete-font").onclick = e => {
+		(e.target as HTMLButtonElement).closest("fieldset").remove();
 		saveForm();
 	};
 
-	el.querySelector(".font-title button").onclick = e => {
-		e.target.closest("fieldset").classList.toggle("show-font-details");
+	el.querySelector<HTMLButtonElement>(".font-title button").onclick = e => {
+		(e.target as HTMLButtonElement).closest("fieldset").classList.toggle("show-font-details");
 	};
 
 	if (font.new) {
@@ -147,7 +151,7 @@ export function addFormElement(font, files) {
 	}
 
 	// Add variable sliders
-	let axes = false;
+	let axes = {};
 	if (font.axes) {
 		axes = font.axes;
 	} else if (font.file in files) {
@@ -157,18 +161,16 @@ export function addFormElement(font, files) {
 
 	// Add named variable instances
 	let instances = {};
-	if (font.instances) {
-		instances = font.instances;
-	} else if (font.file in files) {
+	if (font.file in files) {
 		instances = files[font.file].instances || {};
 	}
 	addNamedInstances(instances, parentEl);
 
 	// Select the named instance, if in use
-	const instanceDropdown = el.querySelector(".select-instance");
+	const instanceDropdown: HTMLSelectElement | null = el.querySelector(".select-instance");
 	if (instanceDropdown) {
 		instanceDropdown.value = font.activeinstance;
-		el.querySelector(".font-name-instance").innerText = font.activeinstance;
+		el.querySelector<HTMLSpanElement>(".font-name-instance").innerText = font.activeinstance;
 	}
 
 	parentEl.addEventListener("dragover", highlight, false);
@@ -176,31 +178,31 @@ export function addFormElement(font, files) {
 	parentEl.addEventListener("drop", grabFont, false);
 
 	const textareas = el.querySelectorAll("textarea");
-	for (const textarea of textareas) {
+	textareas.forEach(textarea => {
 		textarea.oninput = saveForm;
-	}
+	});
 
 	usedFonts.prepend(el);
 }
 
 // Select named instance based on slider values
 function syncVariableValues() {
-	const containers = document.querySelectorAll(".font");
-	for (const container of containers) {
-		const sliders = container.querySelectorAll(
+	const containers: NodeListOf<HTMLFieldSetElement> = document.querySelectorAll(".font");
+	containers.forEach(container => {
+		const sliders: NodeListOf<HTMLInputElement> = container.querySelectorAll(
 			".variable-sliders [type=range]"
 		);
 
-		if (!sliders.length) break;
+		if (!sliders.length) return;
 
-		const customInstance = {};
-		for (const slider of sliders) {
+		const customInstance: Location = {};
+		sliders.forEach(slider => {
 			const name = slider.name.replace("var-", "");
 			customInstance[name] = parseFloat(slider.value);
-		}
+		});
 		const ci = JSON.stringify(customInstance);
 
-		const dropdown = container.querySelector(".select-instance");
+		const dropdown = container.querySelector<HTMLSelectElement>(".select-instance");
 		if (dropdown.value == "--inherit--") {
 			container
 				.querySelector(".variable-sliders-container")
@@ -214,22 +216,20 @@ function syncVariableValues() {
 
 		const options = dropdown.querySelectorAll("option");
 		let sel = 1; // "--axes--"
-		for (const option of options) {
+		options.forEach(option => {
 			if (option.dataset.instance == ci) {
 				sel = option.index;
-				break;
+				return;
 			}
-		}
+		});
 		dropdown.selectedIndex = sel;
-	}
+	})
 }
 
 /**
  * Add named instances to the font editor.
- * @param {Record<string, any>} instances
- * @param {HTMLElement} el
  */
-function addNamedInstances(instances, el) {
+function addNamedInstances(instances: Record<string, Location>, el: HTMLElement) {
 	const container = el.querySelector(".variable-instances");
 	container.innerHTML = "";
 
@@ -259,7 +259,7 @@ function addNamedInstances(instances, el) {
 			option.value = instance;
 
 			const axes = instances[instance];
-			const orderedAxes = {};
+			const orderedAxes: Location = {};
 			Object.keys(axes)
 				.sort()
 				.forEach(function (key) {
@@ -273,12 +273,12 @@ function addNamedInstances(instances, el) {
 	}
 }
 
-function applyNamedInstance(e) {
-	const sel = e.target;
-	const parent = e.target.closest(".font");
+function applyNamedInstance(e: Event) {
+	const sel = e.target as HTMLSelectElement;
+	const parent = sel.closest(".font");
 
 	const instanceName = sel.value == "--inherit--" ? "" : sel.value;
-	parent.querySelector(".font-name-instance").innerText = instanceName;
+	parent.querySelector<HTMLSpanElement>(".font-name-instance").innerText = instanceName;
 
 	if (sel.value == "--inherit--" || sel.value == "--axes--") {
 		saveForm();
@@ -288,15 +288,15 @@ function applyNamedInstance(e) {
 	const axes = JSON.parse(sel.options[sel.selectedIndex].dataset.instance);
 
 	for (const axis in axes) {
-		const slider = parent.querySelector(`[name=var-${axis}]`);
+		const slider = parent.querySelector(`[name=var-${axis}]`) as HTMLInputElement;
 		slider.value = axes[axis];
 	}
 
 	saveForm();
 }
 
-function addVariableSliders(axes, el) {
-	const newAxes = {};
+function addVariableSliders(axes: Record<string, FontkitAxis|Axis>, el: HTMLElement) {
+	const newAxes: Record<string, Axis> = {};
 	el.querySelector(".variable-sliders").innerHTML = "";
 	if (!axes) {
 		el.querySelector(".variable-sliders-container").classList.remove(
@@ -305,8 +305,11 @@ function addVariableSliders(axes, el) {
 	} else {
 		const keys = Object.keys(axes).sort();
 		for (let i = 0; i < keys.length; ++i) {
-			const value = axes[keys[i]].value || axes[keys[i]].default || 0;
-			const axis = {
+			let inputAxis = axes[keys[i]];
+			const value = "default" in inputAxis
+				? inputAxis.default
+				: inputAxis.value || 0;
+			const axis: Axis = {
 				id: keys[i],
 				name: axes[keys[i]].name,
 				min: axes[keys[i]].min,
@@ -326,22 +329,27 @@ function addVariableSliders(axes, el) {
 	return newAxes;
 }
 
+type StraightInput = "id" | "css" | "fallback";
+function isStraightInput(input: string): input is StraightInput {
+	return ["id", "css", "fallback"].includes(input);
+}
+
 // Store changes made to fonts
 // Note: files have already been stored at this point
 export function saveForm() {
-	const newFonts = [];
+	const newFonts: IFont[] = [];
 	const form = document.querySelector("#fontsForm");
-	const fieldsets = form.querySelectorAll("fieldset");
+	const fieldsets: NodeListOf<HTMLFieldSetElement> = form.querySelectorAll("fieldset");
 
 	// Get new fonts
-	for (const fieldset of fieldsets) {
-		const newFont = {};
-		const inputs = fieldset.querySelectorAll("*[name]");
-		const axes = {};
-		const straightInputs = ["id", "css", "fallback"];
+	fieldsets.forEach(fieldset => {
+		const newFont: IFont = {
+			axes: {},
+		} as IFont;
+		const inputs: NodeListOf<HTMLInputElement> = fieldset.querySelectorAll("*[name]");
 
-		for (const input of inputs) {
-			if (input.name === "file") {
+		inputs.forEach(input => {
+			if (input.name === "file" && input instanceof HTMLSelectElement) {
 				newFont["name"] = input.options[input.selectedIndex].text;
 				newFont["file"] = input.options[input.selectedIndex].value;
 			} else if (input.name === "select-instance") {
@@ -350,33 +358,32 @@ export function saveForm() {
 				} else {
 					newFont["activeinstance"] = input.value;
 				}
-			} else if (straightInputs.includes(input.name)) {
+			} else if (isStraightInput(input.name)) {
 				newFont[input.name] = input.value;
 			} else if (input.name.startsWith("var-")) {
 				const name = input.name.replace("var-", "");
 				const axis = {
 					id: name,
 					name: input.dataset.name,
-					min: input.min,
-					max: input.max,
-					value: input.value
+					min: parseInt(input.min, 10),
+					max: parseInt(input.max, 10),
+					value: parseInt(input.value, 10)
 				};
-				axes[name] = axis;
+				newFont.axes[name] = axis;
 			} else if (input.name === "selectors") {
 				// Selectors should become an array
 				newFont["selectors"] = input.value
 					.split(",")
 					.map(i => i.trim());
 			}
-		}
+		});
 
-		newFont.axes = axes;
 		newFonts.unshift(newFont);
-	}
+	});
 
 	// Get blacklist
 	const blacklist = form
-		.querySelector("[name=blacklist]")
+		.querySelector<HTMLInputElement>("[name=blacklist]")
 		.value.split(",")
 		.map(i => i.trim());
 
@@ -399,12 +406,11 @@ export function saveForm() {
 
 // Keep track of file data, and hook up to rest
 // of form data on submit
-function grabFont(e) {
-	/** @type {FileList} */
-	const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
+function grabFont(e: DragEvent) {
+	const files = e.dataTransfer.files;
 	const file = files[0]; // Only use first file if multiple are dropped
 	const name = file.name;
-	const parent = e.target.closest("fieldset");
+	const parent = (e.target as HTMLElement).closest("fieldset");
 	const fontId = parent.dataset.fontid;
 
 	parent.classList.remove("highlight");
@@ -430,10 +436,10 @@ function grabFont(e) {
 					files: files
 				},
 				() => {
-					parent.querySelector(".font-name-title").innerText = name;
+					parent.querySelector<HTMLSpanElement>(".font-name-title").innerText = name;
 					// Update dropdown
 					updateFontDropdowns(name, name);
-					const dropdown = document.querySelector(`#file${fontId}`);
+					const dropdown: HTMLSelectElement = document.querySelector(`#file${fontId}`);
 					dropdown.value = name;
 
 					// Font is saved, add variable axes, if any
@@ -448,13 +454,7 @@ function grabFont(e) {
 }
 
 // Analyse a *new* font for variable axes, create form inputs
-/**
- *
- * @param {File} file
- * @param {HTMLElement} parent
- * @returns
- */
-function grabVariableData(file, parent) {
+function grabVariableData(file: File, parent: HTMLElement) {
 	parent
 		.querySelector(".variable-sliders-container")
 		.classList.remove("show");
@@ -463,14 +463,16 @@ function grabVariableData(file, parent) {
 	let font = false;
 	return bufferPromise.then(buffer => {
 		try {
-			font = create(Buffer.from(buffer));
+			let font = create(Buffer.from(buffer)) as FontkitFont;
+			// @ts-ignore // Types are not updated for this version of Fontkit
+			let instances: Record<string, Location> = font.namedVariations;
 
 			const axes = addVariableSliders(font.variationAxes, parent);
-			addNamedInstances(font.namedVariations, parent);
+			addNamedInstances(instances, parent);
 
-			chrome.storage.local.get("files", ({ files }) => {
+			chrome.storage.local.get("files", ({ files }: { files: Record<string, FontFile> }) => {
 				files[file.name].axes = axes;
-				files[file.name].instances = font.namedVariations;
+				files[file.name].instances = instances;
 
 				chrome.storage.local.set({
 					files: files
@@ -482,42 +484,42 @@ function grabVariableData(file, parent) {
 	});
 }
 
-function addSlider(axis, parent) {
+function addSlider(axis: Axis, parent: HTMLElement) {
 	const variableSliders = parent.querySelector(".variable-sliders");
-	const template = document.querySelector("#variableSlider");
+	const template: HTMLTemplateElement = document.querySelector("#variableSlider");
 	const el = document.importNode(template.content, true);
 
-	const input = el.querySelector("input");
-	const label = el.querySelector("label");
-	const value = el.querySelector(".slider-value");
+	const input: HTMLInputElement = el.querySelector("input");
+	const label: HTMLLabelElement = el.querySelector("label");
+	const value: HTMLSpanElement = el.querySelector(".slider-value");
 
 	label.innerText = axis.name;
 
 	input.name = `var-${axis.id}`;
-	input.min = axis.min;
-	input.max = axis.max;
-	input.value = axis.value;
+	input.min = axis.min.toString();
+	input.max = axis.max.toString();
+	input.value = axis.value.toString();
 	input.dataset.name = axis.name;
-	value.innerText = axis.value;
+	value.innerText = axis.value.toString();
 
 	input.onchange = e => {
-		value.innerText = e.target.value;
+		value.innerText = (e.target as HTMLInputElement).value;
 		// Move dropdown away from "--inherit--" option to ensure
 		// axes/dropdown are synced properly
-		parent.querySelector(".select-instance").value = "--axes--";
+		parent.querySelector<HTMLSelectElement>(".select-instance").value = "--axes--";
 		saveForm();
 	};
 
 	variableSliders.append(el);
 }
 
-function highlight(e) {
+function highlight(e: Event) {
 	this.classList.add("highlight");
 	e.preventDefault();
 	e.stopPropagation();
 }
 
-function unhighlight(e) {
+function unhighlight(e: Event) {
 	this.classList.remove("highlight");
 	e.preventDefault();
 	e.stopPropagation();

@@ -1,8 +1,10 @@
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
+let mode = "development";
 
 module.exports = {
-	mode: "production",
+	mode: mode,
+	devtool: mode === "development" ? "source-map" : false,
 	performance: {
 		maxEntrypointSize: 500000
 	},
@@ -10,6 +12,18 @@ module.exports = {
 		popup: "./src/popup.js",
 		content: "./src/content.js",
 		"service-worker": "./src/service-worker.js"
+	},
+	module: {
+		rules: [
+			{
+				test: /\.ts$/,
+				use: "ts-loader",
+				exclude: /node_modules/
+			}
+		]
+	},
+	resolve: {
+		extensions: [".ts", ".js"]
 	},
 	output: {
 		filename: "[name].js",
