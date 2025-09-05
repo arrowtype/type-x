@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const activateFonts = document.querySelector("#activateFonts");
-const fullReset = document.querySelector(".full-reset");
-
-import { defaultFiles, defaultFonts } from "./recursive-fonts";
-import { addFormElement, buildForm, saveForm } from "./form.ts";
-import { Font } from "./font.ts";
+import { defaultFiles, defaultFonts } from "./recursive-fonts.js";
+import { addFormElement, buildForm, saveForm } from "./form";
+import { Font } from "./font";
 
 const defaultBlacklist = [
 	".icon",
@@ -34,8 +31,12 @@ const defaultBlacklist = [
 	".Mwv9k", // google hangouts
 	".NtU4hc" // google hangouts
 ];
-const showBlacklist = document.querySelector("#showBlacklist");
-const addFont = document.querySelector("#addFont");
+const showBlacklist: HTMLButtonElement =
+	document.querySelector("#showBlacklist");
+const addFont: HTMLButtonElement = document.querySelector("#addFont");
+const activateFonts: HTMLButtonElement =
+	document.querySelector("#activateFonts");
+const fullReset: HTMLButtonElement = document.querySelector(".full-reset");
 
 // Show/hide blacklist
 showBlacklist.onclick = () => {
@@ -59,25 +60,22 @@ addFont.onclick = async () => {
 	saveForm();
 };
 
-fullReset.onclick = () => {
+fullReset.onclick = async () => {
 	if (
 		window.confirm(
 			"Do you really want to reset Type-X? This will remove all loaded fonts and reset all font overrides to the extension default values. THIS CANNOT BE UNDONE."
 		)
 	) {
-		chrome.storage.local.set(
-			{
-				extensionActive: false,
-				fonts: defaultFonts,
-				files: defaultFiles,
-				blacklist: defaultBlacklist
-			},
-			() => {
-				// Rebuild the menu
-				buildForm();
-				callTypeX();
-			}
-		);
+		await chrome.storage.local.set({
+			extensionActive: false,
+			fonts: defaultFonts,
+			files: defaultFiles,
+			blacklist: defaultBlacklist
+		});
+		// Rebuild the menu
+		buildForm();
+		callTypeX();
+		showStatus();
 	}
 };
 
@@ -105,18 +103,18 @@ export async function callTypeX() {
 }
 
 // Check there's something in local storage and reset to defaults if not
-let { fonts, files, blacklist } = await chrome.storage.local.get([
-	"fonts",
-	"files",
-	"blacklist"
-]);
-if (fonts === undefined) fonts = defaultFonts;
-if (files === undefined) files = defaultFiles;
-if (blacklist === undefined) blacklist = defaultBlacklist;
-await chrome.storage.local.set({
-	fonts,
-	files,
-	blacklist
-});
+chrome.storage.local.get(
+	["fonts", "files", "blacklist"],
+	async ({ fonts, files, blacklist }) => {
+		if (fonts === undefined) fonts = defaultFonts;
+		if (files === undefined) files = defaultFiles;
+		if (blacklist === undefined) blacklist = defaultBlacklist;
+		await chrome.storage.local.set({
+			fonts,
+			files,
+			blacklist
+		});
+	}
+);
 
 showStatus();

@@ -9,7 +9,7 @@ module.exports = {
 		maxEntrypointSize: 500000
 	},
 	entry: {
-		popup: "./src/popup.js",
+		popup: "./src/popup.ts",
 		content: "./src/content.js",
 		"service-worker": "./src/service-worker.js"
 	},
@@ -22,15 +22,13 @@ module.exports = {
 			}
 		]
 	},
-	resolve: {
-		extensions: [".ts", ".js"]
-	},
 	output: {
 		filename: "[name].js",
 		chunkFilename: "[name].bundle.js",
 		clean: true
 	},
 	resolve: {
+		extensions: [".ts", ".js", "..."],
 		fallback: {
 			fs: false,
 			buffer: require.resolve("buffer"),

@@ -1,5 +1,5 @@
-import { Axis, Font, FontFile, FontkitAxis, IFont, Location } from "./font.js";
-import { callTypeX } from "./popup.js";
+import { Axis, Font, FontFile, FontkitAxis, IFont, Location } from "./font";
+import { callTypeX } from "./popup";
 import { create } from "fontkit";
 import type { Font as FontkitFont } from "fontkit";
 
