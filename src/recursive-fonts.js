@@ -32,43 +32,12 @@ export const defaultFonts = [
 		],
 		css: "line-height: normal; font-feature-settings: normal;",
 		inherit: false,
-		activeinstance: "Mono Linear Regular",
-		axes: {
-			MONO: {
-				id: "MONO",
-				name: "Monospace",
-				min: 0,
-				max: 1,
-				value: 1
-			},
-			CASL: {
-				id: "CASL",
-				name: "Casual",
-				min: 0,
-				max: 1,
-				value: 0
-			},
-			CRSV: {
-				id: "CRSV",
-				name: "Cursive",
-				min: 0,
-				max: 1,
-				value: 0.5
-			},
-			slnt: {
-				id: "slnt",
-				name: "Slant",
-				min: -15,
-				max: 0,
-				value: 0
-			},
-			wght: {
-				id: "wght",
-				name: "Weight",
-				min: 300,
-				max: 1000,
-				value: 300
-			}
+		location: {
+			MONO: 1,
+			CASL: 0,
+			CRSV: 0.5,
+			slnt: 0,
+			wght: 400
 		}
 	}),
 	Font.fromObject({
@@ -79,43 +48,12 @@ export const defaultFonts = [
 		selectors: ["*"],
 		css: "",
 		inherit: true,
-		activeinstance: "Sans Linear Regular",
-		axes: {
-			MONO: {
-				id: "MONO",
-				name: "Monospace",
-				min: 0,
-				max: 1,
-				value: 0
-			},
-			CASL: {
-				id: "CASL",
-				name: "Casual",
-				min: 0,
-				max: 1,
-				value: 0
-			},
-			CRSV: {
-				id: "CRSV",
-				name: "Cursive",
-				min: 0,
-				max: 1,
-				value: 0.5
-			},
-			slnt: {
-				id: "slnt",
-				name: "Slant",
-				min: -15,
-				max: 0,
-				value: 0
-			},
-			wght: {
-				id: "wght",
-				name: "Weight",
-				min: 300,
-				max: 1000,
-				value: 300
-			}
+		location: {
+			MONO: 0,
+			CASL: 0,
+			CRSV: 0.5,
+			slnt: 0,
+			wght: 400
 		}
 	})
 ];
@@ -130,35 +68,35 @@ export const defaultFiles = {
 				name: "Monospace",
 				min: 0,
 				max: 1,
-				value: 0
+				default: 0
 			},
 			CASL: {
 				id: "CASL",
 				name: "Casual",
 				min: 0,
 				max: 1,
-				value: 0
+				default: 0
 			},
 			wght: {
 				id: "wght",
 				name: "Weight",
 				min: 300,
 				max: 1000,
-				value: 300
+				default: 300
 			},
 			slnt: {
 				id: "slnt",
 				name: "Slant",
 				min: -15,
 				max: 0,
-				value: 0
+				default: 0
 			},
 			CRSV: {
 				id: "CRSV",
 				name: "Cursive",
 				min: 0,
 				max: 1,
-				value: 0.5
+				default: 0.5
 			}
 		},
 		instances: {
