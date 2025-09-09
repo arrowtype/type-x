@@ -13,8 +13,8 @@
 // limitations under the License.
 
 import { defaultFiles, defaultFonts } from "./recursive-fonts.js";
-import { addFormElement, buildForm, saveForm } from "./form";
-import { Font } from "./font";
+import { addFormElement, buildForm } from "./form";
+import { Font, getFiles, getFonts } from "./font";
 
 const defaultBlacklist = [
 	".icon",
@@ -43,21 +43,15 @@ showBlacklist.onclick = () => {
 	document.querySelector(".blacklist").classList.toggle("show");
 };
 
-// Add new font fieldset to form
+// Add new font to the list
 addFont.onclick = async () => {
-	const randomId = window.crypto.getRandomValues(new Uint32Array(2)).join("");
-	let { files } = await chrome.storage.local.get("files");
-	const newFont = Font.fromObject({
-		new: true,
-		id: randomId,
-		file: Object.keys(files)[0],
-		fallback: ["monospace"],
-		selectors: ["/* Add CSS selectors here */"],
-		css: "/* Additional styles to apply */"
-	});
-
-	addFormElement(newFont, files);
-	saveForm();
+	let files = await getFiles();
+	let fonts = await getFonts();
+	let filename = Object.keys(files)[0];
+	let newfont = await Font.fromFilename(filename);
+	fonts.push(newfont);
+	addFormElement(newfont, files);
+	await chrome.storage.local.set({ fonts });
 };
 
 fullReset.onclick = async () => {
@@ -106,6 +100,15 @@ activateFonts.onclick = async () => {
 
 export async function callTypeX() {
 	chrome.runtime.sendMessage({ runTypeX: true });
+}
+
+export async function showReloadAnimation() {
+	console.log("Asking tabs to show reload animation");
+	chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+		if (tabs[0]?.id) {
+			chrome.tabs.sendMessage(tabs[0].id, { reloadAnimation: true });
+		}
+	});
 }
 
 // Check there's something in local storage and reset to defaults if not
