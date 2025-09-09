@@ -78,11 +78,12 @@ fullReset.onclick = async () => {
 	}
 };
 
-// Update the status when storage changess
+// Update the status and the tabs when storage changes
 chrome.storage.local.onChanged.addListener(changes => {
 	if (changes.extensionActive) {
 		showStatus();
 	}
+	callTypeX();
 });
 
 async function showStatus() {
