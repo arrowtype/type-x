@@ -211,12 +211,19 @@ export class FontFile {
 		}
 	}
 
-	setupReload(handle: FileSystemFileHandle, onReload?: () => void) {
+	setupReload(
+		handle: FileSystemFileHandle,
+		onReload: () => void,
+		fontReadyHook: (fontName: string) => void
+	) {
 		this.handle = handle;
-		setInterval(this.compare.bind(this, onReload), 1000);
+		setInterval(this.compare.bind(this, onReload, fontReadyHook), 1000);
 	}
 
-	async compare(onReload?: () => void) {
+	async compare(
+		onReload: (font: FontFile) => void,
+		fontReadyHook: (fontName: string) => void
+	) {
 		const file = await this.handle.getFile();
 
 		if (
@@ -224,7 +231,9 @@ export class FontFile {
 			file.lastModified > lastLoaded[this.file]
 		) {
 			lastLoaded[this.file] = file.lastModified;
-			onReload?.();
+			// Update ourselves with new data
+			await this.readFromFile(file, fontReadyHook);
+			onReload?.(this);
 		}
 	}
 
@@ -232,6 +241,22 @@ export class FontFile {
 		return Object.fromEntries(
 			Object.values(this.axes).map(axis => [axis.id, axis.default])
 		);
+	}
+
+	async readFromFile(file: File, fontReadyHook?: (fontName: string) => void) {
+		const name = file.name;
+		this.loadVariableInfo(await file.arrayBuffer());
+
+		const reader = new FileReader();
+		reader.onload = async ({ target }) => {
+			this.file = target.result as string;
+			// Stick new file in storage
+			let { files } = await chrome.storage.local.get("files");
+			files[name] = this;
+			await chrome.storage.local.set({ files });
+			fontReadyHook?.(name);
+		};
+		reader.readAsDataURL(file);
 	}
 }
 
@@ -278,21 +303,11 @@ async function setupFont(
 	if (!allowedExt.includes(ext)) {
 		return null;
 	}
-
-	const reader = new FileReader();
-	reader.onload = async ({ target }) => {
-		let fontfile = new FontFile(target.result as string, name, {}, {});
-		fontfile.loadVariableInfo(await file.arrayBuffer());
-		if (handle) {
-			fontfile.setupReload(handle, reloadHook);
-		}
-		// Stick new file in storage
-		let { files } = await chrome.storage.local.get("files");
-		files[name] = fontfile;
-		await chrome.storage.local.set({ files });
-		fontReadyHook?.(name);
-	};
-	reader.readAsDataURL(file);
+	let fontfile = new FontFile("", name, {}, {}); // We'll fill in the contents
+	if (handle) {
+		fontfile.setupReload(handle, reloadHook, fontReadyHook);
+	}
+	await fontfile.readFromFile(file, fontReadyHook);
 	return name;
 }
 

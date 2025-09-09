@@ -155,19 +155,18 @@ export async function addFormElement(
 	parentEl.addEventListener(
 		"drop",
 		async e => {
-			let newfont = await dropFont(
+			await dropFont(
 				e,
 				async fontFileName => {
-					// Font has been added to the files record, need a new font element
+					// Font has been added to the files[] array, need a new font element
 					// for it.
 					await changeFont(parentEl, fontFileName);
+					// Rebuild dropdowns
+					await buildForm();
 				},
 				async () => {
-					console.warn("Reload won't work right now");
-					console.log("Reloading font", this.name);
 					// Ask tabs to show reloading animation
 					showReloadAnimation();
-					await changeFont(parentEl, this.file);
 					callTypeX();
 				}
 			);
