@@ -1,29 +1,47 @@
+import { getFonts } from "./font";
+
+/** @type {string[]} */
 let stylesheets = [];
+/** @type {Object.<number, string>} */
 let injectedCSS = {};
-async function insertOrReplaceCss(tabId, text) {
-	if (tabId in injectedCSS) {
-		if (injectedCSS[tabId] == text) {
+/**
+ * @param {number} tabId
+ * @param {string} category
+ * @param {string} text
+ */
+async function insertOrReplaceCss(tabId, category, text) {
+	if (tabId in injectedCSS && category in injectedCSS[tabId]) {
+		if (injectedCSS[tabId][category] == text) {
 			return;
 		}
 		await chrome.scripting.removeCSS({
 			target: { tabId },
-			css: injectedCSS[tabId]
+			css: injectedCSS[tabId][category]
 		});
 	}
 	await chrome.scripting.insertCSS({
 		target: { tabId },
 		css: text
 	});
-	injectedCSS[tabId] = text;
+	if (!(tabId in injectedCSS)) {
+		injectedCSS[tabId] = {};
+	}
+	injectedCSS[tabId][category] = text;
 }
 
 // Do the thing! (Generate stylesheet and inject into active tab)
 export async function runTypeX() {
 	let tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-	let { extensionActive } = await chrome.storage.local.get("extensionActive");
 	const activeTab = tabs[0];
-	await generateStyleSheet();
-	await injectStyleSheet(activeTab.id);
+	if (activeTab) {
+		let fontDeclarations = await generateFontStyleSheets();
+		let fontFileDeclarations = await generateFontFileStyleSheets();
+		await injectStyleSheets(
+			activeTab.id,
+			fontDeclarations,
+			fontFileDeclarations
+		);
+	}
 }
 
 // Injecting the stylesheet is fast, adding a class to
@@ -36,12 +54,22 @@ let customFontsOn = () => {
 let customFontsOff = () => {
 	document.documentElement.dataset.disablefont = "";
 };
-async function injectStyleSheet(tabId) {
+
+/**
+ * @param {number} tabId
+ */
+async function injectStyleSheets(
+	tabId,
+	fontDeclarations,
+	fontFileDeclarations
+) {
 	let { extensionActive } = await chrome.storage.local.get("extensionActive");
-	let stylesheetsCode = stylesheets.join("\n");
+	let fontDeclarationsCss = fontDeclarations.join("\n");
+	let fontFileDeclarationsCss = fontFileDeclarations.join("\n");
 	if (extensionActive) {
 		// Inject CSS to activate font
-		await insertOrReplaceCss(tabId, stylesheetsCode);
+		await insertOrReplaceCss(tabId, "fonts", fontDeclarationsCss);
+		await insertOrReplaceCss(tabId, "fontfiles", fontFileDeclarationsCss);
 	}
 	chrome.scripting.executeScript({
 		target: { tabId },
@@ -49,77 +77,47 @@ async function injectStyleSheet(tabId) {
 	});
 }
 
-async function generateStyleSheet() {
-	let { fonts, files, blacklist } = await chrome.storage.local.get([
-		"fonts",
-		"files",
-		"blacklist"
-	]);
+async function generateFontStyleSheets() {
+	let { blacklist } = await chrome.storage.local.get(["blacklist"]);
+	let fonts = await getFonts();
 	stylesheets = [];
-	const blacklistSelectors = (() => {
-		let b = "";
-		for (const blacklistItem of blacklist) {
-			b += `:not(${blacklistItem})`;
-		}
-		return b;
-	})();
 
 	for (const font of fonts) {
-		const selectors = [];
-		const axesStyles = [];
 		let fontName = font.name;
 		let stylesheet = "";
+		let selectors = font.cssSelectorString(blacklist);
+		const stack = `'${fontName}', ${font.fallback}`;
+		stylesheet += `
+                        ${selectors} {
+                            font-family: ${stack} !important;
+                            ${font.cssVariationSettings()}
+                            ${font.css}
+                        }`;
 
-		for (const selector of font.selectors) {
-			selectors.push(
-				`html:not([data-disablefont]) ${selector}${blacklistSelectors}`
-			);
-		}
+		stylesheets.push(stylesheet);
+		console.log("Generated stylesheet for", font.name);
+		console.log(stylesheet);
+	}
+	return stylesheets;
+}
 
-		let axes = false;
-		if (font.axes && Object.entries(font.axes).length) {
-			axes = font.axes;
-		} else if (font.file in files) {
-			axes = files[font.file].axes;
-		}
-
-		// Only inject variable axes when font has axes,
-		// and we don't want to inherit page styles
-		if (axes && !font.inherit) {
-			for (const axisData in axes) {
-				axesStyles.push(
-					`'${axes[axisData].id}' ${axes[axisData].value}`
-				);
-			}
-			fontName = font.name + font.id;
-		}
-
+async function generateFontFileStyleSheets() {
+	let fonts = await getFonts();
+	let { files } = await chrome.storage.local.get("files");
+	let stylesheets = [];
+	for (const font of fonts) {
+		let fontName = font.name;
 		if (font.file in files) {
-			stylesheet += `
+			stylesheets.push(`
                             @font-face {
                                 font-family: '${fontName}';
                                 src: url('${files[font.file].file}');
                                 font-weight: 100 900;
                                 font-stretch: 50% 200%;
-                            }`;
+                            }`);
 		}
-
-		const stack = `'${fontName}', ${font.fallback}`;
-		stylesheet += `
-                        ${selectors.join(",")} {
-                            font-family: ${stack} !important;
-                            ${
-								axesStyles.length
-									? `font-variation-settings: ${axesStyles.join(
-											","
-									  )};`
-									: ""
-							}
-                            ${font.css}
-                        }`;
-
-		stylesheets.push(stylesheet);
 	}
+	return stylesheets;
 }
 
 // Listen for call from popup or page
