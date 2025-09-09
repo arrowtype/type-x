@@ -19,14 +19,14 @@ async function insertOrReplaceCss(tabId, category, text) {
 			css: injectedCSS[tabId][category]
 		});
 	}
-	await chrome.scripting.insertCSS({
-		target: { tabId },
-		css: text
-	});
 	if (!(tabId in injectedCSS)) {
 		injectedCSS[tabId] = {};
 	}
 	injectedCSS[tabId][category] = text;
+	await chrome.scripting.insertCSS({
+		target: { tabId },
+		css: text
+	});
 }
 
 // Do the thing! (Generate stylesheet and inject into active tab)
@@ -95,8 +95,6 @@ async function generateFontStyleSheets() {
                         }`;
 
 		stylesheets.push(stylesheet);
-		console.log("Generated stylesheet for", font.name);
-		console.log(stylesheet);
 	}
 	return stylesheets;
 }
