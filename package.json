@@ -19,7 +19,12 @@
 		"util": "^0.12.5"
 	},
 	"devDependencies": {
+		"@types/chrome": "^0.1.6",
+		"@types/fontkit": "^2.0.8",
+		"@types/wicg-file-system-access": "^2023.10.6",
 		"copy-webpack-plugin": "^13.0.1",
+		"ts-loader": "^9.5.4",
+		"typescript": "^5.9.2",
 		"webpack": "^5.82.0",
 		"webpack-cli": "^6.0.1"
 	},

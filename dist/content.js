@@ -1,1 +1,1 @@
-chrome.runtime.sendMessage({runTypeX:!0,pageLoad:!0});
+chrome.runtime.sendMessage({runTypeX:!0,pageLoad:!0}),chrome.runtime.onMessage.addListener((e,t,n)=>{e.reloadAnimation&&(console.log("Received reload animation message"),document.documentElement.style.transition="opacity 0.3s",document.documentElement.style.opacity="0.5",setTimeout(()=>{document.documentElement.style.opacity="1"},300))});
