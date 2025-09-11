@@ -49,9 +49,9 @@
     tslib "^2.8.0"
 
 "@types/chrome@^0.1.6":
-  version "0.1.6"
-  resolved "https://registry.npmjs.org/@types/chrome/-/chrome-0.1.6.tgz"
-  integrity sha512-Rnv8CDthTPA4/ojSWw5A//7Ew7P2pAJECxAR8YeOhehaUKZ7WX5fHIZbEw8m6bTRNzFyhxhzUb6T3gjKMry+2w==
+  version "0.1.9"
+  resolved "https://registry.npmjs.org/@types/chrome/-/chrome-0.1.9.tgz"
+  integrity sha512-Tjzql/wuGkC4Q3FWSziPMbggN0FwQZph4WFhzvnBfmnipzX1vtNBNToAGGpSqAAf26wfKFfZTZmxN8+pgMK9Rw==
   dependencies:
     "@types/filesystem" "*"
     "@types/har-format" "*"
