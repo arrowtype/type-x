@@ -86,7 +86,7 @@ async function showStatus() {
 	chrome.action.setIcon({
 		path: `icons/typex-${extensionActive ? "active" : "off"}@128.png`
 	});
-	activateFonts.classList.toggle("active", extensionActive);
+	activateFonts.classList.toggle("active", !!extensionActive);
 }
 
 // Toggle extension on/off using the button
