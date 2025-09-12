@@ -1,5 +1,4 @@
-import { create } from "fontkit";
-import type { Font as FontkitFont } from "fontkit";
+import type { Font as FontkitFont } from "fontkit-next";
 
 const randomId = () =>
 	window.crypto.getRandomValues(new Uint32Array(2)).join("");
@@ -185,10 +184,14 @@ export class FontFile {
 		return new FontFile(obj.file, obj.name, obj.axes, obj.instances);
 	}
 
-	loadVariableInfo(buffer: ArrayBuffer) {
+	async loadVariableInfo(buffer: ArrayBuffer) {
 		// Use Fontkit to parse the font data
 		try {
-			let fontkitFont = create(Buffer.from(buffer)) as FontkitFont;
+			let fontkitFont = await import(
+				/* webpackChunkName: "fontkit" */ "fontkit-next"
+			).then(({ default: fontkit }) => {
+				return fontkit.create(Buffer.from(buffer)) as FontkitFont;
+			});
 			try {
 				// @ts-ignore // Types are not updated for this version of Fontkit
 				this.instances = fontkitFont.namedVariations;
@@ -245,7 +248,7 @@ export class FontFile {
 
 	async readFromFile(file: File, fontReadyHook?: (fontName: string) => void) {
 		const name = file.name;
-		this.loadVariableInfo(await file.arrayBuffer());
+		await this.loadVariableInfo(await file.arrayBuffer());
 
 		const reader = new FileReader();
 		reader.onload = async ({ target }) => {

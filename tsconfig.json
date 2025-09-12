@@ -9,6 +9,9 @@
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
     "moduleResolution": "bundler",
+    "paths": {
+            "*": [ "./src/@custom_types/*"]
+        }
   },
   "types": ["chrome"]
 }
