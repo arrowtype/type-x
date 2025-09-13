@@ -11,12 +11,14 @@
 Type-X is currently unlisted from the Chrome Web Store for maintenance.<br/>However, it can still be used in Chrome Developer Mode (see <a href="https://github.com/arrowtype/type-x#install-in-developer-mode">below</a>).
 </h3>
 
+UPDATE, SEP 2025: [We are working to relist it on the Chrome Web Store!](https://github.com/arrowtype/type-x/issues/125) If it’s not there yet, you can use it in Chrome Developer Mode, but please check back soon, as this should be changed soon!
+
 ---
 
 Type-X is a Google Chrome extension that makes it easy and efficient to test local fonts on any website.
 
 - Browse comfortably to experience your own fonts in context, with blazing-fast font injection and a one-click override.
-- Use your local fonts or add custom font files directly to test real web font files – WOFF & WOFF2 included (all fonts stay on your computer).
+- Use your local fonts or add custom font files directly to test real web font files – WOFF2 included (all fonts stay on your own computer, and nothing is uploaded to any server, etc).
 - Take full control over how you apply your fonts with custom CSS selectors and styles.
 - Avoid "tofu" from icon fonts with preset and custom selectors to ignore icon elements.
 
@@ -67,11 +69,11 @@ Click the switch to activate font overrides! Click it again to remove your overr
 
 Type-X can have one or more font overrides at a given time, and these overrides are applied to all web pages you visit with Type-X activated.
 
-To add a new override, click the `+` button. 
+To add a new override, click the `+ Add font` button. 
 
 To customize an override, click the `›` icon to expand it.
 
-To remove an override, expand one of the font overrides and click `Delete`. Note: deleting an override does not delete the font file, even if you have loaded the font file directly into the extension.
+To remove an override, expand it and click `Delete`. Note: deleting an override does not delete the font file from the Type-X menu, even if you have loaded the font file directly into the extension. It will still be available as an option, unless you reset the entire extension.
 
 #### Font menu
 
@@ -120,12 +122,13 @@ Using CSS selectors requires some knowledge of HTML and CSS, but you can do a lo
 You may want to control styles such as weight, size, or color in overridden text. If so, you can use CSS style properties to do so. For instance, if you want to make all text affected by a certain font override into bold, 20px, black text, you could use this style:
 
 ```
+letter-spacing: 0; /* resets style */
 font-weight: bold;
 font-size: 20px;
 color: black;
 ```
 
-Of course, using fewer style overrides is often better, so that you see your chosen font while disrupting a web page's styles as little as possible.
+Of course, using fewer style overrides is often better, so that you can see your chosen font while disrupting a web page's overall styles and layout as little as possible.
 
 #### `Selectors to ignore`
 
