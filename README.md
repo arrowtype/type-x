@@ -22,7 +22,7 @@ Type-X is a Google Chrome extension that makes it easy and efficient to test loc
 - Take full control over how you apply your fonts with custom CSS selectors and styles.
 - Avoid "tofu" from icon fonts with preset and custom selectors to ignore icon elements.
 
-![Type-X in use to apply font overrides to Wikipedia](design/typex-demo.mp4)
+![Type-X in use to apply font overrides to Wikipedia](design/typex-demo.gif)
 
 ## Why?
 
