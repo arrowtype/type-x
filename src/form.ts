@@ -308,6 +308,7 @@ async function getFont(id: string): Promise<Font | null> {
 		console.error("Couldn't find font with ID", id);
 		return null;
 	}
+	await updateFont(font);
 	return font;
 }
 
@@ -385,6 +386,7 @@ function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
 	}
 
 	input.onchange = async e => {
+		console.log("hey look")
 		let fontId = parent.dataset.fontid;
 		let font = await getFont(fontId);
 		let newValue = (e.target as HTMLInputElement).value;
@@ -397,6 +399,7 @@ function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
 		if (dropdown) {
 			dropdown.value = (await font.activeInstance()) || "--axes--";
 		}
+		console.log(font, newValue)
 		await updateFont(font);
 	};
 
@@ -418,6 +421,8 @@ function unhighlight(e: Event) {
 async function updateFont(font: Font) {
 	let { fonts } = await chrome.storage.local.get("fonts");
 	let fontId = font.id;
+	console.log("before font map error...")
 	fonts = fonts.map((f: Font) => (f.id === fontId ? font : f));
+	console.log("after map error")
 	await chrome.storage.local.set({ fonts }); // Updating storage calls typeX
 }
