@@ -9,6 +9,7 @@ import {
 	getFiles
 } from "./font";
 import { callTypeX, showReloadAnimation } from "./popup";
+import { defaultFonts } from "./recursive-fonts.js";
 
 const localFonts: Record<string, FontFile> = {};
 
@@ -386,7 +387,6 @@ function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
 	}
 
 	input.onchange = async e => {
-		console.log("hey look")
 		let fontId = parent.dataset.fontid;
 		let font = await getFont(fontId);
 		let newValue = (e.target as HTMLInputElement).value;
@@ -399,7 +399,6 @@ function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
 		if (dropdown) {
 			dropdown.value = (await font.activeInstance()) || "--axes--";
 		}
-		console.log(font, newValue)
 		await updateFont(font);
 	};
 
@@ -418,11 +417,26 @@ function unhighlight(e: Event) {
 	e.stopPropagation();
 }
 
+async function setStorageKeyIfNotFound(key: string, defaultValue: Font[]) {
+	try {
+		const result = await chrome.storage.local.get(key);
+		if (result[key] === undefined) {
+			// Value not found, set it
+			await chrome.storage.local.set({ [key]: defaultValue });
+			console.log(`${key} set to:`, defaultValue);
+		} else {
+			// Value already exists
+			console.log(`${key} already exists with value:`, result[key]);
+		}
+	} catch (error) {
+		console.error("Error accessing chrome.storage.local:", error);
+	}
+}
+
 async function updateFont(font: Font) {
+	setStorageKeyIfNotFound("fonts", defaultFonts);
 	let { fonts } = await chrome.storage.local.get("fonts");
 	let fontId = font.id;
-	console.log("before font map error...")
 	fonts = fonts.map((f: Font) => (f.id === fontId ? font : f));
-	console.log("after map error")
 	await chrome.storage.local.set({ fonts }); // Updating storage calls typeX
 }
