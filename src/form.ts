@@ -326,6 +326,11 @@ async function applyNamedInstance(e: Event) {
 
 	font.inherit = sel.value == "--inherit--";
 
+	sliders.querySelectorAll(".variable-slider").forEach(slider => {
+		let input = slider.querySelector("input");
+		input.disabled = font.inherit;
+	});
+
 	if (font.inherit) {
 		sliders.classList.add("mute");
 		await updateFont(font);
@@ -359,6 +364,10 @@ async function addVariableSliders(font: Font, el: HTMLElement) {
 		}
 		container.classList.add("show");
 	}
+	// If we start with inherit, we start muted
+	if (font.inherit) {
+		container.classList.add("mute");
+	}
 }
 
 function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
@@ -370,6 +379,8 @@ function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
 	const input: HTMLInputElement = el.querySelector("input");
 	const label: HTMLLabelElement = el.querySelector("label");
 	const value: HTMLSpanElement = el.querySelector(".slider-value");
+
+	input.disabled = font.inherit;
 
 	label.innerText = axis.name;
 
