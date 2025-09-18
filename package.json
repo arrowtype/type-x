@@ -11,7 +11,7 @@
 	},
 	"dependencies": {
 		"buffer": "^6.0.3",
-		"fontkit-next": "^1.8.1",
+		"fontkit": "lineto/fontkit#fix/named-variations",
 		"iconv-lite": "^0.7.0",
 		"process": "^0.11.10",
 		"stream-browserify": "^3.0.0",
@@ -20,6 +20,7 @@
 	},
 	"devDependencies": {
 		"@types/chrome": "^0.1.6",
+		"@types/fontkit": "^2.0.8",
 		"@types/wicg-file-system-access": "^2023.10.6",
 		"copy-webpack-plugin": "^13.0.1",
 		"ts-loader": "^9.5.4",
