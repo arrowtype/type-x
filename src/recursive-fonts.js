@@ -46,7 +46,7 @@ export const defaultFonts = [
 		file: "RecursiveOriginal",
 		fallback: "sans-serif",
 		selectors: ["*"],
-		css: "",
+		css: "letter-spacing: 0em; font-feature-settings: normal;",
 		inherit: true,
 		location: {
 			MONO: 0,
