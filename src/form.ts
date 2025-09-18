@@ -9,6 +9,7 @@ import {
 	getFiles
 } from "./font";
 import { callTypeX, showReloadAnimation } from "./popup";
+import { defaultFonts } from "./recursive-fonts.js";
 
 const localFonts: Record<string, FontFile> = {};
 
@@ -308,6 +309,7 @@ async function getFont(id: string): Promise<Font | null> {
 		console.error("Couldn't find font with ID", id);
 		return null;
 	}
+	await updateFont(font);
 	return font;
 }
 
@@ -323,6 +325,11 @@ async function applyNamedInstance(e: Event) {
 	let sliders = parent.querySelector(".variable-sliders-container");
 
 	font.inherit = sel.value == "--inherit--";
+
+	sliders.querySelectorAll(".variable-slider").forEach(slider => {
+		let input = slider.querySelector("input");
+		input.disabled = font.inherit;
+	});
 
 	if (font.inherit) {
 		sliders.classList.add("mute");
@@ -357,6 +364,10 @@ async function addVariableSliders(font: Font, el: HTMLElement) {
 		}
 		container.classList.add("show");
 	}
+	// If we start with inherit, we start muted
+	if (font.inherit) {
+		container.classList.add("mute");
+	}
 }
 
 function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
@@ -368,6 +379,8 @@ function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
 	const input: HTMLInputElement = el.querySelector("input");
 	const label: HTMLLabelElement = el.querySelector("label");
 	const value: HTMLSpanElement = el.querySelector(".slider-value");
+
+	input.disabled = font.inherit;
 
 	label.innerText = axis.name;
 
@@ -415,7 +428,24 @@ function unhighlight(e: Event) {
 	e.stopPropagation();
 }
 
+async function setStorageKeyIfNotFound(key: string, defaultValue: Font[]) {
+	try {
+		const result = await chrome.storage.local.get(key);
+		if (result[key] === undefined) {
+			// Value not found, set it
+			await chrome.storage.local.set({ [key]: defaultValue });
+			console.log(`${key} set to:`, defaultValue);
+		} else {
+			// Value already exists
+			console.log(`${key} already exists with value:`, result[key]);
+		}
+	} catch (error) {
+		console.error("Error accessing chrome.storage.local:", error);
+	}
+}
+
 async function updateFont(font: Font) {
+	setStorageKeyIfNotFound("fonts", defaultFonts);
 	let { fonts } = await chrome.storage.local.get("fonts");
 	let fontId = font.id;
 	fonts = fonts.map((f: Font) => (f.id === fontId ? font : f));
