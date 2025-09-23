@@ -7,7 +7,7 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"build": "npx webpack"
+		"build": "npx webpack --mode production --output-path ./dist"
 	},
 	"dependencies": {
 		"buffer": "^6.0.3",
