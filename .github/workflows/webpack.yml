@@ -31,15 +31,5 @@ jobs:
             - name: Upload build artifact
               uses: actions/upload-artifact@v4
               with:
-                  name: dist-folder
+                  name: typex-extension
                   path: dist/
-
-            # create a zip file of the dist folder for easier download
-            - name: Zip dist folder
-              run: zip -r typex.zip dist/
-
-            - name: Upload dist.zip as artifact
-              uses: actions/upload-artifact@v4
-              with:
-                  name: dist-zip
-                  path: typex.zip
