@@ -42,7 +42,7 @@ Type-X is currently unlisted from the Chrome Web Store for maintenance. However,
 
 If you wish to develop or edit the extension itself, you can directly download the latest build, and use it in Chrome:
 
-1. Download the latest release zip from https://github.com/arrowtype/type-x/releases. (There may be an even more recent build within the repo’s [Actions](https://github.com/arrowtype/type-x/actions/), but Releases are better tested.)
+1. Download the [latest release zip from the repo Releases](https://github.com/arrowtype/type-x/releases).
 2. Unzip the download.
 3. Go to chrome://extensions/ in Chrome
 4. Turn on "Developer Mode"
