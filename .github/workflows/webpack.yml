@@ -31,5 +31,5 @@ jobs:
             - name: Upload build artifact
               uses: actions/upload-artifact@v4
               with:
-                  name: typex-extension
+                  name: type-x
                   path: dist/
