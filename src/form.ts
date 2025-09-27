@@ -331,12 +331,12 @@ async function applyNamedInstance(e: Event) {
 		// input.disabled = font.inherit;
 	});
 
-	// if (font.inherit) {
-	// 	// sliders.classList.add("mute");
-	// 	await updateFont(font);
-	// 	return;
-	// }
-	sliders.classList.remove("mute");
+	if (font.inherit) {
+		sliders.classList.add("mute");
+		await updateFont(font);
+		return;
+	}
+	// sliders.classList.remove("mute");
 	if (!font.inherit) {
 		await font.setInstance(instanceName);
 	}
@@ -366,10 +366,13 @@ async function addVariableSliders(font: Font, el: HTMLElement) {
 		}
 		container.classList.add("show");
 	}
+
 	// If we start with inherit, we start muted
-	// if (font.inherit) {
-	// 	container.classList.add("mute");
-	// }
+	if (font.inherit) {
+		container.classList.add("mute");
+	}
+	// watch for click on variableSliders, and activate them
+	await activateSliders(el);
 }
 
 function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
@@ -416,6 +419,21 @@ function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
 	};
 
 	variableSliders.append(el);
+}
+
+async function activateSliders(parent: HTMLElement) {
+	let font = await getFont(parent.dataset.fontid);
+	if (!font) return;
+	let sliders = parent.querySelector(".variable-sliders-container");
+	let styleMenu = parent.querySelector(".select-instance");
+	// watch for click on variableSliders, and add class "active"
+	(sliders as HTMLElement).onclick = e => {
+		sliders.classList.remove("mute");
+		(styleMenu as HTMLSelectElement).value = "[Custom axes]";
+		(
+			parent.querySelector(".font-name-instance") as HTMLSpanElement
+		).innerText = "[Custom axes]";
+	};
 }
 
 function highlight(e: Event) {
