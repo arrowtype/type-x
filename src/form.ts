@@ -147,6 +147,7 @@ export async function addFormElement(
 
 	await addVariableSliders(font, parentEl);
 	await addNamedInstances(font, parentEl);
+	await activateSliders(font, parentEl);
 
 	// Set up font name and instance in title
 	await setFontNameAndInstance(font, parentEl);
@@ -270,9 +271,9 @@ async function addNamedInstances(font: Font, el: HTMLElement) {
 
 	// Create instances dropdown
 	const dropdown = document.createElement("select");
+	dropdown.onchange = applyNamedInstance;
 	dropdown.classList.add("select-instance");
 	dropdown.name = "select-instance";
-	dropdown.onchange = applyNamedInstance;
 
 	// Add "turn off font-variation-settings" option
 	const option = document.createElement("option");
@@ -370,6 +371,30 @@ async function addVariableSliders(font: Font, el: HTMLElement) {
 	}
 }
 
+async function setStyleFromSliders(
+	font: Font,
+	axis: Axis,
+	parent: HTMLElement,
+	input: HTMLInputElement,
+	value: HTMLSpanElement
+) {
+	input.onchange = async e => {
+		let fontId = parent.dataset.fontid;
+		let font = await getFont(fontId);
+		let newValue = (e.target as HTMLInputElement).value;
+		value.innerText = newValue;
+		// Store the value back in the font object
+		font.location[axis.id] = parseFloat(newValue);
+		/// If we're on an instance, update .select-instance
+		const dropdown =
+			parent.querySelector<HTMLSelectElement>(".select-instance");
+		if (dropdown) {
+			dropdown.value = (await font.activeInstance()) || "--axes--";
+		}
+		await updateFont(font);
+	};
+}
+
 function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
 	const variableSliders = parent.querySelector(".variable-sliders");
 	const template: HTMLTemplateElement =
@@ -397,21 +422,7 @@ function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
 		font.location[axis.id] = axis.default;
 	}
 
-	input.onchange = async e => {
-		let fontId = parent.dataset.fontid;
-		let font = await getFont(fontId);
-		let newValue = (e.target as HTMLInputElement).value;
-		value.innerText = newValue;
-		// Store the value back in the font object
-		font.location[axis.id] = parseFloat(newValue);
-		/// If we're on an instance, update .select-instance
-		const dropdown =
-			parent.querySelector<HTMLSelectElement>(".select-instance");
-		if (dropdown) {
-			dropdown.value = (await font.activeInstance()) || "--axes--";
-		}
-		await updateFont(font);
-	};
+	setStyleFromSliders(font, axis, parent, input, value);
 
 	variableSliders.append(el);
 }
@@ -426,6 +437,20 @@ function unhighlight(e: Event) {
 	this.classList.remove("highlight");
 	e.preventDefault();
 	e.stopPropagation();
+}
+
+async function activateSliders(font: Font, parent: HTMLElement) {
+	let sliders = parent.querySelector(".variable-sliders-container");
+	let styleMenu = parent.querySelector(".select-instance");
+	// watch for click on variableSliders, and add class "active"
+	(sliders as HTMLElement).onclick = async e => {
+		sliders.classList.remove("mute");
+		(styleMenu as HTMLSelectElement).value = "--axes--";
+		(styleMenu as HTMLSelectElement).value =
+			(await font.activeInstance()) || "--axes--";
+		applyNamedInstance(e);
+		await updateFont(font);
+	};
 }
 
 async function setStorageKeyIfNotFound(key: string, defaultValue: Font[]) {
