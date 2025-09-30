@@ -147,7 +147,7 @@ export async function addFormElement(
 
 	await addVariableSliders(font, parentEl);
 	await addNamedInstances(font, parentEl);
-	await activateSliders(font, parentEl);
+	// await activateSliders(font, parentEl);
 
 	// Set up font name and instance in title
 	await setFontNameAndInstance(font, parentEl);
@@ -422,6 +422,21 @@ function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
 		font.location[axis.id] = axis.default;
 	}
 
+	// input.onclick = e => {
+	// 	activateSliders(font, parent);
+	// };
+
+	let sliders = parent.querySelectorAll<HTMLElement>(
+		".variable-slider input"
+	);
+
+	variableSliders.addEventListener("click", async e => {
+		variableSliders.classList.remove("mute");
+		sliders.forEach(slider => {
+			(slider as HTMLInputElement).disabled = false;
+		});
+	});
+
 	setStyleFromSliders(font, axis, parent, input, value);
 
 	variableSliders.append(el);
@@ -439,19 +454,61 @@ function unhighlight(e: Event) {
 	e.stopPropagation();
 }
 
-async function activateSliders(font: Font, parent: HTMLElement) {
-	let sliders = parent.querySelector(".variable-sliders-container");
-	let styleMenu = parent.querySelector(".select-instance");
-	// watch for click on variableSliders, and add class "active"
-	(sliders as HTMLElement).onclick = async e => {
-		sliders.classList.remove("mute");
-		(styleMenu as HTMLSelectElement).value = "--axes--";
-		(styleMenu as HTMLSelectElement).value =
-			(await font.activeInstance()) || "--axes--";
-		applyNamedInstance(e);
-		await updateFont(font);
-	};
-}
+// async function activateSliders(font: Font, parent: HTMLElement) {
+// 	let slider_container = parent.querySelector<HTMLElement>(
+// 		".variable-sliders-container"
+// 	);
+// 	let sliders = parent.querySelectorAll<HTMLElement>(
+// 		".variable-slider input"
+// 	);
+// 	let styleMenu = parent.querySelector<HTMLSelectElement>(".select-instance");
+
+// 	// slider_container.classList.remove("mute");
+// 	// watch for click on variableSliders, and remove class "mute"
+// 	slider_container.onclick = async e => {
+// 		slider_container.classList.remove("mute");
+// 		sliders.forEach(slider => {
+// 			(slider as HTMLInputElement).disabled = false;
+// 		});
+// 	};
+// 	// 	// styleMenu.value = (await font.activeInstance()) || "--axes--";
+// 	// 	// applyNamedInstance(e);
+// 	// 	// await updateFont(font);
+// 	// 	sliders.forEach(slider => {
+// 	// 		(slider as HTMLInputElement).disabled = false;
+// 	// 	});
+// 	// };
+// 	// sliders.forEach(slider => {
+// 	// 	slider.onclick = e => {
+// 	// 		slider_container.classList.remove("mute");
+// 	// 		sliders.forEach(slider => {
+// 	// 			(slider as HTMLInputElement).disabled = false;
+// 	// 		});
+// 	// 	};
+// 	// });
+// 	sliders.forEach(slider => {
+// 		slider.onclick = e => {
+// 			slider_container.classList.remove("mute");
+// 			sliders.forEach(slider => {
+// 				(slider as HTMLInputElement).disabled = false;
+// 			});
+// 		};
+// 		// When slider is moved, update the font object and save to storage
+// 		slider.oninput = async e => {
+// 			// slider_container.classList.remove("mute");
+// 			let fontId = parent.dataset.fontid;
+// 			let font = await getFont(fontId);
+// 			let input = e.target as HTMLInputElement;
+// 			let value = (e.target as HTMLInputElement).value;
+// 			let axisId = (e.target as HTMLInputElement).name.replace(
+// 				"var-",
+// 				""
+// 			);
+
+// 			setStyleFromSliders(font, axisId, parent, input, value);
+// 		};
+// 	});
+// }
 
 async function setStorageKeyIfNotFound(key: string, defaultValue: Font[]) {
 	try {
