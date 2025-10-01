@@ -313,6 +313,19 @@ async function getFont(id: string): Promise<Font | null> {
 	return font;
 }
 
+function reenableMutedSliders(font: Font, container: Element) {
+	(container as HTMLElement).addEventListener(
+		"mousedown",
+		async () => {
+			if (!font.inherit) return;
+			container.classList.remove("mute");
+			font.inherit = false;
+			await updateFont(font);
+		},
+		{ once: true }
+	);
+}
+
 async function applyNamedInstance(e: Event) {
 	const sel = e.target as HTMLSelectElement;
 	const parent = sel.closest(".font") as HTMLFieldSetElement;
@@ -326,13 +339,9 @@ async function applyNamedInstance(e: Event) {
 
 	font.inherit = sel.value == "--inherit--";
 
-	sliders.querySelectorAll(".variable-slider").forEach(slider => {
-		let input = slider.querySelector("input");
-		input.disabled = font.inherit;
-	});
-
 	if (font.inherit) {
 		sliders.classList.add("mute");
+		reenableMutedSliders(font, sliders);
 		await updateFont(font);
 		return;
 	}
@@ -367,6 +376,9 @@ async function addVariableSliders(font: Font, el: HTMLElement) {
 	// If we start with inherit, we start muted
 	if (font.inherit) {
 		container.classList.add("mute");
+		// If a user clicks muted sliders, assume they want to
+		// go into custom axes mode
+		reenableMutedSliders(font, container);
 	}
 }
 
@@ -379,8 +391,6 @@ function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
 	const input: HTMLInputElement = el.querySelector("input");
 	const label: HTMLLabelElement = el.querySelector("label");
 	const value: HTMLSpanElement = el.querySelector(".slider-value");
-
-	input.disabled = font.inherit;
 
 	label.innerText = axis.name;
 

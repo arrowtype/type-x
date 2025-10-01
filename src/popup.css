@@ -329,6 +329,11 @@ textarea:focus {
 	opacity: 0.5;
 }
 
+.variable-sliders-container.mute input {
+	accent-color: var(--gray-2);
+	opacity: 0.5;
+}
+
 .variable-slider {
 	display: flex;
 	margin-top: 0.125rem;
