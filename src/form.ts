@@ -8,7 +8,7 @@ import {
 	getFonts,
 	getFiles
 } from "./font";
-import { callTypeX, showReloadAnimation } from "./popup";
+import { callTypeX, showReloadAnimation, activateExtension } from "./popup";
 import { defaultFonts } from "./recursive-fonts.js";
 
 const localFonts: Record<string, FontFile> = {};
@@ -194,7 +194,25 @@ export async function addFormElement(
 		};
 	});
 
+	// Auto-enable extension when interacting with font controls
+	const fontDetails = el.querySelector(".font-details");
+	if (fontDetails) {
+		const formElements = fontDetails.querySelectorAll(
+			"input, select, textarea"
+		);
+		formElements.forEach(element => {
+			element.addEventListener("change", autoEnableExtension);
+		});
+	}
+
 	usedFonts.prepend(el);
+}
+
+async function autoEnableExtension() {
+	let { extensionActive } = await chrome.storage.local.get("extensionActive");
+	if (!extensionActive) {
+		await activateExtension(true);
+	}
 }
 
 async function changeFont(
