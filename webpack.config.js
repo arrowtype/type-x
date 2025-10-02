@@ -6,7 +6,7 @@ module.exports = {
 	mode: mode,
 	devtool: mode === "development" ? "source-map" : false,
 	performance: {
-		maxEntrypointSize: 500000
+		hints: false
 	},
 	entry: {
 		popup: "./src/popup.ts",
