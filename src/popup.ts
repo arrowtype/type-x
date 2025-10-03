@@ -28,10 +28,7 @@ const defaultBlacklist = [
 	".font-fontello",
 	".material-icons",
 	".google-material-icons",
-	".google-symbols",
-	".DPvwYc", // google hangouts
-	".Mwv9k", // google hangouts
-	".NtU4hc" // google hangouts
+	".google-symbols"
 ];
 const showBlacklist: HTMLButtonElement =
 	document.querySelector("#showBlacklist");
