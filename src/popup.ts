@@ -89,13 +89,19 @@ async function showStatus() {
 	activateFonts.classList.toggle("active", !!extensionActive);
 }
 
-// Toggle extension on/off using the button
-activateFonts.onclick = async () => {
+// Set extension state (on/off) or toggle it
+export async function activateExtension(setActive?: boolean) {
 	let { extensionActive } = await chrome.storage.local.get("extensionActive");
+	const active = setActive !== undefined ? setActive : !extensionActive;
 	await chrome.storage.local.set({
-		extensionActive: !extensionActive
+		extensionActive: active
 	});
 	await callTypeX();
+}
+
+// Toggle extension on/off using the button
+activateFonts.onclick = async () => {
+	await activateExtension();
 };
 
 export async function callTypeX() {
