@@ -27,6 +27,7 @@ const defaultBlacklist = [
 	".fab",
 	".font-fontello",
 	".material-icons",
+	".google-material-icons",
 	".DPvwYc", // google hangouts
 	".Mwv9k", // google hangouts
 	".NtU4hc" // google hangouts
