@@ -18,7 +18,7 @@ UPDATE, OCTOBER 2025: [We are working to relist it on the Chrome Web Store!](htt
 Type-X is a Google Chrome extension that makes it easy and efficient to test local fonts on any website.
 
 - Browse comfortably to experience your own fonts in context, with blazing-fast font injection and a one-click override.
-- Use your local fonts or add custom font files directly to test real web font files – WOFF2 included (all fonts stay on your own computer, and nothing is uploaded to any server, etc).
+- Use your local fonts or add custom font files directly to test real web font files – WOFF2 included. (All fonts stay on your own computer, and nothing is uploaded to any server, etc).
 - Take full control over how you apply your fonts with custom CSS selectors and styles.
 - Avoid "tofu" from icon fonts with preset and custom selectors to ignore icon elements.
 
