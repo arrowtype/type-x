@@ -11,7 +11,7 @@
 Type-X is currently unlisted from the Chrome Web Store for maintenance.<br/>However, it can still be used in Chrome Developer Mode (see <a href="https://github.com/arrowtype/type-x#install-in-developer-mode">below</a>).
 </h3>
 
-UPDATE, SEP 2025: [We are working to relist it on the Chrome Web Store!](https://github.com/arrowtype/type-x/issues/125) If it’s not there yet, you can use it in Chrome Developer Mode, but please check back soon, as this should be changed soon!
+UPDATE, OCTOBER 2025: [We are working to relist it on the Chrome Web Store!](https://github.com/arrowtype/type-x/issues/125) If it’s not there yet, you can use it in Chrome Developer Mode, but please check back soon, as this should be changed soon!
 
 ---
 
@@ -42,12 +42,10 @@ Type-X is currently unlisted from the Chrome Web Store for maintenance. However,
 
 If you wish to develop or edit the extension itself, you can directly download the latest build, and use it in Chrome:
 
-1. Download the latest release zip from https://github.com/arrowtype/type-x/releases. (There may be an even more recent build within the repo’s [Actions](https://github.com/arrowtype/type-x/actions/), but Releases are better tested.)
-2. Unzip the download.
-3. Go to chrome://extensions/ in Chrome
-4. Turn on "Developer Mode"
-5. Click "Load unpacked"
-6. Click "Load unpacked" and navigate to the folder of the release you just downloaded. Alternatively, you can just drag-n-drop the folder into the extensions page.
+1. Download the zip file from [the latest release](https://github.com/arrowtype/type-x/releases/latest).
+2. Go to chrome://extensions/ in Chrome
+3. Turn on "Developer Mode"
+4. Drag-n-drop the downloaded zip onto the extensions page.
 
 ## Development
 
@@ -57,8 +55,7 @@ If you wish to work on the code of Type-X, follow these steps, then install in d
 2. Run `npm i` to set up dependencies, then `npm run build` to build
 3. The extension will be saved in the `dist` folder
 
-
-## Usage
+## How to use Type-X
 
 ### Basics
 
@@ -66,13 +63,15 @@ Click the switch to activate font overrides! Click it again to remove your overr
 
 ### Font Overrides
 
-Type-X can have one or more font overrides at a given time, and these overrides are applied to all web pages you visit with Type-X activated.
+Type-X can have one or more font overrides at a given time, and these overrides are applied to all web pages you visit with Type-X activated. (Some websites block the injected CSS used to apply the fonts, but most allow it! If the extension isn’t working on a particular website, this is probably the reason.)
 
 To add a new override, click the `+ Add font` button. 
 
 To customize an override, click the `›` icon to expand it.
 
-To remove an override, expand it and click `Delete`. Note: deleting an override does not delete the font file from the Type-X menu, even if you have loaded the font file directly into the extension. It will still be available as an option, unless you reset the entire extension.
+To remove an override, expand it and click `Delete`. 
+
+Note: deleting an override does not delete the font file from the Type-X menu, even if you have loaded the font file directly into the extension. It will still be available as an option, unless you reset the entire extension.
 
 #### Font menu
 
