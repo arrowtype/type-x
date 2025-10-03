@@ -10,23 +10,30 @@ let injectedCSS = {};
  * @param {string} text
  */
 async function insertOrReplaceCss(tabId, category, text) {
-	if (tabId in injectedCSS && category in injectedCSS[tabId]) {
-		if (injectedCSS[tabId][category] == text) {
-			return;
-		}
-		await chrome.scripting.removeCSS({
-			target: { tabId },
-			css: injectedCSS[tabId][category]
-		});
+	const previousCss = injectedCSS[tabId]?.[category];
+	if (previousCss == text) {
+		return;
 	}
-	if (!(tabId in injectedCSS)) {
-		injectedCSS[tabId] = {};
-	}
-	injectedCSS[tabId][category] = text;
+
+	// Insert new CSS...
 	await chrome.scripting.insertCSS({
 		target: { tabId },
 		css: text
 	});
+
+	if (previousCss) {
+		// ...and remove old CSS *afterwards* to prevent FOUT
+		await chrome.scripting.removeCSS({
+			target: { tabId },
+			css: previousCss
+		});
+	}
+
+	if (!(tabId in injectedCSS)) {
+		injectedCSS[tabId] = {};
+	}
+
+	injectedCSS[tabId][category] = text;
 }
 
 // Do the thing! (Generate stylesheet and inject into active tab)
