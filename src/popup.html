@@ -17,7 +17,12 @@
 			<button type="button" id="addFont" class="add-font button-flex">
 				<span>
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-						<g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-width="2">
+						<g
+							fill="none"
+							fill-rule="evenodd"
+							stroke-linecap="round"
+							stroke-width="2"
+						>
 							<path d="M2,8 L14,8" />
 							<path d="M2,8 L14,8" transform="rotate(90 8 8)" />
 						</g>
@@ -31,11 +36,25 @@
 			<form id="fontsForm">
 				<div id="usedFonts"></div>
 				<div class="controls">
-					<button type="button" id="showBlacklist" class="button-flex show-blacklist">
+					<button
+						type="button"
+						id="showBlacklist"
+						class="button-flex show-blacklist"
+					>
 						<span>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-								<g fill="none" fill-rule="evenodd" stroke-linecap="round">
-									<path stroke-width="2" d="M6 1L4 15M12 1L10 15M2 5L14 5M2 11L14 11" />
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 16 16"
+							>
+								<g
+									fill="none"
+									fill-rule="evenodd"
+									stroke-linecap="round"
+								>
+									<path
+										stroke-width="2"
+										d="M6 1L4 15M12 1L10 15M2 5L14 5M2 11L14 11"
+									/>
 								</g>
 							</svg>
 							Ignore...
@@ -43,7 +62,10 @@
 					</button>
 					<button type="button" class="button-flex full-reset">
 						<span>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 16 16"
+							>
 								<path
 									fill="none"
 									stroke-linecap="round"
@@ -56,15 +78,26 @@
 					</button>
 				</div>
 				<div class="blacklist">
-					<span class="all-caps">Don't apply fonts to these selectors:</span>
+					<span class="all-caps"
+						>Don't apply fonts to these selectors:</span
+					>
 					<textarea rows="3" name="blacklist"></textarea>
 				</div>
 			</form>
 		</main>
 
 		<footer>
-			<a href="https://github.com/arrowtype/type-x/graphs/contributors" target="_blank">View Contributors</a>
-			<a href="https://github.com/arrowtype/type-x" target="_blank" class="muted-link">Source on GitHub</a>
+			<a
+				href="https://github.com/arrowtype/type-x/blob/main/README.md"
+				target="_blank"
+				>How to use Type-X</a
+			>
+			<a
+				href="https://github.com/arrowtype/type-x/issues"
+				target="_blank"
+				class="muted-link"
+				>Submit Feedback</a
+			>
 		</footer>
 
 		<!-- Template:  -->
@@ -76,8 +109,16 @@
 						<span class="font-name-title-container">
 							<span class="font-name-title"></span>
 							<span class="font-name-instance"></span>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-								<path fill="none" stroke-linecap="round" stroke-width="2" d="M11 8L6 3M6 13L11 8" />
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 16 16"
+							>
+								<path
+									fill="none"
+									stroke-linecap="round"
+									stroke-width="2"
+									d="M11 8L6 3M6 13L11 8"
+								/>
 							</svg>
 						</span>
 					</button>
@@ -86,15 +127,29 @@
 					<input type="hidden" name="id" value="" />
 					<div class="select-font">
 						<div class="select-font-dropdowns">
-							<select name="file" class="font-file-select"></select>
+							<select
+								name="file"
+								class="font-file-select"
+							></select>
 							<div class="variable-instances"></div>
 						</div>
 
 						<label class="select-font-button">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-								<g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-width="2">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 16 16"
+							>
+								<g
+									fill="none"
+									fill-rule="evenodd"
+									stroke-linecap="round"
+									stroke-width="2"
+								>
 									<path d="M3,14 L13,14" />
-									<path d="M4,6 L12,6" transform="rotate(90 8 6)" />
+									<path
+										d="M4,6 L12,6"
+										transform="rotate(90 8 6)"
+									/>
 									<path d="M3 7L8 2M8 2L13 7" />
 								</g>
 							</svg>
@@ -121,7 +176,10 @@
 						</button>
 						<button type="button" class="button-flex delete-font">
 							<span>
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 16 16"
+								>
 									<g
 										fill="none"
 										fill-rule="evenodd"
@@ -131,7 +189,12 @@
 									>
 										<g class="lid">
 											<path d="M3.5,4 L12.5,4" />
-											<rect width="2" height="2" x="7" y="2" />
+											<rect
+												width="2"
+												height="2"
+												x="7"
+												y="2"
+											/>
 										</g>
 										<polygon points="5 7 11 7 11 14 5 14" />
 									</g>
@@ -140,7 +203,11 @@
 							</span>
 						</button>
 					</div>
-					<textarea rows="1" name="fallback" class="fallback-fonts"></textarea>
+					<textarea
+						rows="1"
+						name="fallback"
+						class="fallback-fonts"
+					></textarea>
 				</div>
 			</fieldset>
 		</template>
@@ -148,7 +215,15 @@
 		<template id="variableSlider">
 			<div class="variable-slider">
 				<label for="slider-label"></label>
-				<input type="range" name="" min="" max="" value="" data-name="" step=".01" />
+				<input
+					type="range"
+					name=""
+					min=""
+					max=""
+					value=""
+					data-name=""
+					step=".01"
+				/>
 				<span class="slider-value"></span>
 			</div>
 		</template>
