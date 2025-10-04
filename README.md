@@ -27,7 +27,9 @@ Type-X is a Google Chrome extension that makes it easy and efficient to test loc
 
 ## Your data stays your own
 
-Type-X doesn’t require any kind of user account. There are no trackers, and it collects no data, even for analytics. No ads will ever be added. Your fonts stay on your computer, cached in your local browser. Much of the development was enabled by generous financial support from the Google Fonts team, because it is used to develop fonts commissioned by Google.
+Type-X doesn’t require any kind of user account. There are no trackers, and it collects no data, even for analytics. No ads will ever be added. Your fonts stay on your computer, cached in your local browser. 
+
+Type-X began as an experimental project by [ArrowType](https://arrowtype.com/), and it continues to receive their time and effort, because it is such a helpful a tool for testing and improving font projects. Much of the development was enabled by generous financial support from the [Google Fonts](https://fonts.google.com/) team, because it is used to develop fonts commissioned by Google.
 
 Ultimately, this is a tool made by type designers and developers who wanted a good tool to test fonts on the web. It is shared freely because we have collaborators and colleagues who also find it useful.
 
