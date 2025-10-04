@@ -25,6 +25,12 @@ Type-X is a Google Chrome extension that makes it easy and efficient to test loc
 
 ![Type-X in use to apply font overrides to Wikipedia](design/typex-demo.gif)
 
+## Your data stays your own
+
+Type-X doesn’t require any kind of user account. There are no trackers, and it collects no data, even for analytics. No ads will ever be added. Your fonts stay on your computer, cached in your local browser. Much of the development was enabled by generous financial support from the Google Fonts team, because it is used to develop fonts commissioned by Google.
+
+Ultimately, this is a tool made by type designers and developers who wanted a good tool to test fonts on the web. It is shared freely because we have collaborators and colleagues who also find it useful.
+
 ## Why?
 
 Type designers spend countless hours creating type proofs and fake designs to test their fonts. This is a vital part of the type design process, but sometimes the best way to understand how a font works (and what needs fixing) is to experience it as a reader, not as a designer.
@@ -147,3 +153,11 @@ Have you found a bug?
 
 Let us know! [File an issue](https://github.com/arrowtype/type-x/issues) or make a pull request (please see [Contributing guidelines](CONTRIBUTING.md)).
 
+## Credits (October 2025)
+
+Many thanks to:
+- @simoncozens for all his recent work to rewrite and revive the extension.
+- [Google Fonts](https://fonts.google.com/) for financially supporting Simon’s recent work here, along with financially supporting much of the original design & development.
+- @RoelN for making a few recent UX upgrades, as well as for his original role in developing and co-designing the original version of the extension.
+- @arrowtype (that’s me!) for the coordinating the recent development work, as well as leading the original design and development.
+- Everyone who expressed support of the extension. We couldn’t have revived this without you!
