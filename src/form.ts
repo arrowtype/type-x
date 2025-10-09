@@ -113,6 +113,8 @@ export async function addFormElement(
 			await changeFont(parentEl, fontFileName);
 			// Rebuild dropdowns
 			await buildForm();
+			// Auto-enable extension
+			await autoEnableExtension();
 		});
 	};
 	el.querySelector<HTMLButtonElement>(".show-fallbacks").onclick = e => {
@@ -164,6 +166,8 @@ export async function addFormElement(
 					await changeFont(parentEl, fontFileName);
 					// Rebuild dropdowns
 					await buildForm();
+					// Auto-enable extension
+					await autoEnableExtension();
 				},
 				async () => {
 					// Ask tabs to show reloading animation
