@@ -70,18 +70,29 @@ async function injectStyleSheets(
 	fontDeclarations,
 	fontFileDeclarations
 ) {
-	let { extensionActive } = await chrome.storage.local.get("extensionActive");
-	let fontDeclarationsCss = fontDeclarations.join("\n");
-	let fontFileDeclarationsCss = fontFileDeclarations.join("\n");
-	if (extensionActive) {
-		// Inject CSS to activate font
-		await insertOrReplaceCss(tabId, "fonts", fontDeclarationsCss);
-		await insertOrReplaceCss(tabId, "fontfiles", fontFileDeclarationsCss);
+	try {
+		let { extensionActive } = await chrome.storage.local.get(
+			"extensionActive"
+		);
+		let fontDeclarationsCss = fontDeclarations.join("\n");
+		let fontFileDeclarationsCss = fontFileDeclarations.join("\n");
+		if (extensionActive) {
+			// Inject CSS to activate font
+			await insertOrReplaceCss(tabId, "fonts", fontDeclarationsCss);
+			await insertOrReplaceCss(
+				tabId,
+				"fontfiles",
+				fontFileDeclarationsCss
+			);
+		}
+		await chrome.scripting.executeScript({
+			target: { tabId },
+			func: extensionActive ? customFontsOn : customFontsOff
+		});
+	} catch (error) {
+		// Silently ignore errors for protected pages (chrome://, extension pages, etc.)
+		console.debug(`Can't inject into ${tabId}:`, error.message);
 	}
-	chrome.scripting.executeScript({
-		target: { tabId },
-		func: extensionActive ? customFontsOn : customFontsOff
-	});
 }
 
 async function generateFontStyleSheets() {
