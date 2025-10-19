@@ -5,13 +5,8 @@
   Type-X: test your fonts across the web!
 </h1>
 
-<!--<h3 align="center"><a href="https://chrome.google.com/webstore/detail/type-x/bfnfnnicdjkkialkldogjjmmfeiopbin" target="_blank">Now on the Chrome Web Store ↗</a></h3>-->
+<h3 align="center"><a href="https://chromewebstore.google.com/detail/type-x/paelebbajjhdmomglaffoachiepobeag" target="_blank">Now on the Chrome Web Store ↗</a></h3>
 
-<h3 align="center">
-Type-X is currently unlisted from the Chrome Web Store for maintenance.<br/>However, it can still be used in Chrome Developer Mode (see <a href="https://github.com/arrowtype/type-x#install-in-developer-mode">below</a>).
-</h3>
-
-UPDATE, OCTOBER 2025: [We are working to relist it on the Chrome Web Store!](https://github.com/arrowtype/type-x/issues/125) If it’s not there yet, you can use it in Chrome Developer Mode, but please check back soon, as this should be changed soon!
 
 ---
 
