@@ -376,7 +376,10 @@ async function applyNamedInstance(e: Event) {
 		let axisId = input.name.replace("var-", "");
 		if (axisId in font.location) {
 			input.value = font.location[axisId].toString();
-			span.innerHTML = input.value;
+			// Keep showing "auto" for optical size
+			if (!span.classList.contains("auto")) {
+				span.innerHTML = input.value;
+			}
 		}
 	});
 	// Save font object in storage, which in turn updates the tabs
@@ -429,6 +432,34 @@ function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
 		font.location[axis.id] = axis.default;
 	}
 
+	// Optical size can be left to the browser, which matches it to the font
+	// size. Its value doubles as the toggle and reads "auto" while it's on.
+	const showAuto = (on: boolean) => {
+		value.classList.toggle("auto", on);
+		value.setAttribute("aria-pressed", on.toString());
+		value.innerText = on ? "auto" : input.value;
+	};
+	if (axis.id == "opsz") {
+		value.classList.add("auto-toggle");
+		value.tabIndex = 0;
+		value.setAttribute("role", "button");
+		value.title = "Automatic optical size: match it to the font size";
+		showAuto(font.autoOpsz);
+		const toggle = async () => {
+			let font = await getFont(parent.dataset.fontid);
+			font.autoOpsz = !font.autoOpsz;
+			showAuto(font.autoOpsz);
+			await updateFont(font);
+		};
+		value.onclick = toggle;
+		value.onkeydown = e => {
+			if (e.key == "Enter" || e.key == " ") {
+				e.preventDefault();
+				toggle();
+			}
+		};
+	}
+
 	input.onchange = async e => {
 		let fontId = parent.dataset.fontid;
 		let font = await getFont(fontId);
@@ -436,6 +467,11 @@ function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
 		value.innerText = newValue;
 		// Store the value back in the font object
 		font.location[axis.id] = parseFloat(newValue);
+		// Moving the optical size slider means choosing a size
+		if (axis.id == "opsz") {
+			font.autoOpsz = false;
+			showAuto(false);
+		}
 		/// If we're on an instance, update .select-instance
 		const dropdown =
 			parent.querySelector<HTMLSelectElement>(".select-instance");

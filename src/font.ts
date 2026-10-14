@@ -23,6 +23,7 @@ export interface IFont {
 	inherit: boolean;
 	location: Location;
 	new: boolean;
+	autoOpsz: boolean;
 }
 
 export class Font {
@@ -35,6 +36,8 @@ export class Font {
 	inherit: boolean;
 	location: Location;
 	new: boolean;
+	// Leave optical size to the browser (font-optical-sizing: auto)
+	autoOpsz: boolean;
 
 	constructor(
 		id: string,
@@ -45,7 +48,8 @@ export class Font {
 		css: string,
 		inherit: boolean,
 		location: Location,
-		isNew: boolean
+		isNew: boolean,
+		autoOpsz: boolean
 	) {
 		this.id = id;
 		this.name = name;
@@ -56,6 +60,7 @@ export class Font {
 		this.inherit = inherit;
 		this.location = location;
 		this.new = isNew;
+		this.autoOpsz = autoOpsz;
 	}
 	static fromObject(obj: any): Font {
 		return new Font(
@@ -67,7 +72,8 @@ export class Font {
 			obj.css,
 			obj.inherit,
 			obj.location || {},
-			obj.new
+			obj.new,
+			obj.autoOpsz ?? true
 		);
 	}
 
@@ -80,6 +86,7 @@ export class Font {
 			file: filename,
 			location: files[filename]?.defaultLocation || {},
 			inherit: true,
+			autoOpsz: true,
 			fallback: ["monospace"],
 			selectors: ["/* Add CSS selectors here */"],
 			css: "/* Additional styles to apply */"
@@ -151,6 +158,8 @@ export class Font {
 			return "";
 		}
 		let settings = Object.entries(this.location)
+			// Setting 'opsz' explicitly overrides font-optical-sizing: auto
+			.filter(([axisId]) => !(axisId == "opsz" && this.autoOpsz))
 			.map(([axisId, axisValue]) => `'${axisId}' ${axisValue}`)
 			.join(",");
 		if (settings) {

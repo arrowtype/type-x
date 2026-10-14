@@ -354,6 +354,33 @@ textarea:focus {
 	flex: auto;
 }
 
+/* Styled like .select-font-button, sized to line up with the other values */
+.slider-value.auto-toggle {
+	min-width: calc(20% - var(--spacing-unit-half));
+	margin-left: var(--spacing-unit-half);
+	/* Draw the border outside the line, so the text sits where a number would */
+	margin-top: -2px;
+	margin-bottom: -2px;
+	padding: 0;
+	text-align: center;
+	background: transparent;
+	transition: background 0.35s;
+	border: 2px solid var(--gray-0);
+	border-radius: 0.25rem;
+	cursor: pointer;
+}
+
+.slider-value.auto-toggle:hover,
+.slider-value.auto-toggle:focus-visible {
+	background: var(--bg-alt);
+	outline: none;
+}
+
+.slider-value.auto-toggle.auto {
+	text-transform: uppercase;
+	color: var(--accent);
+}
+
 /* UI contols */
 .controls {
 	height: calc(var(--unit-height) * 2 / 3);

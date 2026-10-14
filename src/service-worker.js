@@ -2,38 +2,74 @@ import { getFonts } from "./font";
 
 /** @type {string[]} */
 let stylesheets = [];
-/** @type {Object.<number, string>} */
-let injectedCSS = {};
+// The CSS we last injected into each tab, per category. This lives in session
+// storage rather than a variable because Chrome stops idle service workers
+// after ~30 seconds, and we need the exact text to remove an old stylesheet
+// once the worker starts up again. Otherwise the old stylesheet stays in the
+// page: e.g. the slider values keep overriding "[Inherit page styles]".
+const injectedCssKey = tabId => `injectedCSS-${tabId}`;
+
+/**
+ * @param {number} tabId
+ * @returns {Promise<Object.<string, string>>}
+ */
+async function getInjectedCss(tabId) {
+	const key = injectedCssKey(tabId);
+	return (await chrome.storage.session.get(key))[key] || {};
+}
+
+/**
+ * @param {number} tabId
+ * @param {Object.<string, string>} css
+ */
+async function setInjectedCss(tabId, css) {
+	try {
+		await chrome.storage.session.set({ [injectedCssKey(tabId)]: css });
+	} catch (error) {
+		// Session storage is limited to 10 MB, and font files are inlined
+		console.debug(`Can't remember CSS for ${tabId}:`, error.message);
+	}
+}
+
+// Run CSS updates one at a time, so quick successive changes (like dragging
+// a slider) can't both replace the same stylesheet and leave one behind
+let cssQueue = Promise.resolve();
+function queueCssUpdate(update) {
+	const result = cssQueue.then(update);
+	cssQueue = result.catch(() => {});
+	return result;
+}
+
 /**
  * @param {number} tabId
  * @param {string} category
  * @param {string} text
  */
-async function insertOrReplaceCss(tabId, category, text) {
-	const previousCss = injectedCSS[tabId]?.[category];
-	if (previousCss == text) {
-		return;
-	}
+function insertOrReplaceCss(tabId, category, text) {
+	return queueCssUpdate(async () => {
+		const injectedCss = await getInjectedCss(tabId);
+		const previousCss = injectedCss[category];
+		if (previousCss == text) {
+			return;
+		}
 
-	// Insert new CSS...
-	await chrome.scripting.insertCSS({
-		target: { tabId },
-		css: text
-	});
-
-	if (previousCss) {
-		// ...and remove old CSS *afterwards* to prevent FOUT
-		await chrome.scripting.removeCSS({
+		// Insert new CSS...
+		await chrome.scripting.insertCSS({
 			target: { tabId },
-			css: previousCss
+			css: text
 		});
-	}
 
-	if (!(tabId in injectedCSS)) {
-		injectedCSS[tabId] = {};
-	}
+		if (previousCss) {
+			// ...and remove old CSS *afterwards* to prevent FOUT
+			await chrome.scripting.removeCSS({
+				target: { tabId },
+				css: previousCss
+			});
+		}
 
-	injectedCSS[tabId][category] = text;
+		injectedCss[category] = text;
+		await setInjectedCss(tabId, injectedCss);
+	});
 }
 
 // Do the thing! (Generate stylesheet and inject into active tab)
@@ -141,9 +177,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 	if (message.pageLoad) {
 		// We moved to a new page; although we may have injected CSS into this *tab* previously,
 		// we haven't for this page, so clear it from our cache so we inject some more.
-		delete injectedCSS[sender.tab.id];
+		queueCssUpdate(() =>
+			chrome.storage.session.remove(injectedCssKey(sender.tab.id))
+		);
 	}
 	if (message.runTypeX) {
 		runTypeX();
 	}
+});
+
+chrome.tabs.onRemoved.addListener(tabId => {
+	queueCssUpdate(() => chrome.storage.session.remove(injectedCssKey(tabId)));
 });
