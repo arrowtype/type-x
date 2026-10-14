@@ -354,6 +354,28 @@ textarea:focus {
 	flex: auto;
 }
 
+.slider-value.auto-toggle {
+	align-self: center;
+	min-width: 0;
+	margin-left: var(--spacing-unit-half);
+	padding: 0 var(--spacing-unit-half);
+	border-radius: 1rem;
+	border: 1px var(--text-p3) solid;
+	cursor: pointer;
+}
+
+/* Keep the number in the DOM, but show "auto" while it's on */
+.slider-value.auto-toggle.auto {
+	font-size: 0;
+	border-color: var(--accent);
+}
+
+.slider-value.auto-toggle.auto::after {
+	content: "auto";
+	font-size: var(--t2);
+	color: var(--accent);
+}
+
 /* UI contols */
 .controls {
 	height: calc(var(--unit-height) * 2 / 3);
