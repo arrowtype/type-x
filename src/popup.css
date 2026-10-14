@@ -356,9 +356,11 @@ textarea:focus {
 
 /* Styled like .select-font-button, sized to line up with the other values */
 .slider-value.auto-toggle {
-	align-self: center;
 	min-width: calc(20% - var(--spacing-unit-half));
 	margin-left: var(--spacing-unit-half);
+	/* Draw the border outside the line, so the text sits where a number would */
+	margin-top: -2px;
+	margin-bottom: -2px;
 	padding: 0;
 	text-align: center;
 	background: transparent;
@@ -374,15 +376,8 @@ textarea:focus {
 	outline: none;
 }
 
-/* Keep the number in the DOM, but show "auto" while it's on */
 .slider-value.auto-toggle.auto {
-	font-size: 0;
-}
-
-.slider-value.auto-toggle.auto::after {
-	content: "auto";
 	text-transform: uppercase;
-	font-size: var(--t3);
 	color: var(--accent);
 }
 

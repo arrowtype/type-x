@@ -376,7 +376,10 @@ async function applyNamedInstance(e: Event) {
 		let axisId = input.name.replace("var-", "");
 		if (axisId in font.location) {
 			input.value = font.location[axisId].toString();
-			span.innerHTML = input.value;
+			// Keep showing "auto" for optical size
+			if (!span.classList.contains("auto")) {
+				span.innerHTML = input.value;
+			}
 		}
 	});
 	// Save font object in storage, which in turn updates the tabs
@@ -434,6 +437,7 @@ function addSlider(font: Font, axis: Axis, parent: HTMLElement) {
 	const showAuto = (on: boolean) => {
 		value.classList.toggle("auto", on);
 		value.setAttribute("aria-pressed", on.toString());
+		value.innerText = on ? "auto" : input.value;
 	};
 	if (axis.id == "opsz") {
 		value.classList.add("auto-toggle");
