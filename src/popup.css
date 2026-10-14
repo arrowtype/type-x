@@ -354,25 +354,35 @@ textarea:focus {
 	flex: auto;
 }
 
+/* Styled like .select-font-button, sized to line up with the other values */
 .slider-value.auto-toggle {
 	align-self: center;
-	min-width: 0;
+	min-width: calc(20% - var(--spacing-unit-half));
 	margin-left: var(--spacing-unit-half);
-	padding: 0 var(--spacing-unit-half);
-	border-radius: 1rem;
-	border: 1px var(--text-p3) solid;
+	padding: 0;
+	text-align: center;
+	background: transparent;
+	transition: background 0.35s;
+	border: 2px solid var(--gray-0);
+	border-radius: 0.25rem;
 	cursor: pointer;
+}
+
+.slider-value.auto-toggle:hover,
+.slider-value.auto-toggle:focus-visible {
+	background: var(--bg-alt);
+	outline: none;
 }
 
 /* Keep the number in the DOM, but show "auto" while it's on */
 .slider-value.auto-toggle.auto {
 	font-size: 0;
-	border-color: var(--accent);
 }
 
 .slider-value.auto-toggle.auto::after {
 	content: "auto";
-	font-size: var(--t2);
+	text-transform: uppercase;
+	font-size: var(--t3);
 	color: var(--accent);
 }
 
